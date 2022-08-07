@@ -4,5 +4,6 @@ import {mount} from '@cypress/react';
 
 it('should run', () => {
     mount(<App />) 
-    cy.contains('My').should('be.visible');
+    cy.contains('Email address').should('be.visible');
+
 });
