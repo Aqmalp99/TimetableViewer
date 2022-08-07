@@ -1,11 +1,8 @@
 import "./App.css";
+import ShaeTest from "./components/ShaeTest/ShaeTest";
 
 function App() {
-  return (
-    <div className="App">
-      <p>My app</p>
-    </div>
-  );
+  return <ShaeTest />;
 }
 
 export default App;
