@@ -1,9 +1,9 @@
 import * as React from 'react';
-import App from '../../src/App';
+import Login from '../../src/components/login/Login';
 import {mount} from '@cypress/react';
 
 it('should run', () => {
-    mount(<App />) 
+    mount(<Login />) 
     cy.contains('Email address').should('be.visible');
 
 });
