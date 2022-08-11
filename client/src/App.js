@@ -1,26 +1,24 @@
-// import "./App.css";
 
 import Calendar from "./components/calendar/Calendar";
 
-// function App() {
-//   return (
-//     <div className="App">
-//       <p>My app</p>
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
+import "./App.css";
+import ShaeTest from "./components/ShaeTest/ShaeTest";
+import Login from "./components/login/Login";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
-    return (
-        <div>
-          <Calendar />
-        </div>
-    ); 
+  return (
+    <Routes>
+      <Route  exact path="/" element={<Login />} />
+      <Route path="/shae" element={<ShaeTest />} />
+      <Route path="/calendar" element={<Calendar />} />
+    </Routes>
+    
+  );
 }
 
 export default App;
+
+
+
 
