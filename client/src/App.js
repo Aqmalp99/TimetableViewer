@@ -1,3 +1,6 @@
+
+import Calendar from "./components/calendar/Calendar";
+
 import "./App.css";
 import ShaeTest from "./components/ShaeTest/ShaeTest";
 import Login from "./components/login/Login";
@@ -8,8 +11,14 @@ function App() {
     <Routes>
       <Route  exact path="/" element={<Login />} />
       <Route path="/shae" element={<ShaeTest />} />
+      <Route path="/calendar" element={<Calendar />} />
     </Routes>
+    
   );
 }
 
 export default App;
+
+
+
+
