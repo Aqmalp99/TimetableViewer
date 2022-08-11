@@ -19,26 +19,54 @@ const Calendar = () => {
 
     const view = React.useMemo(() => {
         return {
-            schedule: { type: 'week' }
+            schedule: { 
+                type: 'week',
+                startTime:'07:00',
+                endTime:'19:00'
+             }
         };
     }, []);
 
+    const inv = [{
+        start: '12:00',
+        end: '13:00',
+        title: 'Lunch break',
+        recurring: {
+            repeat: 'weekly',
+            weekDays: 'MO,TU,WE,TH,FR'
+        }
+    },  {
+        start: '17:00',
+        end: '23:59',
+        recurring: {
+            repeat: 'weekly',
+            weekDays: 'MO,TU,WE,TH,FR'
+        }
+    }];
+
+
   return (
-    <div>
-      <Eventcalendar
+    <div className="calendar-container">
+      <Eventcalendar 
+            className='calendar-width'
             theme="ios" 
             themeVariant="light"
             clickToCreate={true}
-            dragToCreate={true}
+            dragToCreate={false}
             dragToMove={true}
             dragToResize={true}
-            eventDelete={true}
+            eventDelete={false}
             data={myEvents}
             view={view}
+            invalidateEvent="strict"
+            invalid={inv}
             onEventClick={onEventClick}
-       />
+       />{console.log(myEvents)}
+       
     </div>
   )
 }
 
 export default Calendar
+
+
