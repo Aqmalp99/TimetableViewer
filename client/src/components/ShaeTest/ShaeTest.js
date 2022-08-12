@@ -1,11 +1,11 @@
 import React from "react";
-import Calendar from "../calendar/Calendar";
+import ShaeCalendar from "../ShaeCalendar/ShaeCalendar";
 
 const ShaeTest = () => {
   return (
     <div className="App">
       <p>My app</p>
-      <Calendar />
+      <ShaeCalendar />
     </div>
   );
 };
