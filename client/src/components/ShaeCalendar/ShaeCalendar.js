@@ -1,18 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Eventcalendar, getJson, toast } from "@mobiscroll/react";
 
 const ShaeCalendar = () => {
   const [myEvents, setEvents] = React.useState([]);
 
-  React.useEffect(() => {
-    getJson(
-      "https://trial.mobiscroll.com/events/?vers=5",
-      (events) => {
-        setEvents(events);
+  // React.useEffect(() => {
+  //   getJson(
+  //     "https://trial.mobiscroll.com/events/?vers=5",
+  //     (events) => {
+  //       setEvents(events);
+  //     },
+  //     "jsonp"
+  //   );
+  // }, []);
+
+  //events object has color, end, id, start, title
+  useEffect(() => {
+    setEvents([
+      {
+        // base properties
+        title: "Product planning",
+        color: "#56ca70",
+
+        start: new Date(2022, 7, 10, 13),
+        end: new Date(2022, 7, 10, 14),
+        // add any property you'd like
+        description: "Weekly meeting with team",
+        location: "Office",
       },
-      "jsonp"
-    );
+    ]);
   }, []);
 
   const onEventClick = React.useCallback((event) => {
@@ -31,25 +48,25 @@ const ShaeCalendar = () => {
     };
   }, []);
 
-  const inv = [
-    {
-      start: "12:00",
-      end: "13:00",
-      title: "Lunch break",
-      recurring: {
-        repeat: "weekly",
-        weekDays: "MO,TU,WE,TH,FR",
-      },
-    },
-    {
-      start: "17:00",
-      end: "23:59",
-      recurring: {
-        repeat: "weekly",
-        weekDays: "MO,TU,WE,TH,FR",
-      },
-    },
-  ];
+  //   const inv = [
+  //     {
+  //       start: "12:00",
+  //       end: "13:00",
+  //       title: "Lunch break",
+  //       recurring: {
+  //         repeat: "weekly",
+  //         weekDays: "MO,TU,WE,TH,FR",
+  //       },
+  //     },
+  //     {
+  //       start: "17:00",
+  //       end: "23:59",
+  //       recurring: {
+  //         repeat: "weekly",
+  //         weekDays: "MO,TU,WE,TH,FR",
+  //       },
+  //     },
+  //   ];
 
   return (
     <div className="calendar-container">
@@ -59,13 +76,13 @@ const ShaeCalendar = () => {
         themeVariant="light"
         clickToCreate={true}
         dragToCreate={false}
-        dragToMove={true}
-        dragToResize={true}
+        dragToMove={false}
+        dragToResize={false}
         eventDelete={false}
         data={myEvents}
         view={view}
         invalidateEvent="strict"
-        invalid={inv}
+        // invalid={inv}
         onEventClick={onEventClick}
       />
       {console.log(myEvents)}
