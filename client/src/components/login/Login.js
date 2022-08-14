@@ -1,3 +1,5 @@
+import NavbarLogin from "../Navbar/NavbarLogin";
+
 import { Button} from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import Row from "react-bootstrap/Row";
@@ -7,6 +9,7 @@ import Container from "react-bootstrap/Container";
 
 const Login = ()  => {
     return(
+        <NavbarLogin />,
         <Container>
             <Form>
                 <Row>
@@ -31,7 +34,7 @@ const Login = ()  => {
                 </Button>
             </Form>
         </Container>
-    )
+    );
 }
 
-export default Login
+export default Login;
