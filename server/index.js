@@ -1,20 +1,21 @@
-const express = require("express");
-const path = require("path");
-const cors = require("cors");
-require("dotenv").config({path: "./config.env"});
-
-const PORT = process.env.PORT || 3001;
-
+const express = require('express');
 const app = express();
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const routerUrls = require('./routes/routes');
+const cors = require('cors');
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, './.env') });
 
-app.use(cors());
-app.use(express.json());
-app.use(express.static(path.join(__dirname, "../client/build")));
+dotenv.config()
 
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+mongoose.connect(process.env.DATABASE_CONNECT,()=>{
+    console.log("Database connected")
 });
+app.use(express.json());
+app.use(cors())
+app.use('/app',routerUrls);
 
-app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
-})
+app.listen(4000,() =>{
+    console.log("Server connected at port 4000")
+});
