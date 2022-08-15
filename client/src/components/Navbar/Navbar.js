@@ -3,7 +3,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 
 const Navbar = () => {
-  return (
+  render (
     <>
       <Navbar bg="dark" variant="dark">
         <Container>
