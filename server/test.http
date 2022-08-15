@@ -2,5 +2,5 @@ POST http://localhost:4000/app/shae
 Content-Type: application/json
 
 {
-    "name":"testing-vinay"
+    "name":"testing-vnay2"
 }
