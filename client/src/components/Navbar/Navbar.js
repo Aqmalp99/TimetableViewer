@@ -1,45 +1,45 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Card  from 'react-bootstrap/Card';
+// import { displaySignup } from '../authentication/Home';
 
-const Navbar = () => {
-  render (
+const NavbarTemp = () => {
+  return (
     <>
-      <Navbar bg="dark" variant="dark">
-        <Container>
-          <Navbar.Brand href="#home">Navbar</Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
-          </Nav>
-        </Container>
-      </Navbar>
-      <br />
-      <Navbar bg="primary" variant="dark">
-        <Container>
-          <Navbar.Brand href="#home">Navbar</Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
-          </Nav>
-        </Container>
-      </Navbar>
-
-      <br />
+    <Card fluid  border="dark">
       <Navbar bg="light" variant="light">
         <Container>
-          <Navbar.Brand href="#home">Navbar</Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
-          </Nav>
+        <Navbar.Brand text="red" href="/">
+          Uni Timetable
+          </Navbar.Brand>
+        <Container fluid>
+            <Row>
+              <Col md={{ span: 2, offset: -1 }} >
+                <Nav className="me-auto">
+                  <Nav.Link href="/calendar">Calendar</Nav.Link>
+                  <Nav.Link href="/about">About</Nav.Link>
+                </Nav>
+              </Col>
+              <Col md={{ span: 2, offset: 6 }}>
+                <Nav >
+                  <Nav.Link>Login</Nav.Link>
+                  <Nav.Link >Sign Up</Nav.Link>
+                  {/* <Nav.Link onClick={displaySignup}>Sign Up</Nav.Link> */}
+                </Nav>
+              </Col>
+
+            </Row>
+          </Container>
         </Container>
       </Navbar>
+    </Card>   
+      <br />
+      
     </>
   );
 }
 
-export default Navbar
+export default NavbarTemp;
