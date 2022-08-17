@@ -2,7 +2,6 @@ import ShaeTest from "./components/ShaeTest/ShaeTest" ;
 import Calendar from "./components/calendar/Calendar";
 
 import "./App.css";
-import Navbar from "./components/Navbar/Navbar";
 import Home from "./components/authentication/Home";
 
 import { Route, Routes } from "react-router-dom";
@@ -22,7 +21,3 @@ function App() {
 }
 
 export default App;
-
-
-
-
