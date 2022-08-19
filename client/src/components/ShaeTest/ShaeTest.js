@@ -3,13 +3,17 @@ import ShaeCalendar from "../ShaeCalendar/ShaeCalendar";
 import Button from "react-bootstrap/Button";
 
 const ShaeTest = () => {
-  const [buttonState, setButtonState] = useState(true);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
+
+  const ifEventSelected = selected => {
+    setButtonDisabled(selected ? false : true);
+  }
   
   return (
     <div className="App">
       <p>My app</p>
-      <ShaeCalendar />
-      <Button disabled={buttonState}>
+      <ShaeCalendar ifEventSelected={ifEventSelected}/>
+      <Button disabled={buttonDisabled}>
         Get Recommended Times
       </Button>
     </div>

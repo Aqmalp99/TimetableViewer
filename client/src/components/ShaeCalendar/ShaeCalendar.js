@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Eventcalendar, Button, getJson, toast } from "@mobiscroll/react";
 
-const ShaeCalendar = () => {
+const ShaeCalendar = ({ifEventSelected}) => {
   const [myEvents, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState({});
 
@@ -29,10 +29,12 @@ const ShaeCalendar = () => {
     setSelectedEvent({
       eventName: event.event.title,
     });
+    ifEventSelected(true);
   }, []);
 
   const onCellClick = useCallback((event) => {
     setSelectedEvent({});
+    ifEventSelected(false);
   }, []);
 
   // const renderScheduleEvent = useCallback((data) => {});
@@ -87,9 +89,6 @@ const ShaeCalendar = () => {
         onEventClick={onEventClick}
         // renderScheduleEvent={renderScheduleEvent}
       />
-      <div style={{display: selectedEvent === {} ? "none" : "block"}}>
-        {selectedEvent.eventName}
-      </div>
     </div>
   );
 };
