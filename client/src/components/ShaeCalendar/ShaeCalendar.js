@@ -184,11 +184,11 @@ const ShaeCalendar = () => {
     ]);
   }, []);
 
-  // const onEventClick = useCallback((event) => {
-  //   toast({
-  //     message: event.event.title,
-  //   });
-  // }, []);
+  const onEventClick = useCallback((event) => {
+    toast({
+      message: event.event.title,
+    });
+  }, []);
 
   // const renderScheduleEvent = useCallback((data) => {});
 
@@ -229,7 +229,7 @@ const ShaeCalendar = () => {
         className="calendar-width"
         theme="ios"
         themeVariant="light"
-        clickToCreate={true}
+        clickToCreate={false}
         dragToCreate={false}
         dragToMove={false}
         dragToResize={false}
@@ -238,7 +238,7 @@ const ShaeCalendar = () => {
         view={view}
         invalidateEvent="strict"
         // invalid={inv}
-        // onEventClick={onEventClick}
+        onEventClick={onEventClick}
         // renderScheduleEvent={renderScheduleEvent}
       />
     </div>
