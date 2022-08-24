@@ -1,6 +1,6 @@
-import signUpRoutes from './signupRouter';
+import studentRouter from './studentRouter';
 
-export{signUpRoutes};
+export{studentRouter};
 
 
 // const express = require('express')

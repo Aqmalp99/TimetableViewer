@@ -1,4 +1,4 @@
-POST http://localhost:4000/app/shae
+POST http://localhost:4000/app/student
 Content-Type: application/json
 
 {
