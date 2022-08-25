@@ -14,7 +14,10 @@ const Timetable = () => {
       repeat: "weekly",
       weekDays: "TH, FR"
     },
-    title: "ESAS2"
+    title: "ESAS2",
+    venue: "IW 218",
+    description: "In class lab work",
+    typeOfClass: "workshop"
   }
 
   ]);
@@ -35,14 +38,31 @@ const Timetable = () => {
     setShow(!show)
   };
 
-  const [title, setTitle]=useState("");
+  const [classDetails, setClassDetails]=useState(
+    { title: "",
+    venue: "",
+    description: "",
+    typeOfClass: "",
+    startTime: "",
+    endTime: ""
+
+  });
   
   const onEventClick = React.useCallback((event) => {
     setShow(!show);
-    setTitle(event.event.title);
-    console.log(title);
+    setClassDetails({
+      title: event.event.title,
+      venue: event.event.venue,
+      description: event.event.description,
+      typeOfClass: event.event.typeOfClass,
+      startTime: event.event.start,
+      endTime: event.event.end
+    
+    }
+      );
+    console.log(classDetails);
 
-  }, [title,show]);
+  }, [classDetails,show]);
 
 
   const view = React.useMemo(() => {
@@ -80,10 +100,14 @@ const Timetable = () => {
           <Modal.Title>Class Details</Modal.Title>
        </Modal.Header>
        <ModalBody>
-          <p>{title}</p>
+          <p>Title: {classDetails.title}</p>
+         
+          <p>Venue: {classDetails.venue}</p>
+          <p>Type of Class: {classDetails.typeOfClass}</p>
+          <p>Description: {classDetails.description}</p>
        </ModalBody>
       </Modal>
-      {console.log(myEvents)}
+    
       
     </div>
   );

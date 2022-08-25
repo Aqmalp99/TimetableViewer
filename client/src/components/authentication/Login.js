@@ -11,14 +11,14 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 
 const Login = ()  => {
-    const [currentLogin, newLogin] = useState({
-        email:'',
-        password:''
-    });
+    // const [currentLogin, newLogin] = useState({
+    //     email:'',
+    //     password:''
+    // });
 
-    const updateLogin = () => {
-        newLogin({email:Event.})
-    }
+    // const updateLogin = () => {
+    //     // newLogin({email:Event.})
+    // }
     return(
         <>
         <div className="login-container">
