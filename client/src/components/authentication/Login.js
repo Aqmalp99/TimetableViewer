@@ -1,6 +1,6 @@
 
 // State imports
-import { useRef, useState, useEffect} from "react";
+import { useState} from "react";
 
 // Boot Strap imports
 import { Button} from "react-bootstrap";
@@ -11,6 +11,14 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 
 const Login = ()  => {
+    // const [currentLogin, newLogin] = useState({
+    //     email:'',
+    //     password:''
+    // });
+
+    // const updateLogin = () => {
+    //     // newLogin({email:Event.})
+    // }
     return(
         <>
         <div className="login-container">

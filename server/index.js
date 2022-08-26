@@ -1,27 +1,4 @@
-const express = require('express');
-const app = express();
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const routerUrls = require('./routes/routes');
-const cors = require('cors');
-const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, './.env') });
-
-dotenv.config()
-
-mongoose.connect(process.env.DATABASE_CONNECT,()=>{
-    console.log("Database connected")
-});
-app.use(express.json());
-app.use(cors())
-
-app.use(express.static(path.join(__dirname, "../client/build")));
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/build", "index.html"));
-});
-
-app.use('/app',routerUrls);
-
-app.listen(4000,() =>{
-    console.log("Server connected at port 4000")
-});
+// Set options as a parameter, environment variable, or rc file.
+// eslint-disable-next-line no-global-assign
+require = require("esm")(module/* , options */)
+module.exports = require("./main.js")
