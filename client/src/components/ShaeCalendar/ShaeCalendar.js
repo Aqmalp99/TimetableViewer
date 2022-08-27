@@ -13,8 +13,8 @@ const ShaeCalendar = ({ifEventSelected}) => {
         // base properties
         title: "Product planning",
         color: "#56ca70",
-        start: new Date(2022, 7, 17, 13),
-        end: new Date(2022, 7, 17, 14),
+        start: new Date(2022, 7, 27, 13),
+        end: new Date(2022, 7, 27, 14),
         // add any property you'd like
         description: "Weekly meeting with team",
         location: "Office",
