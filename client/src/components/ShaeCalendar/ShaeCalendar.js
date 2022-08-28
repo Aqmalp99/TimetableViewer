@@ -1,16 +1,17 @@
 import React, { useMemo, useEffect, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import { Eventcalendar, Button, getJson, toast } from "@mobiscroll/react";
+import { Eventcalendar, Button, toast } from "@mobiscroll/react";
 import axios from 'axios';
 
 const ShaeCalendar = () => {
   const [myEvents, setEvents] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   //events object has color, end, id, start, title
   useEffect(() => {
     const getClasses = async () => {
       await axios
-      .get("http://localhost:4000/staff/1")
+      .get("/staff/1")
       .then((response) => {
         let data = [];
         response.data.map(element => {
@@ -21,14 +22,19 @@ const ShaeCalendar = () => {
             color: "#56ca70",
             start: new Date(element.start_date.slice(0,10) + "T" + element.start_time),
             end: new Date(element.start_date.slice(0,10) +"T" + element.end_time),
+            recurring: {
+              repeat: 'weekly',
+              interval: 1
+            }
           })
         })
-        console.log(data);
         setEvents(data);
-        setLoadReady(true);
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
     }
 
@@ -42,7 +48,7 @@ const ShaeCalendar = () => {
           <div>
              <div>{data.original.title}</div>
               <div>{data.original.className}</div>
-              <div>{data.original.venue}</div>
+              {/* <div>{data.original.venue}</div> */}
               <div>{data.original.classType}</div>
             </div>
         </div>
@@ -88,6 +94,10 @@ const ShaeCalendar = () => {
   //       },
   //     },
   //   ];
+
+  if (loading){
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="calendar-container">

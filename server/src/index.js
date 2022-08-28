@@ -27,6 +27,16 @@ app.use(cors())
 app.use('/app',routerUrls);
 app.use('/', timetableRouter);
 
+if (process.env.NODE_ENV === 'production'){
+    app.use(express.static(path.join(__dirname, '../../client/build')));
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../', '../', 'client', 'build', 'index.html'));
+    });
+}
+else {
+    app.get('/', (req, res) => res.send("set to production"));
+}
+
 app.listen(PORT,() =>{
     console.log(`Server connected at port ${PORT}`);
 });

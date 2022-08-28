@@ -6,6 +6,7 @@
         ]
     },
     "version": "0.1.0",
+    "proxy": "http://localhost:4000",
     "private": true,
     "dependencies": {
         "@mobiscroll/react": "https://npm.mobiscroll.com/@mobiscroll/react-trial/-/react-trial-5.18.1.tgz",
