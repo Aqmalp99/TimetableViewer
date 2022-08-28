@@ -1,24 +1,37 @@
 import React, { useMemo, useEffect, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Eventcalendar, Button, getJson, toast } from "@mobiscroll/react";
+import axios from 'axios';
 
 const ShaeCalendar = () => {
   const [myEvents, setEvents] = React.useState([]);
 
   //events object has color, end, id, start, title
   useEffect(() => {
-    setEvents([
-      {
-        // base properties
-        title: "COMPSCI 3304",
-        className: "Engineering Software as Services II",
-        venue: "Ingkarni Wardli / B17 / Teaching Room",
-        classType: "Lecture",
-        color: "#56ca70",
-        start: new Date(2022, 7, 27, 13),
-        end: new Date(2022, 7, 27, 15),
-      },
-    ]);
+    const getClasses = async () => {
+      await axios
+      .get("http://localhost:4000/staff/1")
+      .then((response) => {
+        console.log(response.data);
+        setEvents([
+          {
+            // base properties
+            title: "COMPSCI 3304",
+            className: "Engineering Software as Services II",
+            venue: "Ingkarni Wardli / B17 / Teaching Room",
+            classType: "Lecture",
+            color: "#56ca70",
+            start: new Date(2022, 7, 27, 13),
+            end: new Date(2022, 7, 27, 15),
+          },
+        ]);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    }
+
+    getClasses();
   }, []);
 
   //custom content in calendar item

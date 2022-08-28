@@ -2,7 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/staff/:id', async (req, res) => {
-    const query = `SELECT * FROM users`;
+    const query = `SELECT class.class_code, class.class_name, class.class_type, class.start_date, class.start_time, class.end_time from staff_enrolments
+                    INNER JOIN class
+                    ON class.class_id = staff_enrolments.class_id
+                    WHERE staff_enrolments.staff_id = 1;`;
+    let data = "";
     await req.pool.connect((err, client, release) => {
         if (err) {
             return console.error('Error acquiring client', err.stack)
@@ -12,11 +16,11 @@ router.get('/staff/:id', async (req, res) => {
             if (err) {
                 return console.error('Error executing query', err.stack)
             }
-            console.log(result.rows)
+            // console.log(result.rows)
+            res.send(result.rows);
+            // console.log(data);
         })
     })
-
-    res.sendStatus(200);
 });
 
 module.exports = router;
