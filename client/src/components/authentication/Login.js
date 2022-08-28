@@ -9,15 +9,14 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 import Container from "react-bootstrap/Container";
+import { Prev } from "react-bootstrap/esm/PageItem";
+import Tmc from "./Tmc";
 
 const Login = ()  => {
-    const [currentLogin, newLogin] = useState({
-        email:'',
-        password:''
-    });
+    const [showTmc, setShowTmc]  = useState(false);
 
-    const updateLogin = () => {
-        newLogin({email:Event.})
+    const openTmc = () => {
+        setShowTmc(prev => !prev);
     }
     return(
         <>
@@ -30,7 +29,7 @@ const Login = ()  => {
                         <Row>
                             <Col>
                                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                                    <Form.Control type="email" placeholder="Enter email" />
+                                    <Form.Control type="Text" placeholder="Enter Username" />
                                 </Form.Group>
                             
                                 <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -38,9 +37,19 @@ const Login = ()  => {
                                 </Form.Group>
                             </Col>
                         </Row>
-                        <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                            <Form.Check type="checkbox" label="Agree" />
-                        </Form.Group>
+                        <Row xs="auto">
+                            <Col>
+                                <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                                    <Form.Check type="checkbox" />
+                                </Form.Group>
+                            </Col>
+                            <Col>
+                                <Form.Group className="mb-3">
+                                    <a href="#"><Form.Label onClick={openTmc}>Agree Terms and Conditions</Form.Label></a>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Tmc showTmc={showTmc} setShowTmc={setShowTmc}/>
                         <Button variant="primary" type="submit">
                             Submit
                         </Button>
