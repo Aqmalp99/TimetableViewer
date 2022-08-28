@@ -12,23 +12,24 @@ const ShaeCalendar = () => {
       await axios
       .get("http://localhost:4000/staff/1")
       .then((response) => {
-        console.log(response.data);
-        setEvents([
-          {
-            // base properties
-            title: "COMPSCI 3304",
-            className: "Engineering Software as Services II",
-            venue: "Ingkarni Wardli / B17 / Teaching Room",
-            classType: "Lecture",
+        let data = [];
+        response.data.map(element => {
+          data.push({
+            title: element.class_code,
+            className: element.class_name,
+            classType: element.class_type,
             color: "#56ca70",
-            start: new Date(2022, 7, 27, 13),
-            end: new Date(2022, 7, 27, 15),
-          },
-        ]);
+            start: new Date(element.start_date.slice(0,10) + "T" + element.start_time),
+            end: new Date(element.start_date.slice(0,10) +"T" + element.end_time),
+          })
+        })
+        console.log(data);
+        setEvents(data);
+        setLoadReady(true);
       })
       .catch((err) => {
         console.log(err);
-      })
+      });
     }
 
     getClasses();
