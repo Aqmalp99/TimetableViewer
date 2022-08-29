@@ -6,6 +6,7 @@ import axios from 'axios';
 const ShaeCalendar = () => {
   const [myEvents, setEvents] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
 
   //events object has color, end, id, start, title
   useEffect(() => {
@@ -13,28 +14,28 @@ const ShaeCalendar = () => {
       await axios
       .get("/staff/1")
       .then((response) => {
-        let data = [];
-        response.data.map(element => {
-          data.push({
+        let data = response.data.map(element => {
+          return {
             title: element.class_code,
             className: element.class_name,
             classType: element.class_type,
             color: "#56ca70",
             start: new Date(element.start_date.slice(0,10) + "T" + element.start_time),
             end: new Date(element.start_date.slice(0,10) +"T" + element.end_time),
+            venue: element.room_code + " / " + element.building,
             recurring: {
               repeat: 'weekly',
               interval: 1
             }
-          })
+          };
         })
         setEvents(data);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
-      })
-      .finally(() => {
         setLoading(false);
+        setError(500);
       });
     }
 
@@ -47,9 +48,9 @@ const ShaeCalendar = () => {
         <div>
           <div>
              <div>{data.original.title}</div>
-              <div>{data.original.className}</div>
-              {/* <div>{data.original.venue}</div> */}
-              <div>{data.original.classType}</div>
+             <div>{data.original.className}</div>
+             <div>{data.original.venue}</div>
+             <div>{data.original.classType}</div>
             </div>
         </div>
       );
@@ -97,6 +98,12 @@ const ShaeCalendar = () => {
 
   if (loading){
     return <div>Loading...</div>;
+  }
+
+  if (error){
+    if (error === 500){
+      return <div>There has been an error fetching your class details. Please refresh your page and try again</div>
+    }  
   }
 
   return (

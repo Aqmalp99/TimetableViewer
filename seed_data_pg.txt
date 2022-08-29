@@ -18,7 +18,9 @@ VALUES ('COMPSCI 4412', 'Secure Software Engineering', 'Lecture', '2022-08-22', 
 INSERT INTO staff_enrolments (staff_id, class_id) VALUES (1, 1);
 INSERT INTO staff_enrolments (staff_id, class_id) VALUES (1, 3);
 
-SELECT staff_enrolments.staff_id, class.class_code, class.class_name, class.class_type, class.start_time, class.end_time, class.capacity from staff_enrolments
+SELECT class.class_code, class.class_name, class.class_type, class.start_date, class.start_time, class.end_time, venue.room_code, venue.building from staff_enrolments
 INNER JOIN class
 ON class.class_id = staff_enrolments.class_id
+INNER JOIN venue
+on class.venue_id = venue.venue_id
 WHERE staff_enrolments.staff_id = 1;
