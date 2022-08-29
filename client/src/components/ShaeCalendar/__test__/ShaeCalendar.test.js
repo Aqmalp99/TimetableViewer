@@ -20,3 +20,9 @@ it('sends an api call from axios', async () => {
 // it('displays loading before api call', () => {
 //     jest.mock("axios");
 // });
+
+//how do i do this??
+// it('displays error if there is an error fetching with axios', ()=>{})
+
+//How do i do this??
+//it('fetches the correct data from the database', ()=>{});
