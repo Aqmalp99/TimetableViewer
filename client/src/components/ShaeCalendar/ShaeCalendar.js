@@ -1,13 +1,14 @@
-import React, { useMemo, useEffect, useCallback } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Eventcalendar, Button, toast } from "@mobiscroll/react";
 import axios from 'axios';
 
-const ShaeCalendar = () => {
-  const [myEvents, setEvents] = React.useState([]);
+const ShaeCalendar = ({ifEventSelected}) => {
+  const [myEvents, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState({});
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
-
+  
   //events object has color, end, id, start, title
   useEffect(() => {
     const getClasses = async () => {
@@ -42,27 +43,22 @@ const ShaeCalendar = () => {
     getClasses();
   }, []);
 
-  //custom content in calendar item
-  const renderScheduleEventContent = React.useCallback((data) => {
-      return (
-        <div>
-          <div>
-             <div>{data.original.title}</div>
-             <div>{data.original.className}</div>
-             <div>{data.original.venue}</div>
-             <div>{data.original.classType}</div>
-            </div>
-        </div>
-      );
-      });
-
-  
   const onEventClick = useCallback((event) => {
-    toast({
-      message: event.event.title,
+    // toast({
+    //   message: event.event.title,
+    // });
+    setSelectedEvent({
+      eventName: event.event.title,
     });
+    ifEventSelected(true);
   }, []);
 
+  const onCellClick = useCallback((event) => {
+    setSelectedEvent({});
+    ifEventSelected(false);
+  }, []);
+
+  // const renderScheduleEvent = useCallback((data) => {});
 
   //make start time and end time dynamic based on the classes for that day
   const view = useMemo(() => {
@@ -75,6 +71,20 @@ const ShaeCalendar = () => {
       },
     };
   }, []);
+
+  //custom content in calendar item
+  const renderScheduleEventContent = React.useCallback((data) => {
+    return (
+      <div>
+        <div>
+           <div>{data.original.title}</div>
+           <div>{data.original.className}</div>
+           <div>{data.original.venue}</div>
+           <div>{data.original.classType}</div>
+          </div>
+      </div>
+    );
+    });
 
   //   const inv = [
   //     {
@@ -108,6 +118,7 @@ const ShaeCalendar = () => {
 
   return (
     <div className="calendar-container">
+      {console.log(myEvents)}
       <Eventcalendar
         className="calendar-width"
         theme="ios"
@@ -121,6 +132,7 @@ const ShaeCalendar = () => {
         view={view}
         invalidateEvent="strict"
         // invalid={inv}
+        onCellClick={onCellClick}
         onEventClick={onEventClick}
         renderScheduleEventContent={renderScheduleEventContent}
       />
