@@ -26,3 +26,6 @@ it('sends an api call from axios', async () => {
 
 //How do i do this??
 //it('fetches the correct data from the database', ()=>{});
+
+//How do i do this??
+//it('displays a message explaining i am not enrolled in any classes', ()=>{})
