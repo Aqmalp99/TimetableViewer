@@ -31,6 +31,8 @@ const ShaeCalendar = ({ifEventSelected}) => {
           };
         })
         setEvents(data);
+        if (response.data.length === 0)
+          setError("No classes");
         setLoading(false);
       })
       .catch((err) => {
@@ -44,9 +46,9 @@ const ShaeCalendar = ({ifEventSelected}) => {
   }, []);
 
   const onEventClick = useCallback((event) => {
-    // toast({
-    //   message: event.event.title,
-    // });
+    toast({
+      message: event.event.title,
+    });
     setSelectedEvent({
       eventName: event.event.title,
     });
@@ -113,7 +115,11 @@ const ShaeCalendar = ({ifEventSelected}) => {
   if (error){
     if (error === 500){
       return <div>There has been an error fetching your class details. Please refresh your page and try again</div>
-    }  
+    }
+    
+    if (error === "No classes"){
+      return <div>We have no record of your enrolment in any classes. Please contact a course administrator.</div>
+    }
   }
 
   return (
