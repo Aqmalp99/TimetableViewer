@@ -1,25 +1,46 @@
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import { Eventcalendar, Button, getJson, toast } from "@mobiscroll/react";
+import { Eventcalendar, Button, toast } from "@mobiscroll/react";
+import axios from 'axios';
 
 const ShaeCalendar = ({ifEventSelected}) => {
   const [myEvents, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState({});
-
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
+  
   //events object has color, end, id, start, title
   useEffect(() => {
-    setEvents([
-      {
-        // base properties
-        title: "Product planning",
-        color: "#56ca70",
-        start: new Date(2022, 7, 27, 13),
-        end: new Date(2022, 7, 27, 14),
-        // add any property you'd like
-        description: "Weekly meeting with team",
-        location: "Office",
-      },
-    ]);
+    const getClasses = async () => {
+      await axios
+      .get("/staff/1")
+      .then((response) => {
+        let data = response.data.map(element => {
+          return {
+            title: element.class_code,
+            className: element.class_name,
+            classType: element.class_type,
+            color: "#56ca70",
+            start: new Date(element.start_date.slice(0,10) + "T" + element.start_time),
+            end: new Date(element.start_date.slice(0,10) +"T" + element.end_time),
+            venue: element.room_code + " / " + element.building,
+            recurring: {
+              repeat: 'weekly',
+              interval: 1
+            }
+          };
+        })
+        setEvents(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+        setError(500);
+      });
+    }
+
+    getClasses();
   }, []);
 
   const onEventClick = useCallback((event) => {
@@ -39,15 +60,31 @@ const ShaeCalendar = ({ifEventSelected}) => {
 
   // const renderScheduleEvent = useCallback((data) => {});
 
+  //make start time and end time dynamic based on the classes for that day
   const view = useMemo(() => {
     return {
       schedule: {
         type: "week",
-        startTime: "07:00",
-        endTime: "19:00",
+        startTime: "08:00",
+        endTime: "18:00",
+        allDay: false
       },
     };
   }, []);
+
+  //custom content in calendar item
+  const renderScheduleEventContent = React.useCallback((data) => {
+    return (
+      <div>
+        <div>
+           <div>{data.original.title}</div>
+           <div>{data.original.className}</div>
+           <div>{data.original.venue}</div>
+           <div>{data.original.classType}</div>
+          </div>
+      </div>
+    );
+    });
 
   //   const inv = [
   //     {
@@ -69,9 +106,19 @@ const ShaeCalendar = ({ifEventSelected}) => {
   //     },
   //   ];
 
+  if (loading){
+    return <div>Loading...</div>;
+  }
+
+  if (error){
+    if (error === 500){
+      return <div>There has been an error fetching your class details. Please refresh your page and try again</div>
+    }  
+  }
+
   return (
     <div className="calendar-container">
-      {/* {console.log(myEvents)} */}
+      {console.log(myEvents)}
       <Eventcalendar
         className="calendar-width"
         theme="ios"
@@ -87,7 +134,7 @@ const ShaeCalendar = ({ifEventSelected}) => {
         // invalid={inv}
         onCellClick={onCellClick}
         onEventClick={onEventClick}
-        // renderScheduleEvent={renderScheduleEvent}
+        renderScheduleEventContent={renderScheduleEventContent}
       />
     </div>
   );
