@@ -15,6 +15,7 @@ const ShaeCalendar = ({ifEventSelected}) => {
       await axios
       .get("/staff/1")
       .then((response) => {
+        console.log(response);
         let data = response.data.map(element => {
           return {
             title: element.class_code,
