@@ -3,6 +3,9 @@ import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Eventcalendar, Button, toast } from "@mobiscroll/react";
 import axios from 'axios';
 
+//how to get session token, verify if student or staff
+//depending on account, different route
+
 const ShaeCalendar = ({ifEventSelected}) => {
   const [myEvents, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState({});
