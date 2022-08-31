@@ -16,6 +16,9 @@ const ShaeTest = () => {
       <Button disabled={buttonDisabled}>
         Get Recommended Times
       </Button>
+      <Button disabled={buttonDisabled}>
+        Get Alternate Venues
+      </Button>
     </div>
   );
 };
