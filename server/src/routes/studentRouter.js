@@ -1,5 +1,7 @@
-const express = require('express')
-const studentRouter = express.Router()
+const express = require('express');
+const studentRouter = express.Router();
+const bcrypt = require('bcrypt');
+const saltRounds =10;
 // const testData = require('../models/loginModels')
 
 studentRouter.post('', (request,response) => {

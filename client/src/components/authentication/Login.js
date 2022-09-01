@@ -18,6 +18,27 @@ const Login = ()  => {
     const openTmc = () => {
         setShowTmc(prev => !prev);
     }
+
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    const onUsernameChange = e => setUsername(e.target.value);
+    const onPasswordChange = e => setPassword(e.target.value);
+
+    const handleLogin = async(e) => {
+        e.preventDefault();
+        try {
+            const body = {username,password};
+            const loginDetails = await fetch("http://localhost:8080/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json"},
+                body: JSON.stringify(body)
+            });
+
+        }catch(err) {
+            console.error(err.message);
+        }
+    }
     return(
         <>
         <div className="login-container">
@@ -25,15 +46,15 @@ const Login = ()  => {
                 <h1>Login</h1>
                 <br/>
                 <Container>
-                   <Form>
+                   <Form onSubmit={handleLogin}>
                         <Row>
                             <Col>
-                                <Form.Group className="mb-3" controlId="formBasicEmail">
-                                    <Form.Control type="Text" placeholder="Enter Username" />
+                                <Form.Group className="mb-3" id="username" controlId="formBasicEmail">
+                                    <Form.Control type="Text" value={username} onChange={onUsernameChange} placeholder="Enter Username" />
                                 </Form.Group>
                             
-                                <Form.Group className="mb-3" controlId="formBasicPassword">
-                                    <Form.Control type="password" placeholder="Password" />
+                                <Form.Group className="mb-3" id="password" controlId="formBasicPassword">
+                                    <Form.Control type="password" value={password} onChange={onPasswordChange} placeholder="Password" />
                                 </Form.Group>
                             </Col>
                         </Row>
