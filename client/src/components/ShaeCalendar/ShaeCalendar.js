@@ -1,206 +1,96 @@
-import React, { useMemo, useEffect, useCallback } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import { Eventcalendar, Button, getJson, toast } from "@mobiscroll/react";
+import { Eventcalendar, Button, toast } from "@mobiscroll/react";
+import axios from 'axios';
 
-const ShaeCalendar = () => {
-  const [myEvents, setEvents] = React.useState([]);
+//how to get session token, verify if student or staff
+//depending on account, different route
 
-  // React.useEffect(() => {
-  //   getJson(
-  //     "https://trial.mobiscroll.com/events/?vers=5",
-  //     (events) => {
-  //       setEvents(events);
-  //     },
-  //     "jsonp"
-  //   );
-  // }, []);
-
-  // React.useEffect(() => {
-  //   getJson(
-  //     "https://trial.mobiscroll.com/multi-events/",
-  //     (events) => {
-  //       setEvents(events);
-  //     },
-  //     "jsonp"
-  //   );
-  // }, []);
-
-  // const getCategory = (id) => {
-  //   switch (id) {
-  //     case 1:
-  //       return {
-  //         name: "Project X",
-  //         color: "#ff825d",
-  //       };
-  //     case 2:
-  //       return {
-  //         name: "Stakeholder Mtg.",
-  //         color: "#bd75d0",
-  //       };
-  //     case 3:
-  //       return {
-  //         name: "Status Update",
-  //         color: "#7f9230",
-  //       };
-  //     case 4:
-  //       return {
-  //         name: "Information Sharing",
-  //         color: "#f14590",
-  //       };
-  //     case 5:
-  //       return {
-  //         name: "Team Building",
-  //         color: "#64cad4",
-  //       };
-  //     default:
-  //       return {
-  //         name: "No category",
-  //         color: "#5ac8fa",
-  //       };
-  //   }
-  // };
-
-  // const getParticipant = (id) => {
-  //   switch (id) {
-  //     case 1:
-  //       return {
-  //         name: "Lisa",
-  //         img: "https://img.mobiscroll.com/demos/f1.png",
-  //       };
-  //     case 2:
-  //       return {
-  //         name: "Sharon",
-  //         img: "https://img.mobiscroll.com/demos/f2.png",
-  //       };
-  //     case 3:
-  //       return {
-  //         name: "Emily",
-  //         img: "https://img.mobiscroll.com/demos/f3.png",
-  //       };
-  //     case 4:
-  //       return {
-  //         name: "Rose",
-  //         img: "https://img.mobiscroll.com/demos/f4.png",
-  //       };
-  //     case 5:
-  //       return {
-  //         name: "Matt",
-  //         img: "https://img.mobiscroll.com/demos/m1.png",
-  //       };
-  //     case 6:
-  //       return {
-  //         name: "Rick",
-  //         img: "https://img.mobiscroll.com/demos/m2.png",
-  //       };
-  //     case 7:
-  //       return {
-  //         name: "John",
-  //         img: "https://img.mobiscroll.com/demos/m3.png",
-  //       };
-  //     case 8:
-  //       return {
-  //         name: "Ethan",
-  //         img: "https://img.mobiscroll.com/demos/m4.png",
-  //       };
-  //   }
-  // };
-
-  // const edit = () => {
-  //   toast({ message: "Edit clicked" });
-  // };
-
-  // const renderScheduleEvent = React.useCallback((data) => {
-  //   const cat = getCategory(data.original.category);
-  //   if (data.allDay) {
-  //     return (
-  //       <div
-  //         style={{ background: cat.color }}
-  //         className="md-custom-event-allday-title"
-  //       >
-  //         {data.title}
-  //       </div>
-  //     );
-  //   } else {
-  //     return (
-  //       <div
-  //         className="md-custom-event-cont"
-  //         style={{
-  //           // border: "2px solid " + cat.color,
-  //           border: "2px solid black",
-  //           background: cat.color,
-  //         }}
-  //       >
-  //         <div className="md-custom-event-wrapper">
-  //           <div
-  //             style={{ background: cat.color }}
-  //             className="md-custom-event-category"
-  //           >
-  //             {cat.name}
-  //           </div>
-  //           <div className="md-custom-event-details">
-  //             <div className="md-custom-event-title">{data.title}</div>
-  //             <div className="md-custom-event-time">
-  //               {data.start} - {data.end}
-  //             </div>
-  //             <Button
-  //               className="md-custom-event-btn"
-  //               color="dark"
-  //               variant="outline"
-  //               onClick={edit}
-  //             >
-  //               Edit
-  //             </Button>
-  //             <div className="md-cutom-event-img-cont">
-  //               {data.original.participants &&
-  //                 data.original.participants.map(function (p) {
-  //                   return (
-  //                     <img
-  //                       key={p}
-  //                       className="md-custom-event-img"
-  //                       src={getParticipant(p).img}
-  //                     />
-  //                   );
-  //                 })}
-  //             </div>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     );
-  //   }
-  // });
+const ShaeCalendar = ({ifEventSelected}) => {
+  const [myEvents, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState({});
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
+  
   //events object has color, end, id, start, title
   useEffect(() => {
-    setEvents([
-      {
-        // base properties
-        title: "Product planning",
-        color: "#56ca70",
-        start: new Date(2022, 7, 17, 13),
-        end: new Date(2022, 7, 17, 14),
-        // add any property you'd like
-        description: "Weekly meeting with team",
-        location: "Office",
-      },
-    ]);
+    const getClasses = async () => {
+      await axios
+      .get("/staff/1")
+      .then((response) => {
+        console.log(response);
+        let data = response.data.map(element => {
+          return {
+            title: element.class_code,
+            className: element.class_name,
+            classType: element.class_type,
+            color: "#56ca70",
+            start: new Date(element.start_date.slice(0,10) + "T" + element.start_time),
+            end: new Date(element.start_date.slice(0,10) +"T" + element.end_time),
+            venue: element.room_code + " / " + element.building,
+            recurring: {
+              repeat: 'weekly',
+              interval: 1
+            }
+          };
+        })
+        setEvents(data);
+        if (response.data.length === 0)
+          setError("No classes");
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+        setError(500);
+      });
+    }
+
+    getClasses();
   }, []);
 
-  // const onEventClick = useCallback((event) => {
-  //   toast({
-  //     message: event.event.title,
-  //   });
-  // }, []);
+  const onEventClick = useCallback((event) => {
+    toast({
+      message: event.event.title,
+    });
+    setSelectedEvent({
+      eventName: event.event.title,
+    });
+    ifEventSelected(true);
+  }, []);
+
+  const onCellClick = useCallback((event) => {
+    setSelectedEvent({});
+    ifEventSelected(false);
+  }, []);
 
   // const renderScheduleEvent = useCallback((data) => {});
 
+  //make start time and end time dynamic based on the classes for that day
   const view = useMemo(() => {
     return {
       schedule: {
         type: "week",
-        startTime: "07:00",
-        endTime: "19:00",
+        startTime: "08:00",
+        endTime: "18:00",
+        allDay: false
       },
     };
   }, []);
+
+  //custom content in calendar item
+  const renderScheduleEventContent = React.useCallback((data) => {
+    return (
+      <div>
+        <div>
+           <div>{data.original.title}</div>
+           <div>{data.original.className}</div>
+           <div>{data.original.venue}</div>
+           <div>{data.original.classType}</div>
+          </div>
+      </div>
+    );
+    });
 
   //   const inv = [
   //     {
@@ -222,6 +112,20 @@ const ShaeCalendar = () => {
   //     },
   //   ];
 
+  if (loading){
+    return <div>Loading...</div>;
+  }
+
+  if (error){
+    if (error === 500){
+      return <div>There has been an error fetching your class details. Please refresh your page and try again</div>
+    }
+    
+    if (error === "No classes"){
+      return <div>We have no record of your enrolment in any classes. Please contact a course administrator.</div>
+    }
+  }
+
   return (
     <div className="calendar-container">
       {console.log(myEvents)}
@@ -229,7 +133,7 @@ const ShaeCalendar = () => {
         className="calendar-width"
         theme="ios"
         themeVariant="light"
-        clickToCreate={true}
+        clickToCreate={false}
         dragToCreate={false}
         dragToMove={false}
         dragToResize={false}
@@ -238,8 +142,9 @@ const ShaeCalendar = () => {
         view={view}
         invalidateEvent="strict"
         // invalid={inv}
-        // onEventClick={onEventClick}
-        // renderScheduleEvent={renderScheduleEvent}
+        onCellClick={onCellClick}
+        onEventClick={onEventClick}
+        renderScheduleEventContent={renderScheduleEventContent}
       />
     </div>
   );

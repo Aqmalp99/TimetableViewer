@@ -13,6 +13,7 @@ import { Prev } from "react-bootstrap/esm/PageItem";
 import Tmc from "./Tmc";
 
 const Login = ()  => {
+
     const [showTmc, setShowTmc]  = useState(false);
 
     const openTmc = () => {
@@ -29,7 +30,7 @@ const Login = ()  => {
         e.preventDefault();
         try {
             const body = {username,password};
-            const loginDetails = await fetch("http://localhost:8080/", {
+            const loginDetails = await fetch("http://localhost:4000/", {
                 method: "POST",
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify(body)
@@ -39,6 +40,16 @@ const Login = ()  => {
             console.error(err.message);
         }
     }
+
+    // const [currentLogin, newLogin] = useState({
+    //     email:'',
+    //     password:''
+    // });
+
+    // const updateLogin = () => {
+    //     // newLogin({email:Event.})
+    // }
+
     return(
         <>
         <div className="login-container">
