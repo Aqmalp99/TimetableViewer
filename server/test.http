@@ -1,6 +1,6 @@
-POST http://localhost:4000/app/student
+POST http://localhost:8080/signup
 Content-Type: application/json
 
 {
-    "name":"testing-vnay2"
+    "description":"testing-vnay2"
 }
