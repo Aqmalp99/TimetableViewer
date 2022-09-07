@@ -1,3 +1,14 @@
+CREATE EXTENSION pgcrypto;
+
+INSERT INTO users (email, password)
+VALUES ('test@test.com', crypt('test', gen_salt('bf')));
+
+INSERT INTO enrolled_classes (student_id, class_id)
+VALUES (2, 4);
+
+INSERT INTO class (class_code, class_name, class_type, start_date, start_time, end_time, capacity, venue_id)
+VALUES ('COMPSCI 1000', 'Clash Class', 'Lecture', '2022-08-22', '11:00:00', '13:00:00', 50, 4);
+
 INSERT INTO venue (room_code, building, capacity) VALUES ('B17', 'Ingkarni Wardli', 30);
 INSERT INTO venue (room_code, building, capacity) VALUES ('EM205', 'Engineering & Mathematics', 30);
 INSERT INTO venue (room_code, building, capacity) VALUES ('218', 'Ingkarni Wardli', 30);
