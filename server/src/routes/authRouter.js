@@ -2,6 +2,7 @@ const express = require('express')
 const bcrypt = require('bcrypt');
 const { deleteOne } = require('../models/loginModels');
 // const pool = require("../db/database")
+const pool = require("../db/dbCongif");
 const authRouter = express.Router();
 
 
@@ -9,43 +10,30 @@ authRouter.post('/', async(req, res) => {
     try {
        
         const {username, password} = req.body;
-        let hashedPassword = await bcrypt.hash(password,10);
-        const query = `SELECT * FROM users WHERE username = $1`
-
-        await req.pool.connect((err, client, release) => {
-            if (err) {
-                return console.error('Error acquiring client', err.stack)
-            }
-            client.query(query, [username], (err, result) => {
-                release();
-                if (err) {
-                    return console.error('Error executing query', err.stack)
+        const loginCheck = await pool.query(
+            `SELECT username,password,role FROM users u 
+            WHERE u.username = $1`,[username]
+        );
+        if (loginCheck.rowCount > 0){
+            const isMatch = await bcrypt.compare(password, loginCheck.rows[0].password);
+            if(isMatch)
+            {
+                req.session.user = {
+                    username: username,
+                    role: loginCheck.rows[0].role
                 }
-                console.log(result.rows)
-                // if (result.rows.length > 0){
-                //     const user = result.rows[0]
-                //     bcrypt.compare(password,user.password, (err, isMatch){
-                //         if (err){
-                //             throw err
-                //         }
-                //         if(isMatch){
-                //             return done(null, user);
-                //         }else{
-                //             return done(null, false, {message: "incorrect password"});
-                //         }
-                //     });
-
-                // }else {
-                //     return done(null, false, {message: "Username not matched"});
-                // }
-                // console.log(data);
-            })
-        });
-        console.log({
-            username
-        });
-        // console.log(hashedPassword);
-        // res.json(newUser);
+                console.log(req.session);
+            }
+            else{
+                // pass is incorrect
+                console.log("password incorrect");
+                res.json({loggedIn: false, status:"Username or Password is wrong"});
+            }
+        }else{
+            // user name is incorrect
+            console.log("username incorrect");
+            res.json({loggedIn: false, status:"Username or Password is wrong"});
+        }
     }catch(err){
         console.error(err.message);
     }

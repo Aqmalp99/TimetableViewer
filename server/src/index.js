@@ -2,10 +2,9 @@ const express = require('express');
 const authRouter = require("./routes/authRouter");
 const signUpRouter = require("./routes/signUpRouter")
 const session = require("express-session");
-
 const app = express();
 // const mongoose = require('mongoose');
-const dotenv = require('dotenv').config();
+const dotenv = require('dotenv').config('.env');
 const routerUrls = require('./routes/routes');
 const timetableRouter = require('./routes/timetableRouter');
 const cors = require('cors');
@@ -14,9 +13,17 @@ const path = require('path');
 const dbPool = require('./db/dbCongif');
 // session for user
 app.use(session({
-    secret:'secret',
+    secret: "secret",
+    credentials: true,
+    name: "sid",
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.ENVIRONMENT === "production" ? "true": "auto",
+        httpOnly: true,
+        expires: 1000 * 60 * 60 * 24 * 7,
+        sameSite: process.env.ENVIRONMENT === "production" ? "none" : "lax",
+    }
 })
 );
 // Messages

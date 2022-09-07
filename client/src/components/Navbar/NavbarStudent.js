@@ -23,10 +23,10 @@ const NavbarTemp = () => {
                   <Nav.Link href="/about">About</Nav.Link>
                 </Nav>
               </Col>
-              <Col md={{ span: 2, offset: 6 }}>
+              <Col md={{ span: 3, offset: 6 }}>
                 <Nav >
-                  <Nav.Link>Login</Nav.Link>
-                  <Nav.Link >Sign Up</Nav.Link>
+                  <Nav.Link>Edit Profile</Nav.Link>
+                  <Nav.Link >Sign Out</Nav.Link>
                   {/* <Nav.Link onClick={displaySignup}>Sign Up</Nav.Link> */}
                 </Nav>
               </Col>

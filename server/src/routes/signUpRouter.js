@@ -29,6 +29,7 @@ signUpRouter.post('/signup', async(req, res) => {
                     VALUES($1,$2,$3,$4,$5,$6);`,
                     [username, fullname, email,hashedPassword,role,notification] 
             );
+            res.json({loggedIn: true, username: username});
         } else{
             res.json({loggedIn: false, status:"Username taken"})
             console.log("same user")
