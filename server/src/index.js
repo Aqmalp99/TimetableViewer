@@ -1,4 +1,8 @@
 const express = require('express');
+const authRouter = require("./routes/authRouter");
+const signUpRouter = require("./routes/signUpRouter")
+const session = require("express-session");
+
 const app = express();
 // const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
@@ -6,8 +10,16 @@ const routerUrls = require('./routes/routes');
 const timetableRouter = require('./routes/timetableRouter');
 const cors = require('cors');
 const path = require('path');
-const dbPool = require('./db/database');
-
+// const dbPool = require('./db/database');
+const dbPool = require('./db/dbCongif');
+// session for user
+app.use(session({
+    secret:'secret',
+    resave: false,
+    saveUninitialized: false
+})
+);
+// Messages
 app.use((req,res,next) => {
     req.pool = dbPool;
     next();
@@ -26,6 +38,8 @@ app.use(express.json());
 app.use(cors())
 app.use('/app',routerUrls);
 app.use('/', timetableRouter);
+app.use("/", signUpRouter);
+app.use("/", authRouter);
 
 if (process.env.NODE_ENV === 'production'){
     app.use(express.static(path.join(__dirname, '../../client/build')));

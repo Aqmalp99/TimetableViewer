@@ -13,8 +13,8 @@ function App() {
       <Route  exact path="/" element={<Home />} />
 
       <Route  path="/signup" element={<Signup />} />
-      <Route path="/shae" element={<ShaeTest />}/>
-      <Route path="/Timetable" element={<TimetableView />} />
+      {/* <Route path="/shae" element={<ShaeTest />}/> */}
+      {/* <Route path="/Timetable" element={<TimetableView />} /> */}
     </Routes>
     
   );
