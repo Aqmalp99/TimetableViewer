@@ -1,6 +1,7 @@
-POST http://localhost:8080/signup
+POST http://localhost:4000
 Content-Type: application/json
 
 {
-    "description":"testing-vnay2"
+    "username":"a1111",
+    "password":"1111"
 }

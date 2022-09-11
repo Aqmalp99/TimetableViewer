@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 // const pool = require("../db/database")
 const pool = require("../db/dbCongif");
 const jwt = require('jsonwebtoken');
+const jwtTokens = require('../utilities/jwt-helper')
 
 
 const authRouter = express.Router();
@@ -26,9 +27,16 @@ authRouter.post('/', async(req,res) => {
             console.log("wrong password");
             return res.status(401).json({error: "Username or Password in incorrect"});
         }
+        if(loginCheck.rowCount > 0 && validPassword)
+        {
+            console.log("Good for login");
+            console.log(loginCheck.rows[0].role)
+            let tokens = jwtTokens(loginCheck.rows[0].username, loginCheck.rows[0].role);
+            res.cookie(tokens);
+        }
 
     }catch(error){
-
+        res.status(401).json({error: error.message});
     }
 
 });
