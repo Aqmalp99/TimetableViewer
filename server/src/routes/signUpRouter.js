@@ -3,7 +3,6 @@ const signUpRouter = express.Router()
 const bcrypt = require('bcrypt');
 // const pool = require("../db/database")
 const pool = require("../db/dbCongif");
-const flash = require("express-flash");
 
 
 signUpRouter.post('/signup', async(req, res) => {

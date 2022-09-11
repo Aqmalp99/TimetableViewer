@@ -1,17 +1,30 @@
-const express = require('express');
+// routes
 const authRouter = require("./routes/authRouter");
 const signUpRouter = require("./routes/signUpRouter")
+const timetableRouter = require('./routes/timetableRouter');
+const routerUrl = require("./routes/routes")
+///
+const express = require('express');
 const session = require("express-session");
 const app = express();
-// const mongoose = require('mongoose');
-const dotenv = require('dotenv').config('.env');
-const routerUrls = require('./routes/routes');
-const timetableRouter = require('./routes/timetableRouter');
+const dotenv = require('dotenv').config();
+
 const cors = require('cors');
 const path = require('path');
 // const dbPool = require('./db/database');
 const dbPool = require('./db/dbCongif');
 // session for user
+
+app.use((req,res,next) => {
+    req.pool = dbPool;
+    next();
+});
+
+const PORT = process.env.PORT || 4000;
+app.use(express.json());
+app.use(cors());
+
+// setting up the server and cookie
 app.use(session({
     secret: "secret",
     credentials: true,
@@ -26,27 +39,10 @@ app.use(session({
     }
 })
 );
-// Messages
-app.use((req,res,next) => {
-    req.pool = dbPool;
-    next();
-});
-
-// require('dotenv').config({ path: path.resolve(__dirname, './.env') });
-
-// dotenv.config()
-
-// mongoose.connect(process.env.DATABASE_CONNECT,()=>{
-//     console.log("Database connected")
-// });
-
-const PORT = process.env.PORT || 4000;
-app.use(express.json());
-app.use(cors())
-app.use('/app',routerUrls);
 app.use('/', timetableRouter);
 app.use("/", signUpRouter);
 app.use("/", authRouter);
+app.use('/app/users',routerUrl);
 
 if (process.env.NODE_ENV === 'production'){
     app.use(express.static(path.join(__dirname, '../../client/build')));

@@ -1,21 +1,17 @@
-
-
 const express = require('express')
 const router = express.Router()
-const testData = require('../models/loginModels')
+const pool = require("../db/dbCongif");
 
-router.post('/shae', (request,response) => {
-    const testing = new testData({
-        name:request.body.name
+router.get('/', async (req,res) => {
+    try{
+        const userDetails = await pool.query(
+            `SELECT * FROM users;`
+        );
+        res.json({userDetails: userDetails.rows});
 
-    })  
-    testing.save()
-    .then(data => {
-        response.json(data)
-    })
-    .catch(error => {
-        response.json(error)
-    })
+    }catch(error){
+        res.status(500).json({error:error.message});
+    }
 });
 
 module.exports = router
