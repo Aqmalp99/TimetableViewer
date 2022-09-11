@@ -1,6 +1,5 @@
 import { useState, Fragment } from "react";
 // Components Imports
-import NavbarTemp from "../Navbar/NavbarHome";
 // Bootstrap imports
 import Container from "react-bootstrap/Container";
 import { Button} from "react-bootstrap";
@@ -53,7 +52,6 @@ const Signup = () =>{
             const newUserRequest = await fetch("http://localhost:4000/signup", {
                 method: "POST",
                 headers: { "Content-Type": "application/json"},
-                credentials: "include",
                 body: JSON.stringify(body)
             });
             console.log(newUserRequest);
@@ -65,7 +63,6 @@ const Signup = () =>{
     return(
         <>
             <div className="bg-container">
-            <NavbarTemp/>
             <div className="login-container">
             <div className="login-box">
                 <h1>Signup</h1>

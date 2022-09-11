@@ -1,12 +1,9 @@
-// import { useState } from "react";
-
 // Components Imports
-import NavbarHome from "../Navbar/NavbarHome";
-import Login from "./Login";
+import NavbarStudent from "../Navbar/NavbarStudent";
 // Bootstrap imports
 import { Container } from "react-bootstrap";
 
-const Home = () =>{
+const StudentHome = () =>{
     // const [isShown, setIsShown] = useState(true);
     // const displaySignup = Event =>{
     //     setIsShown(current =>!current);
@@ -15,15 +12,10 @@ const Home = () =>{
     return(
         <>
             <div className="bg-container">
-            <NavbarHome/>
-            {/* <div style={{display: isShown ? 'block' : 'none'}}> */}
-            <Container>
-                <Login/>
-            </Container>
-            {/* </div> */}
+            <NavbarStudent/>
             </div>
         </>
     );
 }
 // export  {displaySignup};
-export default Home;
+export default StudentHome;

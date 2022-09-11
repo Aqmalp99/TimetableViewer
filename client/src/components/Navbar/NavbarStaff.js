@@ -19,14 +19,14 @@ const NavbarTemp = () => {
             <Row>
               <Col md={{ span: 2, offset: -1 }} >
                 <Nav className="me-auto">
-                  <Nav.Link href="/calendar">Calendar</Nav.Link>
+                  <Nav.Link href="/calendar">View Calendar</Nav.Link>
                   <Nav.Link href="/about">About</Nav.Link>
                 </Nav>
               </Col>
               <Col md={{ span: 2, offset: 6 }}>
                 <Nav >
-                  <Nav.Link>Login</Nav.Link>
-                  <Nav.Link >Sign Up</Nav.Link>
+                  <Nav.Link>Edit Profile</Nav.Link>
+                  <Nav.Link >Sign Out</Nav.Link>
                   {/* <Nav.Link onClick={displaySignup}>Sign Up</Nav.Link> */}
                 </Nav>
               </Col>
