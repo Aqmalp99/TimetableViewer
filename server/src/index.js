@@ -42,7 +42,7 @@ app.use(session({
 app.use('/', timetableRouter);
 app.use("/", signUpRouter);
 app.use("/", authRouter);
-app.use('/app/users',routerUrl);
+app.use('/test',routerUrl);
 
 if (process.env.NODE_ENV === 'production'){
     app.use(express.static(path.join(__dirname, '../../client/build')));

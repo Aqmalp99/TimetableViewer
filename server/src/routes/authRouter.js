@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 // const pool = require("../db/database")
 const pool = require("../db/dbCongif");
 const jwt = require('jsonwebtoken');
-const jwtTokens = require('../utilities/jwt-helper')
+const jwtTokens = require('../utilities/jwt-helper');
 
 
 const authRouter = express.Router();
@@ -30,9 +30,13 @@ authRouter.post('/', async(req,res) => {
         if(loginCheck.rowCount > 0 && validPassword)
         {
             console.log("Good for login");
-            console.log(loginCheck.rows[0].role)
-            let tokens = jwtTokens(loginCheck.rows[0].username, loginCheck.rows[0].role);
-            res.cookie(tokens);
+            // console.log(loginCheck.rows[0])
+            let user = {username: loginCheck.rows[0].username , role:loginCheck.rows[0].role}
+            console.log(user);
+            let tokens = jwtTokens(user);
+            res.cookie('refresh_token', tokens.refreshToken, {httpOnly: true});
+            res.json(tokens);
+            console.log(tokens);
         }
 
     }catch(error){

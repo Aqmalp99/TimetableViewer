@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const pool = require("../db/dbCongif");
-
-router.get('/', async (req,res) => {
+const authenticateToken = require('../tokenMiddleware/verification');
+router.get('/',authenticateToken, async (req,res) => {
     try{
         const userDetails = await pool.query(
             `SELECT * FROM users;`
