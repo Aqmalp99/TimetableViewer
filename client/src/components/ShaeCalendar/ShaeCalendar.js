@@ -18,15 +18,26 @@ const detectClash = (data) => {
         //check day of each
         let date1 = new Date(data[i].start_date.slice(0, -1));
         const date2 = new Date(data[j].start_date.slice(0, -1));
-        const sameDay = date1.getDay() === date2.getDay();
-
-        if (sameDay){
-          //check date if dates are recurring
-          while (date1 <= date2){
-            if (date1.toString() === date2.toString()){
-              clashes.push("clash");
+        if (date1.getDay() === date2.getDay()){
+          //check equality if dates are recurring
+          if (date1 < date2){
+            while (date1 <= date2){
+              if (date1.toString() === date2.toString()){
+                clashes.push("clash");
+              }
+              date1.setDate(date1.getDate() + 7);
             }
-            date1.setDate(date1.getDate() + 7);
+          }
+          else if (date2 < date1) {
+            while (date2 <= date1){
+              if (date1.toString() === date2.toString()){
+                clashes.push("clash");
+              }
+              date2.setDate(date2.getDate() + 7);
+            }
+          }
+          else {
+            clashes.push("clash");
           }
         }
       }
