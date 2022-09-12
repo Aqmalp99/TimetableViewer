@@ -10,8 +10,8 @@ const routerUrls = require('./routes/routes');
 const timetableRouter = require('./routes/timetableRouter');
 const cors = require('cors');
 const path = require('path');
-// const dbPool = require('./db/database');
-const dbPool = require('./db/dbCongif');
+const dbPool = require('./db/database');
+// const dbPool = require('./db/dbCongif');
 // session for user
 app.use(session({
     secret:'secret',

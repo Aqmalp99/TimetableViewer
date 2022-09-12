@@ -29,3 +29,5 @@ it('sends an api call from axios', async () => {
 
 //How do i do this??
 //it('displays a message explaining i am not enrolled in any classes', ()=>{})
+
+//mock a function that returns clash data. expect the page to display the clash message after rendering
