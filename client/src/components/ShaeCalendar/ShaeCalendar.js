@@ -23,7 +23,10 @@ const detectClash = (data) => {
           if (date1 < date2){
             while (date1 <= date2){
               if (date1.toString() === date2.toString()){
-                clashes.push("clash");
+                clashes.push({
+                  a: data[i],
+                  b: data[j],
+                });
               }
               date1.setDate(date1.getDate() + 7);
             }
@@ -31,13 +34,19 @@ const detectClash = (data) => {
           else if (date2 < date1) {
             while (date2 <= date1){
               if (date1.toString() === date2.toString()){
-                clashes.push("clash");
+                clashes.push({
+                  a: data[i],
+                  b: data[j],
+                });
               }
               date2.setDate(date2.getDate() + 7);
             }
           }
           else {
-            clashes.push("clash");
+            clashes.push({
+              a: data[i],
+              b: data[j],
+            });
           }
         }
       }
