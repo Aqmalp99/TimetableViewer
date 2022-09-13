@@ -10,14 +10,13 @@ import axios from 'axios';
 
 const detectClash = (data) => {
   let clashes = [];
-
   for (let i = 0; i < data.length; i++){
     for (let j = i+1; j < data.length; j++){
       //check times of each
       if (data[i].start_time === data[j].start_time || (data[i].start_time < data[j].start_time && data[i].end_time > data[j].start_time) || (data[i].start_time > data[j].start_time && data[j].end_time > data[i].start_time)){
         //check day of each
         let date1 = new Date(data[i].start_date.slice(0, -1));
-        const date2 = new Date(data[j].start_date.slice(0, -1));
+        let date2 = new Date(data[j].start_date.slice(0, -1));
         if (date1.getDay() === date2.getDay()){
           //check equality if dates are recurring
           if (date1 < date2){
@@ -52,12 +51,11 @@ const detectClash = (data) => {
       }
     }
   }
-
   return clashes;
 }
 
 
-const ShaeCalendar = ({ifEventSelected}) => {
+const ShaeCalendar = ({ifEventSelected, displayClashes}) => {
   const [myEvents, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState({});
   const [loading, setLoading] = React.useState(true);
@@ -69,8 +67,9 @@ const ShaeCalendar = ({ifEventSelected}) => {
       await axios
       .get("/staff/1")
       .then((response) => {
-        console.log(response);
-        console.log(detectClash(response.data));
+        if (detectClash(response.data).length > 0){
+          displayClashes(detectClash(response.data));
+        }
         let data = response.data.map(element => {
           return {
             title: element.class_code,
@@ -115,8 +114,6 @@ const ShaeCalendar = ({ifEventSelected}) => {
     setSelectedEvent({});
     ifEventSelected(false);
   }, []);
-
-  // const renderScheduleEvent = useCallback((data) => {});
 
   //make start time and end time dynamic based on the classes for that day
   const view = useMemo(() => {

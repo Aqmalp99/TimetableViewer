@@ -1,0 +1,32 @@
+p {
+    margin-bottom: 0.5rem !important;
+}
+
+.App {
+    justify-content: center;
+}
+
+.button-group-flex {
+    display: flex;
+    justify-content: center;
+}
+
+.mbsc-schedule-grid-scroll {
+    overflow-y: auto !important;
+}
+
+.clashes-container {
+    display: flex;
+    margin: 2%;
+    margin-bottom: 10%;
+    margin-top: 5%;
+    justify-content: space-evenly;
+}
+
+.clash-message {
+    background-color: hsl(0, 100%, 65%);
+    color: white;
+    flex-basis: 20%;
+    padding-left: 2%;
+    padding-top: 1%;
+}
