@@ -33,22 +33,14 @@ const Login = ()  => {
             const loginDetails = await fetch("http://localhost:4000/", {
                 method: "POST",
                 headers: { "Content-Type": "application/json"},
+                // credentials: "include",
                 body: JSON.stringify(body)
             });
 
         }catch(err) {
-            console.error(err.message);
+            console.error(username);
         }
     }
-
-    // const [currentLogin, newLogin] = useState({
-    //     email:'',
-    //     password:''
-    // });
-
-    // const updateLogin = () => {
-    //     // newLogin({email:Event.})
-    // }
 
     return(
         <>
