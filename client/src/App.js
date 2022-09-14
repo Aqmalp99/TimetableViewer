@@ -1,4 +1,5 @@
 import ShaeTest from "./components/ShaeTest/ShaeTest" ;
+import AqmalTest from "./components/AqmalTest/AqmalTest";
 import TimetableView from "./components/Timetable/TimetableView";
 
 import "./App.css";
@@ -15,6 +16,7 @@ function App() {
       <Route  exact path="/" element={<Home />} />
       <Route  path="/signup" element={<Signup />} />
       <Route path="/shae" element={<ShaeTest />}/>
+      <Route path="/aqmal" element={<AqmalTest />}/>
       <Route path="/Timetable" element={<TimetableView />} />
       <Route  path="/student-test" element={<StudentHome />} />
       <Route  path="/edit-test" element={<EditProfile />} />
