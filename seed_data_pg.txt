@@ -1,3 +1,17 @@
+CREATE EXTENSION pgcrypto;
+
+INSERT INTO users (email, password)
+VALUES ('test@test.com', crypt('test', gen_salt('bf')));
+
+INSERT INTO enrolled_classes (student_id, class_id)
+VALUES (2, 4);
+
+INSERT INTO class (class_code, class_name, class_type, start_date, start_time, end_time, capacity, venue_id)
+VALUES ('COMPSCI 1000', 'Clash Class', 'Lecture', '2022-08-22', '11:00:00', '13:00:00', 50, 4);
+
+INSERT INTO class (class_code, class_name, class_type, start_date, start_time, end_time, capacity, venue_id)
+VALUES ('COMPSCI 1001', 'Clash Class 2', 'Lecture', '2022-08-22', '12:00:00', '13:00:00', 50, 3);
+
 INSERT INTO venue (room_code, building, capacity) VALUES ('B17', 'Ingkarni Wardli', 30);
 INSERT INTO venue (room_code, building, capacity) VALUES ('EM205', 'Engineering & Mathematics', 30);
 INSERT INTO venue (room_code, building, capacity) VALUES ('218', 'Ingkarni Wardli', 30);
@@ -17,6 +31,8 @@ VALUES ('COMPSCI 4412', 'Secure Software Engineering', 'Lecture', '2022-08-22', 
 
 INSERT INTO staff_enrolments (staff_id, class_id) VALUES (1, 1);
 INSERT INTO staff_enrolments (staff_id, class_id) VALUES (1, 3);
+INSERT INTO staff_enrolments (staff_id, class_id) VALUES (1, 5);
+INSERT INTO staff_enrolments (staff_id, class_id) VALUES (1, 6);
 
 SELECT class.class_code, class.class_name, class.class_type, class.start_date, class.start_time, class.end_time, venue.room_code, venue.building from staff_enrolments
 INNER JOIN class

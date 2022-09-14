@@ -1,6 +1,12 @@
-POST http://localhost:4000/app/student
+POST http://localhost:3000
 Content-Type: application/json
 
 {
-    "name":"testing-vnay2"
+    "username":"a1111",
+    "password":"1111"
 }
+
+
+###
+GET http://localhost:4000/test
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NjI5MTc1ODIsImV4cCI6MTY2MjkxODQ4Mn0.BJI5QSHdQNSm6HFA0HnQ6Evm7Y6qNu3nI3iSIkpL66U
