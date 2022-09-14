@@ -11,8 +11,8 @@ const dotenv = require('dotenv').config();
 
 const cors = require('cors');
 const path = require('path');
-// const dbPool = require('./db/database');
-const dbPool = require('./db/dbCongif');
+const dbPool = require('./db/database');
+// const dbPool = require('./db/dbCongif');
 // session for user
 
 app.use((req,res,next) => {
