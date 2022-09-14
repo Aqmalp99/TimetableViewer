@@ -25,7 +25,7 @@ router.get('/student/:id', async (req, res) => {
 });
 
 router.get('/staff/:id', async (req, res) => {
-    const query = `SELECT class.class_code, class.class_name, class.class_type, class.start_date, class.start_time, class.end_time, venue.room_code, venue.building, venue.capacity from staff_enrolments
+    const query = `SELECT class.class_code, class.class_id, class.class_name, class.class_type, class.start_date, class.start_time, class.end_time, venue.room_code, venue.building, venue.capacity from staff_enrolments
                    INNER JOIN class
                    ON class.class_id = staff_enrolments.class_id
                    INNER JOIN venue
