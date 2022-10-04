@@ -39,9 +39,10 @@ app.use(session({
     }
 })
 );
+app.use('/', authRouter);
 app.use('/', timetableRouter);
 app.use("/", signUpRouter);
-app.use("/", authRouter);
+
 app.use('/test',routerUrl);
 
 if (process.env.NODE_ENV === 'production'){

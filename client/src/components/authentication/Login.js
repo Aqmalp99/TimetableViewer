@@ -1,4 +1,4 @@
-
+import axios from 'axios';
 // State imports
 import { useState} from "react";
 
@@ -7,13 +7,16 @@ import { Button} from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import cookie from "js-cookies";
 
 import Container from "react-bootstrap/Container";
 import { Prev } from "react-bootstrap/esm/PageItem";
 import Tmc from "./Tmc";
+import  { useNavigate,Route } from 'react-router-dom';
+import AqmalTest from "../AqmalTest/AqmalTest";
 
-const Login = ()  => {
-
+const Login = ({setToken})  => {
+    const navigate= useNavigate();
     const [showTmc, setShowTmc]  = useState(false);
 
     const openTmc = () => {
@@ -22,24 +25,34 @@ const Login = ()  => {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    
 
     const onUsernameChange = e => setUsername(e.target.value);
     const onPasswordChange = e => setPassword(e.target.value);
 
     const handleLogin = async(e) => {
         e.preventDefault();
-        try {
-            const body = {username,password};
-            const loginDetails = await fetch("http://localhost:4000/", {
-                method: "POST",
-                headers: { "Content-Type": "application/json"},
-                // credentials: "include",
-                body: JSON.stringify(body)
-            });
+        const body = {username,password};
+        await axios
+        .post("/",body)
+        .then((response) => {
+            const token=response.data.accessToken;
+            setToken(token);
+            navigate("/aqmal");
+        })
+        
+        .catch((err) => console.log(err))
+            // const body = {username,password};
+            // const loginDetails = await fetch("/", {
+            //     method: "POST",
+            //     headers: { "Content-Type": "application/json"},
+            //     // credentials: "include",
+            //     body: JSON.stringify(body)
+            // });
 
-        }catch(err) {
-            console.error(username);
-        }
+        // }catch(err) {
+        //     console.error(username);
+        // }
     }
 
     return(

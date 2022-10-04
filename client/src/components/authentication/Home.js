@@ -6,7 +6,7 @@ import Login from "./Login";
 // Bootstrap imports
 import { Container } from "react-bootstrap";
 
-const Home = () =>{
+const Home = ({setToken}) =>{
     // const [isShown, setIsShown] = useState(true);
     // const displaySignup = Event =>{
     //     setIsShown(current =>!current);
@@ -18,7 +18,7 @@ const Home = () =>{
             <NavbarHome/>
             {/* <div style={{display: isShown ? 'block' : 'none'}}> */}
             <Container>
-                <Login/>
+                <Login setToken={setToken}/>
             </Container>
             {/* </div> */}
             </div>
