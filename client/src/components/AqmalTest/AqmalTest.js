@@ -18,13 +18,23 @@ const ShaeTest = () => {
   const navigate=useNavigate();
   const [auth, setAuth] = useState(false);
   
-  
+  const [classDetails, setClassDetails]=useState(
+    {
+      title:"",
+      venue:"",
+      className:"",
+      classType:"",
+      classSize:"",
+      start:"",
+      end:""
+    }
+  );
 
-
+  const [showClassDetails, setShowClassDetails] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   
   const [clashes, setClashes] = useState([]);
-  const [show, setShow] = useState(false);
+  const [showVenues, setShowVenues] = useState(false);
   const [venue, setVenue]= useState([]);
 
   const displayClashes = (clashes) => {
@@ -57,7 +67,7 @@ const ShaeTest = () => {
   }
 
   const showAlternateVenues = () => {
-    setShow(!show)
+    setShowVenues(!showVenues);
   };
 
   
@@ -67,6 +77,7 @@ const ShaeTest = () => {
   },[]);
   
   const token = getToken();
+  
   if(!token)
   {
     console.log(getToken());
@@ -80,13 +91,24 @@ const ShaeTest = () => {
   const id=payload.id;
   const role = payload.role;
   
-   
-    
+  
+
+  const onClassClick = (event)=> {
+    setClassDetails(event.event);
+    setShowClassDetails(!showClassDetails);
+    console.log(event.event);
+  }
+  
+  const toggleShow = () => {
+    setShowClassDetails(!showClassDetails)
+  };
+  
+
   return (
     <div className="App">
       
       <p>My app</p>
-      <AqmalCalendar id={id} role={role }displayClashes={displayClashes} ifEventSelected={ifEventSelected} SelectedVenue={SelectedVenue}/>
+      <AqmalCalendar id={id} role={role} onClassClick= {onClassClick }displayClashes={displayClashes} ifEventSelected={ifEventSelected} SelectedVenue={SelectedVenue}/>
       <div className="button-group-flex">
         <Button className="me-3 mt-3" disabled={buttonDisabled}>
           Get Recommended Times
@@ -95,7 +117,21 @@ const ShaeTest = () => {
           Get Alternate Venues
         </Button>
       </div>
-      <Modal show={show} onHide={showAlternateVenues}>
+      <Modal show={showClassDetails} onHide={toggleShow}>
+      <Modal.Header closeButton>
+          <Modal.Title>Class Details</Modal.Title>
+       </Modal.Header>
+       <ModalBody>
+          <p>Title: {classDetails.title}</p>
+          <p>Name: {classDetails.className}</p>
+          <p>Venue: {classDetails.venue}</p>
+          <p>class Size: {classDetails.classSize}</p>
+          <p>Class Time: {(classDetails.start ==="") ? "" : classDetails.start.toLocaleTimeString()} -
+           {(classDetails.end === "") ? "" : classDetails.end.toLocaleTimeString()}</p>
+          <p>Type of Class: {classDetails.classType}</p>
+       </ModalBody>
+      </Modal>
+      <Modal show={showVenues} onHide={showAlternateVenues}>
       <Modal.Header closeButton>
           <Modal.Title>Alternate Venues</Modal.Title>
        </Modal.Header>

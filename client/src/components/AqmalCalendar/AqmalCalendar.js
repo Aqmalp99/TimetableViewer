@@ -57,7 +57,7 @@ const detectClash = (data) => {
 }
 
 
-const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role}) => {
+const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role, onClassClick}) => {
   
   
   const [myEvents, setEvents] = useState([]);
@@ -81,6 +81,7 @@ const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role}
             title: element.class_code,
             className: element.class_name,
             classType: element.class_type,
+            classSize: element.class_size,
             color: "#56ca70",
             start: new Date(element.start_date.slice(0,10) + "T" + element.start_time),
             end: new Date(element.start_date.slice(0,10) +"T" + element.end_time),
@@ -116,6 +117,7 @@ const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role}
     });
     ifEventSelected(true);
     SelectedVenue(event.event.id);
+    onClassClick(event);
 
   }, []);
 
