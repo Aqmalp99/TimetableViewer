@@ -56,25 +56,25 @@ const Signup = () =>{
                         <Row>
                             <Col>
                                 <Form.Group className="mb-3" controlId="username">
-                                    <Form.Label sm="4">User Name</Form.Label>
+                                    <Form.Label sm="4">First Name</Form.Label>
                                         <Form.Control type="text"
                                             name="username"
                                             // value={test}
                                             // onChange={e => setTest(e.target.value)} 
                                             value={username}
                                             onChange={onUsernameChange}
-                                            placeholder="Enter Username" 
+                                            placeholder="First Name" 
                                         />
                                 </Form.Group>
                             </Col>
                             <Col>
                                 <Form.Group className="mb-3" controlId="fullnameID">
-                                    <Form.Label sm="4">Full Name</Form.Label>
+                                    <Form.Label sm="4">Last Name</Form.Label>
                                     <Form.Control type="text"
                                         name="fullname" 
                                         value={fullname}
                                         onChange={onFullnameChange}
-                                        placeholder="Enter Full name" 
+                                        placeholder="Last Name" 
                                     
                                     />
                                 </Form.Group>
@@ -87,7 +87,7 @@ const Signup = () =>{
                                     name="email"
                                     value={email}
                                     onChange={onEmailChange} 
-                                    placeholder="Enter Email" 
+                                    placeholder="Email" 
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="PasswordID">
