@@ -1,14 +1,8 @@
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import { Eventcalendar, Button, toast, momentTimezone  } from "@mobiscroll/react";
+import { Eventcalendar, momentTimezone  } from "@mobiscroll/react";
 import axios from 'axios';
-import  { useNavigate } from 'react-router-dom';
 import moment from 'moment-timezone';
-//how to get session token, verify if student or staff
-//depending on account, different route
-
-//detect clash
-
 
 const detectClash = (data) => {
   let clashes = [];
@@ -57,11 +51,9 @@ const detectClash = (data) => {
 }
 
 
-const AqmalCalendar = ({ifEventSelected, displayClashes, SelectedClass, id, role, onClassClick}) => {
-  
+const AqmalCalendar = ({ifEventSelected, displayClashes, ChangeSelectedClass, id, role, onClassClick}) => {
   
   const [myEvents, setEvents] = useState([]);
-  const [selectedEvent, setSelectedEvent] = useState({});
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
   
@@ -109,22 +101,17 @@ const AqmalCalendar = ({ifEventSelected, displayClashes, SelectedClass, id, role
   }, []);
 
   const onEventDoubleClick = useCallback((event) => {
-    setSelectedEvent(event.event);
     ifEventSelected(true);
-    SelectedClass(event.event);
+    ChangeSelectedClass(event.event);
     onClassClick(event);
-
   }, []);
 
   const onEventClick = useCallback((event) => {
-    setSelectedEvent(event.event);
     ifEventSelected(true);
-    SelectedClass(event.event);
-    
-
+    ChangeSelectedClass(event.event);
   }, []);
-  const onCellClick = useCallback((event) => {
-    setSelectedEvent({});
+
+  const onCellClick = useCallback(() => {
     ifEventSelected(false);
   }, []);
 
@@ -135,7 +122,9 @@ const AqmalCalendar = ({ifEventSelected, displayClashes, SelectedClass, id, role
         type: "week",
         startTime: "08:00",
         endTime: "18:00",
-        allDay: false
+        allDay: false,
+        startDay: 1,
+        endDay: 5
       },
     };
   }, []);
@@ -154,7 +143,6 @@ const AqmalCalendar = ({ifEventSelected, displayClashes, SelectedClass, id, role
     );
     });
 
-
   if (loading){
     return <div>Loading...</div>;
   }
@@ -172,7 +160,6 @@ const AqmalCalendar = ({ifEventSelected, displayClashes, SelectedClass, id, role
 
   return (
     <div className="calendar-container">
-      {/* {console.log(myEvents)} */}
       <Eventcalendar
         className="calendar-width"
         theme="ios"
@@ -180,13 +167,11 @@ const AqmalCalendar = ({ifEventSelected, displayClashes, SelectedClass, id, role
         clickToCreate={false}
         dragToCreate={false}
         dragToMove={false}
-        
         dragToResize={false}
         eventDelete={false}
         data={myEvents}
         view={view}
         invalidateEvent="strict"
-        // invalid={inv}
         onCellClick={onCellClick}
         onEventClick={onEventClick}
         onEventDoubleClick={onEventDoubleClick}
