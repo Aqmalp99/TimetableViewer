@@ -14,7 +14,7 @@ const Home = ({setToken}) =>{
 
     return(
         <>
-            <div className="vlogin-background">
+            <div className="v-login-background">
             {/* <NavbarHome/> */}
             {/* <div style={{display: isShown ? 'block' : 'none'}}> */}
             
