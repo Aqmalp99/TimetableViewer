@@ -28,38 +28,12 @@ signUpRouter.post('/signup', async(req, res) => {
                     VALUES($1,$2,$3,$4,$5,$6);`,
                     [username, fullname, email,hashedPassword,role,notification] 
             );
-            res.json({loggedIn: true, username: username});
+            res.status(200).json({status: "signup successfull"});
         } else{
             res.json({loggedIn: false, status:"Username taken"})
             console.log("same user")
             // console.log(existingUser.rows)
         }
-    //     const query = `INSERT INTO 
-    //                      users(username, fullname, email, password, role, notification)
-    //                       VALUES($1,$2,$3,$4,$5,$6);`
-
-    //     await req.pool.connect((err, client, release) => {
-    //         if (err) {
-    //             return console.error('Error acquiring client', err.stack)
-    //         }
-    //         client.query(query, [username, fullname, email,hashedPassword,role,notification], (err, result) => {
-    //             release();
-    //             if (err) {
-    //                 return console.error('Error executing query', err.stack)
-    //             }
-    //             // console.log(result.rows)
-    //             res.send(result.rows);
-    //             // req.flash('success_msg', "Yoo have added the user ");
-                
-    //             // console.log(data);
-                
-    //         })
-    //     })
-    //     console.log({
-    //         username, fullname, email,password,role,notification
-    //     });
-    //     console.log(hashedPassword);
-    //     // res.json(newUser);
     }catch(err){
         console.error(err.message);
     }

@@ -1,10 +1,17 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins');
+
+.link {
+    color: inherit;
+    text-decoration: inherit;
+}
+
 .v-login-background {
     height: 100vh;
     position: relative;
     /* width: 100%; */
     background-size: contain;
-    background-color: #9A99C5;
+    background-image: url('../assets/images/bg-image.png');
+    background-color: #000000;
     display: flex;
     justify-content: center;
 }
@@ -37,7 +44,7 @@
     float: left;
     font-family: 'Poppins';
     font-style: normal;
-    font-weight: 700;
+    font-weight: 900;
     font-size: 18px;
     line-height: 27px;
 
@@ -46,6 +53,7 @@
 .v-heading-float {
     /* border: 2px solid rgb(0, 102, 255); */
     float: right;
+    cursor: pointer;
     font-family: 'Poppins';
     font-style: normal;
     font-weight: 500;
@@ -64,7 +72,7 @@
     /* border: 2px solid rgb(6, 247, 58); */
     font-family: 'Poppins';
     font-style: normal;
-    font-weight: 500;
+    font-weight: 700;
     font-size: 27px;
     line-height: 40px;
 
@@ -80,14 +88,14 @@
     line-height: 24px;
 }
 .v-login-forgot-box {
-    position: relative;
-    float: right;
+    display: flex;
+    justify-content: right;
 }
 .v-forgot-pass {
     padding-bottom: 10px;
     font-family: 'Poppins';
     font-style: normal;
-    
+    cursor:pointer;
     font-weight: 500;
     font-size: 12px;
     line-height: 18px;
@@ -99,12 +107,12 @@
 }
 
 .v-parnet-login-button {
-    padding-left: 98px;
+    display: flex;
+    justify-content: center;
 }
 .v-login-button {
     width: 268px;
     height: 37px;
-    left: 278px;
     top: 525px;
     border: 0;
     background: rgb(2,0,36);
@@ -160,4 +168,13 @@
     line-height: 45px;
 
     color: #FDFDFD;
+}
+
+
+@media (max-width:1024) {
+    /* For tablets: */
+    .v-login-design {
+        display: none;
+    }
+
 }

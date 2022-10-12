@@ -10,7 +10,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 import Tmc from "./Tmc";
-import  { useNavigate,Route } from 'react-router-dom';
+import  { useNavigate,Route, Link } from 'react-router-dom';
 import ellipse1 from  "../assets/images/ellipse_big.svg"
 import ellipse2 from  "../assets/images/ellipse_small.svg"
 import diagram1 from  "../assets/images/undraw.svg"
@@ -64,7 +64,7 @@ const Login = ({setToken})  => {
             <div className='v-login-float'>
                 <div className='v-login-header'>
                     <div className='v-heading'> Uni Timetable</div>
-                    <div className='v-heading-float'> Sign Up</div>
+                    <div className='v-heading-float'> <Link to='/signup' className='link'> Sign Up</Link> </div>
                 </div>
                 <div className='v-login-form'>
                     <div className='v-login-form-heading'> SIGN IN</div>
