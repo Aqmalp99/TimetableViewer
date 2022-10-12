@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+.link {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.v-signup-background {
+    height: 100vh;
+    position: relative;
+    /* width: 100%; */
+    background-size: contain;
+    background-image: url('../assets/images/bg-image.png');
+    background-color: #000000;
+    display: flex;
+    justify-content: center;
+}
+
+.v-signup {
+    padding-top: 30px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-bottom: 40px;
+    width: 600px;
+    height: 700px;
+    position: relative;
+    top: 60px;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.15);
+    
+}
+
+.v-signup-header {
+    /* border: 2px solid rgb(0, 102, 255); */
+    height: 40px;
+    position: relative;
+    
+}
+.v-signup-heading {
+    /* border: 2px solid rgb(0, 102, 255); */
+    float: left;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 18px;
+    line-height: 27px;
+
+    color: #6B6B6B;
+}
+.v-signup-heading-float {
+    /* border: 2px solid rgb(0, 102, 255); */
+    float: right;
+    cursor: pointer;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 27px;
+
+    color: #8A8A8A;
+}
+
+.v-signup-form{
+    padding-top: 5px;
+}
+.v-signup-form-heading{
+    /* border: 2px solid rgb(6, 247, 58); */
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 27px;
+    line-height: 40px;
+
+    color: #454545;
+
+}
+
+.v-signup-form-input {
+    padding-top: 20px;
+}
+.v-parnet-signup-button {
+    display: flex;
+    justify-content: center;
+}
+.v-signup-button {
+    width: 268px;
+    height: 37px;
+    top: 525px;
+    border: 0;
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(97,133,254,1) 0%, rgba(138,196,255,0.9035294117647059) 100%);
+    filter: drop-shadow(0px 10px 20px rgba(170, 188, 246, 0.5));
+}
