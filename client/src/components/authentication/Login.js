@@ -1,6 +1,7 @@
 import axios from 'axios';
 // State imports
 import { useState} from "react";
+import "./login.css"
 
 // Boot Strap imports
 import { Button} from "react-bootstrap";
@@ -57,43 +58,18 @@ const Login = ({setToken})  => {
 
     return(
         <>
-        <div className="login-container">
-            <div className="login-box">
-                <h1>Login</h1>
-                <br/>
-                <Container>
-                   <Form onSubmit={handleLogin}>
-                        <Row>
-                            <Col>
-                                <Form.Group className="mb-3" id="username" controlId="formBasicEmail">
-                                    <Form.Control type="Text" value={username} onChange={onUsernameChange} placeholder="Enter Username" />
-                                </Form.Group>
-                            
-                                <Form.Group className="mb-3" id="password" controlId="formBasicPassword">
-                                    <Form.Control type="password" value={password} onChange={onPasswordChange} placeholder="Password" />
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Row xs="auto">
-                            <Col>
-                                <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                                    <Form.Check type="checkbox" />
-                                </Form.Group>
-                            </Col>
-                            <Col>
-                                <Form.Group className="mb-3">
-                                    <a href="#"><Form.Label onClick={openTmc}>Agree Terms and Conditions</Form.Label></a>
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Tmc showTmc={showTmc} setShowTmc={setShowTmc}/>
-                        <Button variant="primary" type="submit">
-                            Submit
-                        </Button>
-                    </Form>
-                </Container>
+        <div className='v-login'>
+            <div className='v-login-float'>
+                <div className='v-login-header'>
+                    <div className='v-heading'> Uni Timetable</div>
+                    <div className='v-heading-float'> Uni Timetable</div>
+
+                </div>
             </div>
+            <div className='login-design'></div>
+
         </div>
+        
         </>
     );
 }

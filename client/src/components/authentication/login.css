@@ -1,0 +1,35 @@
+.v-login-background {
+    height: 100vh;
+    position: relative;
+    /* width: 100%; */
+    background-size: contain;
+    background-color: #ccc6;
+}
+.v-login {
+    width: 1024px;
+    height: 520px;
+    position: relative;
+    left: 180px;
+    top: 124px;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.15);
+    
+}
+.v-login-float {
+    width: 50%;
+    height: 100%;
+    padding-top: 30px;
+    padding-left: 42px;
+    float: left;
+    border: 2px solid red;
+}
+.v-login-header {
+    border: 2px solid rgb(0, 102, 255);
+    height: 60px;
+}
+.v-login-design {
+    width: 50%;
+    float: left;
+    height: 100%;
+    border: 2px solid red;
+}

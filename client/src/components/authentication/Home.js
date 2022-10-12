@@ -14,12 +14,12 @@ const Home = ({setToken}) =>{
 
     return(
         <>
-            <div className="bg-container">
-            <NavbarHome/>
+            <div className="vlogin-background">
+            {/* <NavbarHome/> */}
             {/* <div style={{display: isShown ? 'block' : 'none'}}> */}
-            <Container>
+            
                 <Login setToken={setToken}/>
-            </Container>
+            
             {/* </div> */}
             </div>
         </>
