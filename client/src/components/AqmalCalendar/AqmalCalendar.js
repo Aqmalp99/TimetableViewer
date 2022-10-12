@@ -109,23 +109,14 @@ const AqmalCalendar = ({ifEventSelected, displayClashes, SelectedClass, id, role
   }, []);
 
   const onEventDoubleClick = useCallback((event) => {
-    toast({
-      message: event.event.title,
-    });
-    setSelectedEvent({
-      eventID: event.event.id,
-      eventName: event.event.title,
-    });
+    setSelectedEvent(event.event);
     ifEventSelected(true);
-    SelectedClass(event.event.id);
+    SelectedClass(event.event);
     onClassClick(event);
 
   }, []);
 
   const onEventClick = useCallback((event) => {
-    toast({
-      message: event.event.title,
-    });
     setSelectedEvent(event.event);
     ifEventSelected(true);
     SelectedClass(event.event);
