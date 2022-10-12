@@ -1,3 +1,8 @@
+.bg-container {
+    min-height: 100vh;
+    background-image: url('./components/images/bg-image.png');
+}
+
 .calendar-container {
     display: flex;
     justify-content: center;
@@ -13,12 +18,6 @@
     border-color: #000;
     border-width: 20px;
 }
-
-.bg-container {
-    min-height: 100vh;
-    background-image: url('./components/images/bg-image.png');
-}
-
 
 .login-container {
     display: block;

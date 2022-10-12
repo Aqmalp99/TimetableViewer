@@ -2,11 +2,13 @@ import React, { useState, useMemo, useEffect, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Eventcalendar, Button, toast } from "@mobiscroll/react";
 import axios from 'axios';
+import  { useNavigate } from 'react-router-dom';
 
 //how to get session token, verify if student or staff
 //depending on account, different route
 
 //detect clash
+
 
 const detectClash = (data) => {
   let clashes = [];
@@ -55,7 +57,9 @@ const detectClash = (data) => {
 }
 
 
-const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue}) => {
+const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role}) => {
+  
+  
   const [myEvents, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState({});
   const [loading, setLoading] = React.useState(true);
@@ -64,8 +68,9 @@ const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue}) => {
   //events object has color, end, id, start, title
   useEffect(() => {
     const getClasses = async () => {
+      // const studentID= "/student/"+ toString(id);
       await axios
-      .get("/staff/1")
+      .get(`/${role}/${id}`)
       .then((response) => {
         if (detectClash(response.data).length > 0){
           displayClashes(detectClash(response.data));

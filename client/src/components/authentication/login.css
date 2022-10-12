@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+.v-login-background {
+    height: 100vh;
+    position: relative;
+    /* width: 100%; */
+    background-size: contain;
+    background-color: #9A99C5;
+    display: flex;
+    justify-content: center;
+}
+.v-login {
+    width: 1024px;
+    height: 520px;
+    position: relative;
+    top: 124px;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.15);
+    
+}
+.v-login-float {
+    width: 50%;
+    height: 100%;
+    padding-top: 30px;
+    padding-left: 42px;
+    padding-right: 32px;
+    float: left;
+    /* border: 2px solid red; */
+}
+.v-login-header {
+    /* border: 2px solid rgb(0, 102, 255); */
+    height: 60px;
+    position: relative;
+    
+}
+.v-heading {
+    /* border: 2px solid rgb(0, 102, 255); */
+    float: left;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 27px;
+
+    color: #6B6B6B;
+}
+.v-heading-float {
+    /* border: 2px solid rgb(0, 102, 255); */
+    float: right;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 27px;
+
+    color: #8A8A8A;
+
+}
+.v-login-form {
+    /* border: 2px solid rgb(0, 102, 255); */
+    padding-top: 80px;
+}
+
+.v-login-form-heading{
+    /* border: 2px solid rgb(6, 247, 58); */
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 27px;
+    line-height: 40px;
+
+    color: #454545;
+
+}
+.v-login-form-heading-text {
+    padding-bottom: 10px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 24px;
+}
+.v-login-forgot-box {
+    position: relative;
+    float: right;
+}
+.v-forgot-pass {
+    padding-bottom: 10px;
+    font-family: 'Poppins';
+    font-style: normal;
+    
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    /* identical to box height */
+
+
+    color: #CDCCCC;
+
+}
+
+.v-parnet-login-button {
+    padding-left: 98px;
+}
+.v-login-button {
+    width: 268px;
+    height: 37px;
+    left: 278px;
+    top: 525px;
+    border: 0;
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(97,133,254,1) 0%, rgba(138,196,255,0.9035294117647059) 100%);
+    filter: drop-shadow(0px 10px 20px rgba(170, 188, 246, 0.5));
+}
+
+.v-login-design {
+    position: relative;
+    width: 50%;
+    float: right;
+    height: 100%;
+    background: linear-gradient(180deg, #6185FE 0%, rgba(138, 196, 255, 0.79) 100%);
+    /* border: 2px solid red; */
+}
+.v-image-container {
+    position: absolute;
+    width: 100%;
+    /* border: 2px solid green; */
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+.v-design-images1 {
+    position: absolute;
+    width: 100%;
+    /* border: 2px solid green; */
+    height: 100%;
+}
+
+.v-design-images2 {
+    
+    width: 70%;
+    /* border: 2px solid green; */
+    height: 80%;
+}
+
+.v-design-images3 {
+    padding-top: 90px;
+    position: absolute;
+    width: 80%;
+    /* border: 2px solid green; */
+    height: 90%;
+}
+
+.v-login-design-text {
+    padding-left: 30px;
+    padding-top: 60px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 45px;
+
+    color: #FDFDFD;
+}
