@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import { ModalBody } from "react-bootstrap";
 import  { useNavigate,Navigate } from 'react-router-dom';
 import { Buffer } from "buffer";
+import axios from "axios";
 
 function getToken() {
   const tokenString = sessionStorage.getItem('token');
@@ -35,7 +36,7 @@ const ShaeTest = () => {
   
   const [clashes, setClashes] = useState([]);
   const [showVenues, setShowVenues] = useState(false);
-  const [venue, setVenue]= useState([]);
+  const [selectedClass, setSelectedClass]= useState([]);
 
   const displayClashes = (clashes) => {
     if (clashes.length > 0){
@@ -67,13 +68,27 @@ const ShaeTest = () => {
   }
 
   const showAlternateVenues = () => {
+    const date= selectedClass.date;
+    const startTime= selectedClass.start.toLocaleTimeString('en-US',{ hour12: false });
+    const endTime= selectedClass.end.toLocaleTimeString('en-US',{ hour12: false });
+    console.log(startTime);
+    console.log(endTime);
+    const getVenues = async () => {
+      
+      await axios
+        .get(`/staff/venues`, { params: {date:date , start_time: startTime, end_time: endTime}})
+        .then((response)=> console.log(response))
+        .catch((err) => console.log(err))
+    }
     setShowVenues(!showVenues);
+    getVenues();
   };
 
   
-  const SelectedVenue = useCallback((event) => {
-    setVenue(event);
+  const SelectedClass = useCallback((event) => {
     console.log(event);
+    setSelectedClass(event);
+    
   },[]);
   
   const token = getToken();
@@ -108,7 +123,7 @@ const ShaeTest = () => {
     <div className="App">
       
       <p>My app</p>
-      <AqmalCalendar id={id} role={role} onClassClick= {onClassClick }displayClashes={displayClashes} ifEventSelected={ifEventSelected} SelectedVenue={SelectedVenue}/>
+      <AqmalCalendar id={id} role={role} onClassClick= {onClassClick}displayClashes={displayClashes} ifEventSelected={ifEventSelected} SelectedClass={SelectedClass}/>
       <div className="button-group-flex">
         <Button className="me-3 mt-3" disabled={buttonDisabled}>
           Get Recommended Times
@@ -136,7 +151,7 @@ const ShaeTest = () => {
           <Modal.Title>Alternate Venues</Modal.Title>
        </Modal.Header>
        <ModalBody>
-          <p>id: {venue}</p>
+          <p>id: {selectedClass.id}</p>
           <p><input type="radio" value="alt1" name="venue"/> EM205</p>
           <p><input type="radio" value="alt2" name="venue"/> IW218</p>
           <Button variant="primary" onClick={showAlternateVenues}>Accept</Button>

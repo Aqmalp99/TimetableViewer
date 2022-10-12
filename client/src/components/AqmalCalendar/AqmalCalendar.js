@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import { Eventcalendar, Button, toast } from "@mobiscroll/react";
+import { Eventcalendar, Button, toast, momentTimezone  } from "@mobiscroll/react";
 import axios from 'axios';
 import  { useNavigate } from 'react-router-dom';
-
+import moment from 'moment-timezone';
 //how to get session token, verify if student or staff
 //depending on account, different route
 
@@ -57,7 +57,7 @@ const detectClash = (data) => {
 }
 
 
-const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role, onClassClick}) => {
+const AqmalCalendar = ({ifEventSelected, displayClashes, SelectedClass, id, role, onClassClick}) => {
   
   
   const [myEvents, setEvents] = useState([]);
@@ -83,8 +83,9 @@ const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role,
             classType: element.class_type,
             classSize: element.class_size,
             color: "#56ca70",
-            start: new Date(element.start_date.slice(0,10) + "T" + element.start_time),
-            end: new Date(element.start_date.slice(0,10) +"T" + element.end_time),
+            date: moment(element.start_date).format('YYYY-MM-DD'),
+            start: new Date(moment(element.start_date).format('YYYY-MM-DD') + "T" + element.start_time),
+            end: new Date(moment(element.start_date).format('YYYY-MM-DD') +"T" + element.end_time),
             venue: element.room_code + " / " + element.building,
             recurring: {
               repeat: 'weekly',
@@ -107,7 +108,7 @@ const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role,
     getClasses();
   }, []);
 
-  const onEventClick = useCallback((event) => {
+  const onEventDoubleClick = useCallback((event) => {
     toast({
       message: event.event.title,
     });
@@ -116,11 +117,21 @@ const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role,
       eventName: event.event.title,
     });
     ifEventSelected(true);
-    SelectedVenue(event.event.id);
+    SelectedClass(event.event.id);
     onClassClick(event);
 
   }, []);
 
+  const onEventClick = useCallback((event) => {
+    toast({
+      message: event.event.title,
+    });
+    setSelectedEvent(event.event);
+    ifEventSelected(true);
+    SelectedClass(event.event);
+    
+
+  }, []);
   const onCellClick = useCallback((event) => {
     setSelectedEvent({});
     ifEventSelected(false);
@@ -152,25 +163,6 @@ const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role,
     );
     });
 
-  //   const inv = [
-  //     {
-  //       start: "12:00",
-  //       end: "13:00",
-  //       title: "Lunch break",
-  //       recurring: {
-  //         repeat: "weekly",
-  //         weekDays: "MO,TU,WE,TH,FR",
-  //       },
-  //     },
-  //     {
-  //       start: "17:00",
-  //       end: "23:59",
-  //       recurring: {
-  //         repeat: "weekly",
-  //         weekDays: "MO,TU,WE,TH,FR",
-  //       },
-  //     },
-  //   ];
 
   if (loading){
     return <div>Loading...</div>;
@@ -185,6 +177,7 @@ const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role,
       return <div>We have no record of your enrolment in any classes. Please contact a course administrator.</div>
     }
   }
+  momentTimezone.moment = moment;
 
   return (
     <div className="calendar-container">
@@ -196,6 +189,7 @@ const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role,
         clickToCreate={false}
         dragToCreate={false}
         dragToMove={false}
+        
         dragToResize={false}
         eventDelete={false}
         data={myEvents}
@@ -204,10 +198,11 @@ const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role,
         // invalid={inv}
         onCellClick={onCellClick}
         onEventClick={onEventClick}
+        onEventDoubleClick={onEventDoubleClick}
         renderScheduleEventContent={renderScheduleEventContent}
       />
     </div>
   );
 };
 
-export default ShaeCalendar;
+export default AqmalCalendar;
