@@ -4,14 +4,18 @@
     color: inherit;
     text-decoration: inherit;
 }
+.v-home {
+    height: 100vh;
+    background-image: url('../assets/images/bg-image.png');
+    background-color: #000000;
+}
 
 .v-login-background {
-    height: 100vh;
+    
     position: relative;
     /* width: 100%; */
     background-size: contain;
-    background-image: url('../assets/images/bg-image.png');
-    background-color: #000000;
+    
     display: flex;
     justify-content: center;
 }
