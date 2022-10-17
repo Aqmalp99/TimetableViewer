@@ -22,7 +22,14 @@ import Alert_boot from '../Alert_boot';
 const Login = ({setToken})  => {
     const navigate= useNavigate();
     const [showTmc, setShowTmc]  = useState(false);
+    const[alert, setAlert] = useState(null);
 
+    const createAlert = (message, type)=> {
+        setAlert({
+            msg: message,
+            type: type
+        })
+    }
     const openTmc = () => {
         setShowTmc(prev => !prev);
     }
@@ -45,7 +52,9 @@ const Login = ({setToken})  => {
             navigate("/aqmal");
         })
         
-        .catch((err) => console.log(err))
+        .catch((err) => {
+            createAlert("Username or password is incorrect", "ERROR")
+            console.log(err)})
             // const body = {username,password};
             // const loginDetails = await fetch("/", {
             //     method: "POST",
@@ -61,7 +70,7 @@ const Login = ({setToken})  => {
 
     return(
         <>
-        <Alert_boot/>
+        <Alert_boot alert={alert}/>
         <div className="v-login-background">
             <div className='v-login'>
                 <div className='v-login-float'>
