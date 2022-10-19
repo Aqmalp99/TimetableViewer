@@ -6,22 +6,26 @@ import Login from "./Login";
 // Bootstrap imports
 import { Container } from "react-bootstrap";
 
+
 const Home = ({setToken}) =>{
     // const [isShown, setIsShown] = useState(true);
     // const displaySignup = Event =>{
     //     setIsShown(current =>!current);
     // };
 
+
     return(
-        <>
-            <div className="bg-container">
-            <NavbarHome/>
-            {/* <div style={{display: isShown ? 'block' : 'none'}}> */}
-            <Container>
-                <Login setToken={setToken}/>
-            </Container>
-            {/* </div> */}
+        <>  
+            <div className="v-home">            
+                
+                {/* <NavbarHome/> */}
+                {/* <div style={{display: isShown ? 'block' : 'none'}}> */}
+                
+                    <Login setToken={setToken}/>
+                
+                {/* </div> */}
             </div>
+
         </>
     );
 }

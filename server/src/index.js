@@ -3,6 +3,7 @@ const authRouter = require("./routes/authRouter");
 const signUpRouter = require("./routes/signUpRouter")
 const timetableRouter = require('./routes/timetableRouter');
 const routerUrl = require("./routes/routes")
+const emailRouter = require("./routes/emailRouter")
 ///
 const express = require('express');
 const session = require("express-session");
@@ -42,6 +43,8 @@ app.use(session({
 app.use('/', authRouter);
 app.use('/', timetableRouter);
 app.use("/", signUpRouter);
+
+app.use('/', emailRouter);
 
 app.use('/test',routerUrl);
 

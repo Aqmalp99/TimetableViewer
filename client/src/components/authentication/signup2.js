@@ -1,5 +1,4 @@
 import { useState, Fragment } from "react";
-import  { useNavigate,Route, Link } from 'react-router-dom';
 // Components Imports
 import NavbarTemp from "../Navbar/NavbarHome";
 // Bootstrap imports
@@ -8,7 +7,6 @@ import { Button} from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import "./signup.css"
 
 const Signup = () =>{
 
@@ -33,6 +31,7 @@ const Signup = () =>{
             const newUserRequest = await fetch("http://localhost:4000/signup", {
                 method: "POST",
                 headers: { "Content-Type": "application/json"},
+                credentials: "include",
                 body: JSON.stringify(body)
             });
             console.log(newUserRequest);
@@ -44,37 +43,38 @@ const Signup = () =>{
     return(
         <>
             <div className="v-signup-background">
-                <div className="v-signup">
-                    <div className='v-signup-header'>
-                        <div className='v-signup-heading'> Uni Timetable</div>
-                        <div className='v-signup-heading-float'> <Link to='/' className='link'> Login</Link> </div>
-                    </div>
-                    <div className="v-signup-form">
-                        <div className="v-signup-form-heading"> SIGN UP</div>
-                        <div className="v-signup-form-input">
-                        <Form onSubmit={handleSubmit}>
+                
+            </div>
+            <div className="bg-container">
+            <NavbarTemp/>
+            <div className="login-container">
+            <div className="login-box">
+                <h1>Signup</h1>
+                <br/>
+                <Container>
+                   <Form onSubmit={handleSubmit}>
                         <Row>
                             <Col>
                                 <Form.Group className="mb-3" controlId="username">
-                                    <Form.Label sm="4">First Name</Form.Label>
+                                    <Form.Label sm="4">User Name</Form.Label>
                                         <Form.Control type="text"
                                             name="username"
                                             // value={test}
                                             // onChange={e => setTest(e.target.value)} 
                                             value={username}
                                             onChange={onUsernameChange}
-                                            placeholder="First Name" 
+                                            placeholder="Enter Username" 
                                         />
                                 </Form.Group>
                             </Col>
                             <Col>
                                 <Form.Group className="mb-3" controlId="fullnameID">
-                                    <Form.Label sm="4">Last Name</Form.Label>
+                                    <Form.Label sm="4">Full Name</Form.Label>
                                     <Form.Control type="text"
                                         name="fullname" 
                                         value={fullname}
                                         onChange={onFullnameChange}
-                                        placeholder="Last Name" 
+                                        placeholder="Enter Full name" 
                                     
                                     />
                                 </Form.Group>
@@ -87,7 +87,7 @@ const Signup = () =>{
                                     name="email"
                                     value={email}
                                     onChange={onEmailChange} 
-                                    placeholder="Email" 
+                                    placeholder="Enter Email" 
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="PasswordID">
@@ -125,16 +125,13 @@ const Signup = () =>{
                         <Form.Group className="mb-3" controlId="formBasicCheckbox">
                             <Form.Check type="checkbox" label="Agree Term and conditions" />
                         </Form.Group>
-                        <div className="v-parnet-signup-button">
-                            <Button className="v-signup-button" type="submit" >
-                                Submit
-                            </Button>
-                        </div>
+                        <Button variant="primary" type="submit" >
+                            Submit
+                        </Button>
                     </Form>
-                        </div>
-                    </div>
-                </div>
-                
+                </Container>
+            </div>
+        </div>
             </div>
         </>
     );

@@ -10,6 +10,7 @@ import { Route, Routes } from "react-router-dom";
 import Signup from "./components/authentication/Signup";
 import StudentHome from "./components/Student/StudentHome";
 import EditProfile from "./components/profiles/EditProfile";
+import ChangeClassDetails from "./components/email/ChangeClassDetails";
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -33,6 +34,8 @@ function App() {
       <Route  path="/student-test" element={<StudentHome />} />
       <Route  path="/edit-test" element={<EditProfile />} />
       <Route path="/admin" element={<AdminHome />} />
+      <Route  path="/email" element={<ChangeClassDetails />} />
+
     </Routes>
     
   );
