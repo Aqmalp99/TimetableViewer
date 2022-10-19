@@ -7,7 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card  from 'react-bootstrap/Card';
 
-const Landing = () => {
+const LandingStudent = () => {
     return (
         <>
 
@@ -36,4 +36,4 @@ const Landing = () => {
     );
 }
 
-exportconst Landing;
+export default LandingStudent;
