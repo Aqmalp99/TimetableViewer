@@ -1,6 +1,7 @@
 import ShaeTest from "./components/ShaeTest/ShaeTest" ;
 import AqmalTest from "./components/AqmalTest/AqmalTest";
 import TimetableView from "./components/Timetable/TimetableView";
+import AdminHome from "./components/Admin/AdminHome";
 
 import "./App.css";
 import Home from "./components/authentication/Home";
@@ -32,7 +33,9 @@ function App() {
       <Route path="/Timetable" element={<TimetableView />} />
       <Route  path="/student-test" element={<StudentHome />} />
       <Route  path="/edit-test" element={<EditProfile />} />
+      <Route path="/admin" element={<AdminHome />} />
       <Route  path="/email" element={<ChangeClassDetails />} />
+
     </Routes>
     
   );

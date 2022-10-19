@@ -1,0 +1,16 @@
+h1{
+    text-align: center;
+}
+
+.search-flex {
+    display: flex;
+    justify-content: center;
+}
+.search-form{
+    width: 30%;
+}
+hr {
+    max-width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+}
