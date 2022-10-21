@@ -122,5 +122,23 @@ router.post('/admin/update-time', async (req, res) => {
         })
     })
 });
+router.post('/admin/create-class', async (req, res) => {
+    const query = `INSERT INTO class (class_code, class_name, class_type, start_date, start_time, end_time, capacity, venue_id)
+                    VALUES ($1,$2,$3,$4, $5, $6, $7, $8)`;
+    await req.pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query(query, [req.body.class_code, req.body.class_name, req.body.class_type, req.body.date, req.body.start_time, req.body.end_time, req.body.capacity, req.body.venue_id], (err, result) => {
+            release();
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            // console.log(result.rows)
+            res.sendStatus(200);
+            // console.log(data);
+        })
+    })
+});
 
 module.exports = router;
