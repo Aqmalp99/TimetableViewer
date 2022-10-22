@@ -11,9 +11,9 @@ import Col from "react-bootstrap/Col";
 import "./signup.css"
 import Alert_boot from '../Alert_boot';
 
-const Signup = () =>{
+const Editprofile = () =>{
 
-    const navigate= useNavigate();
+
     const[alert, setAlert] = useState(null);
 
     const createAlert = (message, type)=> {
@@ -41,17 +41,15 @@ const Signup = () =>{
         e.preventDefault();
         try {
             const body = {username, fullname, email, password,role,notification};
-            const newUserRequest = await fetch("http://localhost:4000/signup", {
+            const editUserRequest = await fetch("http://localhost:4000/editUser", {
                 method: "POST",
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify(body)
             });
-            createAlert("Sign Up successful", "Success")
-            navigate("/")
-            console.log(newUserRequest);
+            console.log(editUserRequest);
 
         }catch(err) {
-            createAlert("Please enter all details", "ERROR")
+            createAlert("Cannot Edit try Again", "ERROR")
             console.error(err.message);
         }
     }
@@ -63,10 +61,10 @@ const Signup = () =>{
                 <div className="v-signup">
                     <div className='v-signup-header'>
                         <div className='v-signup-heading'> Uni Timetable</div>
-                        <div className='v-signup-heading-float'> <Link to='/' className='link'> Login</Link> </div>
+                        {/* <div className='v-signup-heading-float'> <Link to='/' className='link'> Login</Link> </div> */}
                     </div>
                     <div className="v-signup-form">
-                        <div className="v-signup-form-heading"> SIGN UP</div>
+                        <div className="v-signup-form-heading"> EDIT PROFILE</div>
                         <div className="v-signup-form-input">
                         <Form onSubmit={handleSubmit}>
                         <Row>

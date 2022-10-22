@@ -1,12 +1,28 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import AqmalCalendar from "../AqmalCalendar/AqmalCalendar";
 import Button from "react-bootstrap/Button";
 import '../ShaeTest/styles.css';
 import Modal from 'react-bootstrap/Modal';
 import { ModalBody } from "react-bootstrap";
+import  { useNavigate,Navigate } from 'react-router-dom';
+import { Buffer } from "buffer";
+
+function getToken() {
+  const tokenString = sessionStorage.getItem('token');
+  const userToken = JSON.parse(tokenString);
+  console.log(userToken);
+  return userToken;
+}
 
 const ShaeTest = () => {
+  const navigate=useNavigate();
+  const [auth, setAuth] = useState(false);
+  
+  
+
+
   const [buttonDisabled, setButtonDisabled] = useState(true);
+  
   const [clashes, setClashes] = useState([]);
   const [show, setShow] = useState(false);
   const [venue, setVenue]= useState([]);
@@ -50,12 +66,27 @@ const ShaeTest = () => {
     console.log(event);
   },[]);
   
+  const token = getToken();
+  if(!token)
+  {
+    console.log(getToken());
+    return <Navigate to='/'/>;
+
+  }
+  const base64Url = token.split('.')[1];
+  const buff = Buffer.from(base64Url, 'base64');
+  const payloadinit = buff.toString('ascii');
+  const payload = JSON.parse(payloadinit);
+  const id=payload.id;
+  const role = payload.role;
   
-  
+   
+    
   return (
     <div className="App">
+      
       <p>My app</p>
-      <AqmalCalendar displayClashes={displayClashes} ifEventSelected={ifEventSelected} SelectedVenue={SelectedVenue}/>
+      <AqmalCalendar id={id} role={role }displayClashes={displayClashes} ifEventSelected={ifEventSelected} SelectedVenue={SelectedVenue}/>
       <div className="button-group-flex">
         <Button className="me-3 mt-3" disabled={buttonDisabled}>
           Get Recommended Times
@@ -80,7 +111,7 @@ const ShaeTest = () => {
         {clashes}
       </div>
     </div>
-  );
+  )
 };
 
 export default ShaeTest;

@@ -3,6 +3,7 @@ const authRouter = require("./routes/authRouter");
 const signUpRouter = require("./routes/signUpRouter")
 const timetableRouter = require('./routes/timetableRouter');
 const routerUrl = require("./routes/routes")
+const editUserRouter = require("./routes/editUserRouter");
 ///
 const express = require('express');
 const session = require("express-session");
@@ -39,9 +40,11 @@ app.use(session({
     }
 })
 );
+app.use('/', authRouter);
 app.use('/', timetableRouter);
 app.use("/", signUpRouter);
-app.use("/", authRouter);
+app.use("/", editUserRouter);
+
 app.use('/test',routerUrl);
 
 if (process.env.NODE_ENV === 'production'){

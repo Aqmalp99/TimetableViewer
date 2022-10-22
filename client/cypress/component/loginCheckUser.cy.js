@@ -2,7 +2,7 @@ import * as React from 'react';
 import Login from '../../src/components/login/Login';
 import {mount} from '@cypress/react';
 
-it('user should access an application by logging in.', () => {
+it('The user shoul redirect to the right page after loggin in.', () => {
     mount(<Login />) 
     cy.contains('Login').should('be.visible');
     cy.contains('Username').should('be.visible');
@@ -11,4 +11,5 @@ it('user should access an application by logging in.', () => {
     cy.get('#password').type('1234');
     // Calling by form id
     cy.get('#loginForm').submit();
+    cy.contains('Admin').should('be.visible');
 });
