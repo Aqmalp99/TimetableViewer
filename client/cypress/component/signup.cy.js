@@ -26,5 +26,5 @@ it('user should access an application by logging in.', () => {
 
 
     // Calling by form id
-    cy.get('#signupform').submit()
+    cy.get('#signupform').submit();
 });
