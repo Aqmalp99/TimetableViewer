@@ -13,7 +13,7 @@ import Alert_boot from '../Alert_boot';
 
 const Signup = () =>{
 
-
+    const navigate= useNavigate();
     const[alert, setAlert] = useState(null);
 
     const createAlert = (message, type)=> {
@@ -46,6 +46,8 @@ const Signup = () =>{
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify(body)
             });
+            createAlert("Sign Up successful", "Success")
+            navigate("/")
             console.log(newUserRequest);
 
         }catch(err) {
