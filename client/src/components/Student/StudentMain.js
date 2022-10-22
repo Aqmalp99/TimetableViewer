@@ -27,6 +27,16 @@ const StudentMain = () => {
   const [clashes, setClashes] = useState([]);
   const [selectedClass, setSelectedClass]= useState([]);
 
+  const onClashResolve = () => {
+    //maybe?? display a form that asks for names of alternate classes in textbox.
+    //send this info as well?
+
+    //send uni ID, clash start date, clash classes
+    //socket.emit to room 1
+    //display alert saying message sent to administrators
+  }
+
+
   const displayClashes = (clashes) => {
     if (clashes.length > 0){
       const clashMessages = clashes.map((element, index) => {
@@ -60,7 +70,7 @@ const StudentMain = () => {
   const onClassClick = ()=> {
     setShowClassDetails(!showClassDetails);
   };
-  
+
   const token = getToken();
   if(!token)
   {
