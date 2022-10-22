@@ -9,7 +9,8 @@ const express = require('express');
 const session = require("express-session");
 const app = express();
 const dotenv = require('dotenv').config();
-
+const http = require("http");
+const {Server} = require("socket.io");
 const cors = require('cors');
 const path = require('path');
 const dbPool = require('./db/database');
@@ -21,9 +22,18 @@ app.use((req,res,next) => {
     next();
 });
 
+const server = http.createServer(app);
+
 const PORT = process.env.PORT || 4000;
 app.use(express.json());
 app.use(cors());
+
+const io = new Server(server, {
+    cors: {
+      origin: "http://localhost:3000",
+      methods: ["GET", "POST"],
+    },
+  });
 
 // setting up the server and cookie
 app.use(session({
@@ -58,6 +68,19 @@ else {
     app.get('/', (req, res) => res.send("set to production"));
 }
 
-app.listen(PORT,() =>{
-    console.log(`Server connected at port ${PORT}`);
+io.on("connection", async (socket) => {
+    console.log(`User connected: ${socket.id}`);
+    // const userID = socket.handshake.query.id;
+    await socket.join('1');
+  
+    console.log(socket.rooms);
+  
+    socket.on("send_message", async (data) => {
+      console.log(data);
+      socket.to('1').emit("receive_message", data);
+    })
+  });
+  
+server.listen(PORT, () => {
+console.log(`Server listening on port ${PORT}`);
 });

@@ -3,6 +3,7 @@ import AqmalTest from "./components/AqmalTest/AqmalTest";
 import TimetableView from "./components/Timetable/TimetableView";
 import AdminHome from "./components/Admin/AdminHome";
 import AdminInbox from "./components/Admin/AdminInbox";
+import StudentMain from "./components/Student/StudentMain";
 
 import "./App.css";
 import Home from "./components/authentication/Home";
@@ -37,6 +38,7 @@ function App() {
       <Route exact path="/admin" element={<AdminHome />} />
       <Route  path="/email" element={<ChangeClassDetails />} />
       <Route path="/admin/inbox" element={<AdminInbox />} />
+      <Route exact path="/student" element={<StudentMain />} />
     </Routes>
     
   );
