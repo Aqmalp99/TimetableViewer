@@ -1,14 +1,8 @@
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import { Eventcalendar, Button, toast } from "@mobiscroll/react";
+import { Eventcalendar, momentTimezone  } from "@mobiscroll/react";
 import axios from 'axios';
-import  { useNavigate } from 'react-router-dom';
-
-//how to get session token, verify if student or staff
-//depending on account, different route
-
-//detect clash
-
+import moment from 'moment-timezone';
 
 const detectClash = (data) => {
   let clashes = [];
@@ -57,11 +51,9 @@ const detectClash = (data) => {
 }
 
 
-const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role}) => {
-  
+const AqmalCalendar = ({ifEventSelected, displayClashes, ChangeSelectedClass, id, role, onClassClick}) => {
   
   const [myEvents, setEvents] = useState([]);
-  const [selectedEvent, setSelectedEvent] = useState({});
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
   
@@ -81,9 +73,11 @@ const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role}
             title: element.class_code,
             className: element.class_name,
             classType: element.class_type,
+            classSize: element.class_size,
             color: "#56ca70",
-            start: new Date(element.start_date.slice(0,10) + "T" + element.start_time),
-            end: new Date(element.start_date.slice(0,10) +"T" + element.end_time),
+            date: moment(element.start_date).format('YYYY-MM-DD'),
+            start: new Date(moment(element.start_date).format('YYYY-MM-DD') + "T" + element.start_time),
+            end: new Date(moment(element.start_date).format('YYYY-MM-DD') +"T" + element.end_time),
             venue: element.room_code + " / " + element.building,
             recurring: {
               repeat: 'weekly',
@@ -106,21 +100,18 @@ const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role}
     getClasses();
   }, []);
 
-  const onEventClick = useCallback((event) => {
-    toast({
-      message: event.event.title,
-    });
-    setSelectedEvent({
-      eventID: event.event.id,
-      eventName: event.event.title,
-    });
+  const onEventDoubleClick = useCallback((event) => {
     ifEventSelected(true);
-    SelectedVenue(event.event.id);
-
+    ChangeSelectedClass(event.event);
+    onClassClick(event);
   }, []);
 
-  const onCellClick = useCallback((event) => {
-    setSelectedEvent({});
+  const onEventClick = useCallback((event) => {
+    ifEventSelected(true);
+    ChangeSelectedClass(event.event);
+  }, []);
+
+  const onCellClick = useCallback(() => {
     ifEventSelected(false);
   }, []);
 
@@ -131,7 +122,9 @@ const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role}
         type: "week",
         startTime: "08:00",
         endTime: "18:00",
-        allDay: false
+        allDay: false,
+        startDay: 1,
+        endDay: 5
       },
     };
   }, []);
@@ -150,26 +143,6 @@ const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role}
     );
     });
 
-  //   const inv = [
-  //     {
-  //       start: "12:00",
-  //       end: "13:00",
-  //       title: "Lunch break",
-  //       recurring: {
-  //         repeat: "weekly",
-  //         weekDays: "MO,TU,WE,TH,FR",
-  //       },
-  //     },
-  //     {
-  //       start: "17:00",
-  //       end: "23:59",
-  //       recurring: {
-  //         repeat: "weekly",
-  //         weekDays: "MO,TU,WE,TH,FR",
-  //       },
-  //     },
-  //   ];
-
   if (loading){
     return <div>Loading...</div>;
   }
@@ -183,10 +156,10 @@ const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role}
       return <div>We have no record of your enrolment in any classes. Please contact a course administrator.</div>
     }
   }
+  momentTimezone.moment = moment;
 
   return (
     <div className="calendar-container">
-      {/* {console.log(myEvents)} */}
       <Eventcalendar
         className="calendar-width"
         theme="ios"
@@ -199,13 +172,13 @@ const ShaeCalendar = ({ifEventSelected, displayClashes, SelectedVenue, id, role}
         data={myEvents}
         view={view}
         invalidateEvent="strict"
-        // invalid={inv}
         onCellClick={onCellClick}
         onEventClick={onEventClick}
+        onEventDoubleClick={onEventDoubleClick}
         renderScheduleEventContent={renderScheduleEventContent}
       />
     </div>
   );
 };
 
-export default ShaeCalendar;
+export default AqmalCalendar;

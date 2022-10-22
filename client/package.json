@@ -10,7 +10,7 @@
     "private": true,
     "dependencies": {
         "@cypress/xvfb": "^1.2.4",
-        "@mobiscroll/react": "https://npm.mobiscroll.com/@mobiscroll/react-trial/-/react-trial-5.18.3.tgz",
+        "@mobiscroll/react": "https://npm.mobiscroll.com/@mobiscroll/react-trial/-/react-trial-5.19.1.tgz",
         "@testing-library/jest-dom": "^5.16.4",
         "@testing-library/react": "^13.3.0",
         "@testing-library/user-event": "^13.5.0",
@@ -19,6 +19,7 @@
         "buffer": "^6.0.3",
         "express-flash": "^0.0.2",
         "js-cookies": "^1.0.4",
+        "moment-timezone": "^0.5.37",
         "react": "^18.2.0",
         "react-bootstrap": "^2.5.0",
         "react-dom": "^18.2.0",

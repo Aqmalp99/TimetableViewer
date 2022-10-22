@@ -1,11 +1,12 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState } from "react";
 import AqmalCalendar from "../AqmalCalendar/AqmalCalendar";
 import Button from "react-bootstrap/Button";
 import '../ShaeTest/styles.css';
 import Modal from 'react-bootstrap/Modal';
 import { ModalBody } from "react-bootstrap";
-import  { useNavigate,Navigate } from 'react-router-dom';
+import  { Navigate } from 'react-router-dom';
 import { Buffer } from "buffer";
+import axios from "axios";
 
 function getToken() {
   const tokenString = sessionStorage.getItem('token');
@@ -14,18 +15,14 @@ function getToken() {
   return userToken;
 }
 
-const ShaeTest = () => {
-  const navigate=useNavigate();
-  const [auth, setAuth] = useState(false);
+const AqmalTest = () => {
   
-  
-
-
+  const [showClassDetails, setShowClassDetails] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
-  
   const [clashes, setClashes] = useState([]);
-  const [show, setShow] = useState(false);
-  const [venue, setVenue]= useState([]);
+  const [showVenues, setShowVenues] = useState(false);
+  const [selectedClass, setSelectedClass]= useState([]);
+  const [availableVenues, setAvailableVenues]= useState([]);
 
   const displayClashes = (clashes) => {
     if (clashes.length > 0){
@@ -57,14 +54,36 @@ const ShaeTest = () => {
   }
 
   const showAlternateVenues = () => {
-    setShow(!show)
+    const date= selectedClass.date;
+    const startTime= selectedClass.start.toLocaleTimeString('en-US',{ hour12: false });
+    const endTime= selectedClass.end.toLocaleTimeString('en-US',{ hour12: false });
+
+    const getVenues = async () => {
+      await axios
+        .get(`/staff/venues`, { params: {date:date , start_time: startTime, end_time: endTime}})
+        .then((response)=> {
+          let data = response.data.map(element => {
+            return {
+              venueID: element.venue_id,
+              venue: element.room_code + " / " + element.building,
+              capacity: element.capacity
+            };
+          })
+          setAvailableVenues(data);
+        })
+        .catch((err) => console.log(err))
+      }
+    setShowVenues(!showVenues);
+    getVenues();
   };
 
-  
-  const SelectedVenue = useCallback((event) => {
-    setVenue(event);
-    console.log(event);
+  const ChangeSelectedClass = useCallback((event) => {
+    setSelectedClass(event);
   },[]);
+
+  const onClassClick = ()=> {
+    setShowClassDetails(!showClassDetails);
+  };
   
   const token = getToken();
   if(!token)
@@ -79,14 +98,12 @@ const ShaeTest = () => {
   const payload = JSON.parse(payloadinit);
   const id=payload.id;
   const role = payload.role;
-  
-   
-    
+
   return (
     <div className="App">
       
       <p>My app</p>
-      <AqmalCalendar id={id} role={role }displayClashes={displayClashes} ifEventSelected={ifEventSelected} SelectedVenue={SelectedVenue}/>
+      <AqmalCalendar id={id} role={role} onClassClick= {onClassClick}displayClashes={displayClashes} ifEventSelected={ifEventSelected} ChangeSelectedClass={ChangeSelectedClass}/>
       <div className="button-group-flex">
         <Button className="me-3 mt-3" disabled={buttonDisabled}>
           Get Recommended Times
@@ -95,16 +112,36 @@ const ShaeTest = () => {
           Get Alternate Venues
         </Button>
       </div>
-      <Modal show={show} onHide={showAlternateVenues}>
+      <Modal show={showClassDetails} onHide={onClassClick}>
+      <Modal.Header closeButton>
+          <Modal.Title>Class Details</Modal.Title>
+       </Modal.Header>
+       <ModalBody>
+          <p>Title: {selectedClass.title}</p>
+          <p>Name: {selectedClass.className}</p>
+          <p>Venue: {selectedClass.venue}</p>
+          <p>class Size: {selectedClass.classSize}</p>
+          <p>Class Time: 
+            {(selectedClass.start ===undefined) ? "" : selectedClass.start.toLocaleTimeString()} 
+            -
+            {(selectedClass.end === undefined) ? "" : selectedClass.end.toLocaleTimeString()}
+           </p>
+          <p>Type of Class: {selectedClass.classType}</p>
+       </ModalBody>
+      </Modal>
+      <Modal show={showVenues} onHide={showAlternateVenues}>
       <Modal.Header closeButton>
           <Modal.Title>Alternate Venues</Modal.Title>
        </Modal.Header>
        <ModalBody>
-          <p>id: {venue}</p>
-          <p><input type="radio" value="alt1" name="venue"/> EM205</p>
-          <p><input type="radio" value="alt2" name="venue"/> IW218</p>
+        <label htmlFor="venues">Choose an Available Venue:</label>
+          <select>
+            {availableVenues.map((element,index) =>{ 
+                return <option key={index}>{element.venue}</option>
+              }
+            )}
+          </select>
           <Button variant="primary" onClick={showAlternateVenues}>Accept</Button>
-          
        </ModalBody>
       </Modal>
       <div className="clashes-container">
@@ -114,4 +151,4 @@ const ShaeTest = () => {
   )
 };
 
-export default ShaeTest;
+export default AqmalTest;

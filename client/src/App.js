@@ -1,12 +1,19 @@
 import ShaeTest from "./components/ShaeTest/ShaeTest" ;
 import AqmalTest from "./components/AqmalTest/AqmalTest";
 import TimetableView from "./components/Timetable/TimetableView";
+import AdminHome from "./components/Admin/AdminHome";
 
 import "./App.css";
 import Home from "./components/authentication/Home";
 
 import { Route, Routes } from "react-router-dom";
 import Signup from "./components/authentication/Signup";
+<<<<<<< HEAD
+=======
+import StudentHome from "./components/Student/StudentHome";
+import EditProfile from "./components/profiles/EditProfile";
+import ChangeClassDetails from "./components/email/ChangeClassDetails";
+>>>>>>> 93c3933916bd8125d23330af119b2b29f15fccbc
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -27,6 +34,14 @@ function App() {
       <Route path="/shae" element={<ShaeTest />}/>
       <Route path="/aqmal" element={<AqmalTest />}/>
       <Route path="/Timetable" element={<TimetableView />} />
+<<<<<<< HEAD
+=======
+      <Route  path="/student-test" element={<StudentHome />} />
+      <Route  path="/edit-test" element={<EditProfile />} />
+      <Route path="/admin" element={<AdminHome />} />
+      <Route  path="/email" element={<ChangeClassDetails />} />
+
+>>>>>>> 93c3933916bd8125d23330af119b2b29f15fccbc
     </Routes>
     
   );

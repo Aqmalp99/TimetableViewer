@@ -3,7 +3,11 @@ const authRouter = require("./routes/authRouter");
 const signUpRouter = require("./routes/signUpRouter")
 const timetableRouter = require('./routes/timetableRouter');
 const routerUrl = require("./routes/routes")
+<<<<<<< HEAD
 const editUserRouter = require("./routes/editUserRouter");
+=======
+const emailRouter = require("./routes/emailRouter")
+>>>>>>> 93c3933916bd8125d23330af119b2b29f15fccbc
 ///
 const express = require('express');
 const session = require("express-session");
@@ -44,6 +48,8 @@ app.use('/', authRouter);
 app.use('/', timetableRouter);
 app.use("/", signUpRouter);
 app.use("/", editUserRouter);
+
+app.use('/', emailRouter);
 
 app.use('/test',routerUrl);
 
