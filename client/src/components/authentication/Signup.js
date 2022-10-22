@@ -9,8 +9,19 @@ import { Form } from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "./signup.css"
+import Alert_boot from '../Alert_boot';
 
 const Signup = () =>{
+
+
+    const[alert, setAlert] = useState(null);
+
+    const createAlert = (message, type)=> {
+        setAlert({
+            msg: message,
+            type: type
+        })
+    }
 
     const [username, setUsername] = useState("");
     const [fullname, setFullname] = useState("");
@@ -38,11 +49,14 @@ const Signup = () =>{
             console.log(newUserRequest);
 
         }catch(err) {
+            createAlert("Please enter all details", "ERROR")
             console.error(err.message);
         }
     }
     return(
         <>
+        <div className="v-home">
+            <Alert_boot alert={alert}/>
             <div className="v-signup-background">
                 <div className="v-signup">
                     <div className='v-signup-header'>
@@ -135,6 +149,7 @@ const Signup = () =>{
                     </div>
                 </div>
                 
+            </div>
             </div>
         </>
     );
