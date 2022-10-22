@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
-import StudentCalendar from "./StudentCalendar";
-import NavbarStudent from "../Navbar/NavbarStudent";
+import TeacherCalendar from "./TeacherCalendar";
+import NavbarTeacher from "../Navbar/NavbarTeacher";
 import ClassDetails from "./ClassDetails";
 import Button from "react-bootstrap/Button";
 import '../ShaeTest/styles.css';
@@ -21,7 +21,7 @@ function getToken() {
   return userToken;
 }
 
-const StudentMain = () => {
+const TeacherMain = () => {
   
   const [showClassDetails, setShowClassDetails] = useState(false);
   const [clashes, setClashes] = useState([]);
@@ -91,8 +91,9 @@ const StudentMain = () => {
 
   return (
     <div className="App">
-      <NavbarStudent/>
-      <StudentCalendar id={id} role={role} onClassClick= {onClassClick}displayClashes={displayClashes} ChangeSelectedClass={ChangeSelectedClass}/>
+        {console.log(id)}
+      <NavbarTeacher/>
+      <TeacherCalendar id={id} role={role} onClassClick= {onClassClick}displayClashes={displayClashes} ChangeSelectedClass={ChangeSelectedClass}/>
       <ClassDetails showClassDetails={showClassDetails} onClassClick={onClassClick} selectedClass={selectedClass} />
       <div className="clashes-container">
         {clashes}
@@ -101,4 +102,4 @@ const StudentMain = () => {
   )
 };
 
-export default StudentMain;
+export default TeacherMain;

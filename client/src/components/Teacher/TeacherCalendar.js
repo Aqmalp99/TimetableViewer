@@ -3,9 +3,9 @@ import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Eventcalendar, momentTimezone  } from "@mobiscroll/react";
 import axios from 'axios';
 import moment from 'moment-timezone';
-import {detectClash} from './detectClash';
+import {detectClash} from '../Student/detectClash';
 
-const StudentCalendar = ({displayClashes, ChangeSelectedClass, id, role, onClassClick}) => {
+const TeacherCalendar = ({displayClashes, ChangeSelectedClass, id, role, onClassClick}) => {
   
   const [myEvents, setEvents] = useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -13,9 +13,10 @@ const StudentCalendar = ({displayClashes, ChangeSelectedClass, id, role, onClass
   
   //events object has color, end, id, start, title
   useEffect(() => {
+    console.log(`teacher id is ${id}`);
     const getClasses = async () => {
       await axios
-      .get(`/student/${id}`)
+      .get(`/teacher/${id}`)
       .then((response) => {
         if (detectClash(response.data).length > 0){
           displayClashes(detectClash(response.data));
@@ -129,4 +130,4 @@ const StudentCalendar = ({displayClashes, ChangeSelectedClass, id, role, onClass
   );
 };
 
-export default StudentCalendar;
+export default TeacherCalendar;

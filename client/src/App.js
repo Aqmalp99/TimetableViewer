@@ -4,6 +4,7 @@ import TimetableView from "./components/Timetable/TimetableView";
 import AdminHome from "./components/Admin/AdminHome";
 import AdminInbox from "./components/Admin/AdminInbox";
 import StudentMain from "./components/Student/StudentMain";
+import TeacherMain from "./components/Teacher/TeacherMain";
 
 import "./App.css";
 import Home from "./components/authentication/Home";
@@ -39,6 +40,7 @@ function App() {
       <Route  path="/email" element={<ChangeClassDetails />} />
       <Route path="/admin/inbox" element={<AdminInbox />} />
       <Route exact path="/student" element={<StudentMain />} />
+      <Route exact path="/teacher" element={<TeacherMain />} />
     </Routes>
     
   );
