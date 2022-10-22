@@ -26,7 +26,6 @@ const NavbarAdmin = () => {
                 </Navbar.Collapse>
             </Container>
         </Navbar>
-        
     </div>
   );
 }

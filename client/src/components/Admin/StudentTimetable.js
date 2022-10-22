@@ -15,7 +15,7 @@ import axios from "axios";
 //   return userToken;
 // }
 
-const TeacherTimetable = ({role,userID}) => {
+const StudentTimetable = ({role,userID}) => {
   
   const [showClassDetails, setShowClassDetails] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -25,6 +25,7 @@ const TeacherTimetable = ({role,userID}) => {
   const [availableVenues, setAvailableVenues]= useState([]);
 
   const displayClashes = (clashes) => {
+
     if (clashes.length > 0){
       const clashMessages = clashes.map((element, index) => {
         return (
@@ -32,21 +33,22 @@ const TeacherTimetable = ({role,userID}) => {
             <h3>Clash</h3>
             <p>
               {
-              (element.a.start_date > element.b.start_date) 
-                ? element.a.start_date.slice(0, -14)
-                : element.b.start_date.slice(0, -14)
+              (element.a.date > element.b.date) 
+                ? element.a.date.slice(0, -14)
+                : element.b.date.slice(0, -14)
               }
             </p>
-            <p>Class 1: <span>{element.a.class_code}</span></p>
-            <ul><li>{element.a.start_time} - {element.a.end_time}</li></ul>
-            <p>Class 2: <span>{element.b.class_code}</span></p>
-            <ul><li>{element.b.start_time} - {element.b.end_time}</li></ul>
+            <p>Class 1: <span>{element.a.title}</span></p>
+            <ul><li>{element.a.start.toLocaleTimeString()} - {element.a.end.toLocaleTimeString()}</li></ul>
+            <p>Class 2: <span>{element.b.title}</span></p>
+            <ul><li>{element.b.start.toLocaleTimeString()} - {element.b.end.toLocaleTimeString()}</li></ul>
         </div>
         );
       });
 
       setClashes(clashMessages);
     }
+   
   }
 
   const ifEventSelected = selected => {
@@ -150,4 +152,4 @@ const TeacherTimetable = ({role,userID}) => {
   )
 };
 
-export default TeacherTimetable;
+export default StudentTimetable;
