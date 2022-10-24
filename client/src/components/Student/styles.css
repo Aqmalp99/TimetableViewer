@@ -1,0 +1,8 @@
+.enrol-form-container {
+    display: flex;
+    justify-content: center;
+}
+
+.enrol-form {
+    width: 40%;
+}
