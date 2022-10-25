@@ -9,8 +9,12 @@ const express = require('express');
 const session = require("express-session");
 const app = express();
 const dotenv = require('dotenv').config();
-const http = require("http");
-const {Server} = require("socket.io");
+const server = require('http').createServer(app);
+// const server = http.createServer(app);
+const io = require('socket.io')(server, { transports: ["websocket"] , cors: {
+  origin: "http://localhost:3000",
+  methods: ["GET", "POST"],
+}});
 const cors = require('cors');
 const path = require('path');
 const dbPool = require('./db/database');
@@ -22,18 +26,18 @@ app.use((req,res,next) => {
     next();
 });
 
-const server = http.createServer(app);
+
 
 const PORT = process.env.PORT || 4000;
 app.use(express.json());
 app.use(cors());
 
-const io = new Server(server, {
-    cors: {
-      origin: "http://localhost:3000",
-      methods: ["GET", "POST"],
-    },
-  });
+// const io = new Server(httpServer, {
+//     cors: {
+//       origin: "http://localhost:3000",
+//       methods: ["GET", "POST"],
+//     },
+//   });
 
 // setting up the server and cookie
 app.use(session({
