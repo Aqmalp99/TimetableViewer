@@ -5,6 +5,8 @@ import AdminHome from "./components/Admin/AdminHome";
 import AdminInbox from "./components/Admin/AdminInbox";
 import StudentMain from "./components/Student/StudentMain";
 import TeacherMain from "./components/Teacher/TeacherMain";
+import CreateClass from "./components/Admin/CreateClass";
+
 
 import "./App.css";
 import Home from "./components/authentication/Home";
@@ -15,6 +17,7 @@ import StudentHome from "./components/Student/StudentHome";
 import EditProfile from "./components/profiles/EditProfile";
 import ChangeClassDetails from "./components/email/ChangeClassDetails";
 import StudentEnrol from "./components/Student/StudentEnrol";
+
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -43,6 +46,7 @@ function App() {
       <Route exact path="/student" element={<StudentMain />} />
       <Route exact path="/teacher" element={<TeacherMain />} />
       <Route exact path="/student/enrol" element={<StudentEnrol />} />
+      <Route path="/admin/create-class" element={<CreateClass />} />
     </Routes>
     
   );
