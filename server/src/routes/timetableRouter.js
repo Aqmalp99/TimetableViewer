@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/student/:id', async (req, res) => {
-    const query = `SELECT class.class_code, class.class_name, class.class_type, class.start_date, class.start_time, class.end_time, venue.room_code, venue.building from enrolled_classes
+    const query = `SELECT class.class_id, class.class_code, class.class_name, class.class_type, class.start_date, class.start_time, class.end_time, venue.room_code, venue.building from enrolled_classes
                    INNER JOIN class
                    ON class.class_id = enrolled_classes.class_id
                    INNER JOIN venue
@@ -136,6 +136,30 @@ router.post('/admin/create-class', async (req, res) => {
             }
             // console.log(result.rows)
             res.sendStatus(200);
+            // console.log(data);
+        })
+    })
+});
+
+router.get('/classes', async (req, res) => {
+    const query = `SELECT class.class_id, class.class_code, class.class_name, class.class_type, class.start_date, class.start_time, class.end_time, venue.room_code, venue.building from class
+                   INNER JOIN venue
+                   ON class.venue_id = venue.venue_id
+                   WHERE class_id NOT IN 
+                   (SELECT class_id from enrolled_classes 
+                    WHERE student_id=$1);`;
+    
+    await req.pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query(query, [req.query.id], (err, result) => {
+            release();
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            console.log(result.rows)
+            res.send(result.rows);
             // console.log(data);
         })
     })
