@@ -54,7 +54,6 @@ const StudentMain = () => {
             <ul><li>{element.a.start_time} - {element.a.end_time}</li></ul>
             <p>Class 2: <span>{element.b.class_code}</span></p>
             <ul><li>{element.b.start_time} - {element.b.end_time}</li></ul>
-            <Button>Resolve Clash</Button>
         </div>
         );
       });

@@ -23,33 +23,6 @@ hr {
     margin-top: 2%;
 }
 
-.inbox-flex {
-    display: flex;
-    height: 75vh;
-    width: 60vw;
-    border: 1px solid black;
-    flex-direction: row;
-}
-
-.inbox-flex div {
-    height: 100%;
-}
-
 .inbox-list {
     width: 30%;
-    border-right: 1px solid red;
-}
-
-.message-display {
-    width: 70%;
-    padding: 2%;
-}
-
-.clash-list {
-    height: 100%;
-}
-
-.clash-item {
-    border-bottom: 1px solid black;
-    max-height: 10%;
 }

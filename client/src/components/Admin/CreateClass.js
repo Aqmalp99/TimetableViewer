@@ -40,13 +40,13 @@ const CreateClass = () => {
       };
 
       const chooseVenue = (e) => {
-        setFormDetails({...formDetails, capacity: e.target.value});
+        setFormDetails({...formDetails, venue_id: e.target.value});
       }
       const closeModal = () => {
         setShowVenues(!showVenues);
       }
       const submitNewClass = () => {
-        const body = {formDetails};
+        const body = {...formDetails};
         const newClass = async () => {
             await axios
               .post(`/admin/create-class`, body)

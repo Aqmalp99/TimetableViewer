@@ -91,6 +91,7 @@ const TeacherMain = () => {
 
   return (
     <div className="App">
+      <div> I AM TEACHER</div>
         {console.log(id)}
       <NavbarTeacher/>
       <TeacherCalendar id={id} role={role} onClassClick= {onClassClick}displayClashes={displayClashes} ChangeSelectedClass={ChangeSelectedClass}/>

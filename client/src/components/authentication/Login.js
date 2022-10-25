@@ -15,6 +15,7 @@ import ellipse1 from  "../assets/images/ellipse_big.svg"
 import ellipse2 from  "../assets/images/ellipse_small.svg"
 import diagram1 from  "../assets/images/undraw.svg"
 import Alert_boot from '../Alert_boot';
+import { Buffer } from 'buffer';
 
 
 
@@ -49,7 +50,21 @@ const Login = ({setToken})  => {
         .then((response) => {
             const token=response.data.accessToken;
             setToken(token);
-            navigate("/aqmal");
+              const base64Url = token.split('.')[1];
+              const buff = Buffer.from(base64Url, 'base64');
+              const payloadinit = buff.toString('ascii');
+              const payload = JSON.parse(payloadinit);
+              const role = payload.role;
+              if( role === 'student')
+                navigate("/student");
+              
+              else if ( role === 'teacher')
+                navigate("/teacher")
+              
+              else if (role === 'admin')
+                navigate("/admin");
+              
+                
         })
         
         .catch((err) => {

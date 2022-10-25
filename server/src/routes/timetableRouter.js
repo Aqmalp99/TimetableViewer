@@ -46,7 +46,7 @@ router.get('/teacher/venues', async (req, res) => {
                 return console.error('Error executing query', err.stack)
             }
             // console.log(result.rows)
-            console.log(result.rows);
+            
             res.send(result.rows);
             // console.log(data);
         })
@@ -123,8 +123,9 @@ router.post('/admin/update-time', async (req, res) => {
     })
 });
 router.post('/admin/create-class', async (req, res) => {
-    const query = `INSERT INTO class (class_code, class_name, class_type, start_date, start_time, end_time, capacity, venue_id)
-                    VALUES ($1,$2,$3,$4, $5, $6, $7, $8)`;
+    const query = `INSERT INTO class (class_code, class_name, class_type, start_date, start_time, end_time, capacity, venue_id, class_size)
+                    VALUES ($1,$2,$3,$4, $5, $6, $7, $8, 0)`;
+    console.log(req.body);
     await req.pool.connect((err, client, release) => {
         if (err) {
             return console.error('Error acquiring client', err.stack)
@@ -158,11 +159,50 @@ router.get('/classes', async (req, res) => {
             if (err) {
                 return console.error('Error executing query', err.stack)
             }
-            console.log(result.rows)
+            
             res.send(result.rows);
             // console.log(data);
         })
     })
 });
 
+router.get('/admin/clashes', async (req, res) => {
+    const query = `SELECT users.uni_id, clash_request.date_time FROM users
+                    INNER JOIN clash_request
+                    ON users.user_id = clash_request.user_id
+                    ORDER BY clash_request.date_time DESC;`;
+    await req.pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query(query, (err, result) => {
+            release();
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            // console.log(result.rows)
+            res.send(result.rows);
+            // console.log(data);
+        })
+    })
+});
+
+router.post('/student/enrol', async (req, res) => {
+    const query = `INSERT INTO enrolled_classes (student_id, class_id)
+                    VALUES ($1,$2);`;
+    await req.pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query(query, [req.body.user_id, req.body.class_id], (err, result) => {
+            release();
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            // console.log(result.rows)
+            res.sendStatus(200);
+            // console.log(data);
+        })
+    })
+});
 module.exports = router;

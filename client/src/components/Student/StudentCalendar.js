@@ -1,15 +1,35 @@
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import { Eventcalendar, momentTimezone  } from "@mobiscroll/react";
+import { Eventcalendar, setOptions,momentTimezone, CalendarNav, SegmentedGroup, SegmentedItem, CalendarPrev, CalendarToday, CalendarNext } from '@mobiscroll/react';
 import axios from 'axios';
 import moment from 'moment-timezone';
 import {detectClash} from './detectClash';
 
+
+setOptions({
+  theme: 'ios',
+  themeVariant: 'light'
+});
 const StudentCalendar = ({displayClashes, ChangeSelectedClass, id, role, onClassClick}) => {
+  
   
   const [myEvents, setEvents] = useState([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
+  const [calView, setCalView] = React.useState(
+    {
+        
+        schedule: {
+          labels: true,
+          type: "week",
+          startTime: "08:00",
+          endTime: "18:00",
+          allDay: false,
+          startDay: 1,
+          endDay: 5
+        }
+    }
+);
   
   //events object has color, end, id, start, title
   useEffect(() => {
@@ -92,24 +112,99 @@ const StudentCalendar = ({displayClashes, ChangeSelectedClass, id, role, onClass
     );
     });
 
-  if (loading){
-    return <div>Loading...</div>;
-  }
-
-  if (error){
-    if (error === 500){
-      return <div>There has been an error fetching your class details. Please refresh your page and try again</div>
-    }
+const changeView = (event) => {
+    let calView;
     
-    if (error === "No classes"){
-      return <div>We have no record of your enrolment in any classes. Please contact a course administrator.</div>
+    switch (event.target.value) {
+        case 'year':
+            calView = {
+                calendar: { type: 'year' }
+            }
+            break;
+        case 'month':
+            calView = {
+                calendar: { labels: true }
+            }
+            break;
+        case 'week':
+            calView = {
+              schedule: {
+                labels: true,
+                type: "week",
+                startTime: "08:00",
+                endTime: "18:00",
+                allDay: false,
+                startDay: 1,
+                endDay: 5
+              }
+            }
+            break;
+        case 'day':
+            calView = {
+                schedule: { type: 'day',
+                startTime: "08:00",
+                endTime: "18:00",
+                allDay: false, }
+            }
+            break;
+        case 'agenda':
+            calView = {
+                calendar: { type: 'week' },
+                agenda: { type: 'week' }
+            }
+            break;
     }
+
+    
+    setCalView(calView);
+}
+
+const customWithNavButtons = () => {
+    return <React.Fragment>
+        <CalendarNav className="cal-header-nav" />
+        <div className="cal-header-picker">
+            <SegmentedGroup value={view} onChange={changeView}>
+                <SegmentedItem value="year">
+                    Year
+                </SegmentedItem>
+                <SegmentedItem value="month">
+                    Month
+                </SegmentedItem>
+                <SegmentedItem value="week">
+                    Week
+                </SegmentedItem>
+                <SegmentedItem value="day">
+                    Day
+                </SegmentedItem>
+                <SegmentedItem value="agenda">
+                    Agenda
+                </SegmentedItem>
+            </SegmentedGroup>
+        </div>
+        <CalendarPrev className="cal-header-prev" />
+        <CalendarToday className="cal-header-today" />
+        <CalendarNext className="cal-header-next" />
+    </React.Fragment>;
+}
+if (loading){
+  return <div>Loading...</div>;
+}
+
+if (error){
+  if (error === 500){
+    return <div>There has been an error fetching your class details. Please refresh your page and try again</div>
   }
+  
+  if (error === "No classes"){
+    return <div>We have no record of your enrolment in any classes. Please contact a course administrator.</div>
+  }
+}
   momentTimezone.moment = moment;
 
   return (
     <div className="calendar-container">
       <Eventcalendar
+        renderHeader={customWithNavButtons}
         className="calendar-width"
         theme="ios"
         themeVariant="light"
@@ -119,7 +214,7 @@ const StudentCalendar = ({displayClashes, ChangeSelectedClass, id, role, onClass
         dragToResize={false}
         eventDelete={false}
         data={myEvents}
-        view={view}
+        view={calView}
         invalidateEvent="strict"
         onEventClick={onEventClick}
         onEventDoubleClick={onEventDoubleClick}
