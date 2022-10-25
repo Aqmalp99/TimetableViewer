@@ -2,7 +2,7 @@ import * as React from 'react';
 import Login from '../../src/components/login/Login';
 import {mount} from '@cypress/react';
 
-it('user should access an application by logging in.', () => {
+it('wrong password and user name should show errors and the user have option to sign up', () => {
     mount(<Login />) 
     cy.contains('Login').should('be.visible');
     cy.contains('Username').should('be.visible');
@@ -11,4 +11,6 @@ it('user should access an application by logging in.', () => {
     cy.get('#password').type('1234');
     // Calling by form id
     cy.get('#loginForm').submit();
+    cy.contains('ERROR: Username or password is incorrect').should('be.visible');
+    cy.request("http://localhost:3000/signup").contains("SIGN UP").should('be.visible');
 });

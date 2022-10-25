@@ -17,16 +17,14 @@ signUpRouter.post('/signup', async(req, res) => {
         if (existingUser.rowCount === 0){
             //register new user
             const addUser = await pool.query(
-                `INSERT INTO users(
+                `INSERT INTO users( 
                     username, 
-                    fullname, 
-                    email, 
                     password, 
                     role, 
                     notification
                     )
-                    VALUES($1,$2,$3,$4,$5,$6);`,
-                    [username, fullname, email,hashedPassword,role,notification] 
+                    VALUES($1,$2,$3,$4);`,
+                    [email,hashedPassword,role,notification] 
             );
             res.status(200).json({status: "signup successfull"});
         } else{
