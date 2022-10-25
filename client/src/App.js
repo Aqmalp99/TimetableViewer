@@ -2,6 +2,7 @@ import ShaeTest from "./components/ShaeTest/ShaeTest" ;
 import AqmalTest from "./components/AqmalTest/AqmalTest";
 import TimetableView from "./components/Timetable/TimetableView";
 import AdminHome from "./components/Admin/AdminHome";
+import CreateClass from "./components/Admin/CreateClass";
 
 import "./App.css";
 import Home from "./components/authentication/Home";
@@ -39,6 +40,7 @@ function App() {
       <Route  path="/student-test" element={<StudentHome />} />
       <Route  path="/edit-test" element={<EditProfile />} />
       <Route path="/admin" element={<AdminHome />} />
+      <Route path="/admin/create-class" element={<CreateClass />} />
       <Route  path="/email" element={<ChangeClassDetails />} />
 
 >>>>>>> 93c3933916bd8125d23330af119b2b29f15fccbc
