@@ -6,18 +6,27 @@ import { Button, Form } from 'react-bootstrap'
 import "./styles.css";
 import EnrolCalendar from './EnrolCalendar';
 import axios from 'axios';
+import { detectNewClash } from './detectNewClash';
+import io from 'socket.io-client'
 
 function getToken() {
     const tokenString = sessionStorage.getItem('token');
     const userToken = JSON.parse(tokenString);
     console.log(userToken);
     return userToken;
-  }
+}
+
+const socket = io("/", {
+    // query: {
+    //     id: id,
+    // }
+  });
 
 
 const StudentEnrol = () => {
 
     const [otherClasses, setOtherClasses] = useState([]);
+    const [selectedOption, setSelectedOption] = useState({});
     const classesRef = useRef(null);
 
     const token = getToken();
@@ -49,19 +58,31 @@ const StudentEnrol = () => {
         const index = e.target.selectedOptions[0].getAttribute('data-id');
         if (index === null){
             classesRef.current.addTempClass(null);
+            setSelectedOption({});
         }
         else {
             classesRef.current.addTempClass(otherClasses[index]);
+            setSelectedOption(otherClasses[index]);
+        }
+    }
+
+    const onFormSubmit = (e) => {
+        e.preventDefault();
+        let classes = classesRef.current.getAllClasses();
+        classes.pop(); //remove currently selected option
+        const clashes = detectNewClash(selectedOption, classes);
+        if (clashes.length > 0){
+            //socket emit
         }
     }
     
     const options = otherClasses.map((element, index) => {
-            if (element.class_name != null){
-            return (<option data-id={index} key={index}>
-                {element.class_code} {element.class_name} {element.class_type} {element.start_date} {element.start_time} {element.end_time}
-                </option>)
-            }
-        })
+        if (element.class_name != null){
+        return (<option data-id={index} key={index}>
+            {element.class_code} {element.class_name} {element.class_type} {element.start_date} {element.start_time} {element.end_time}
+            </option>)
+        }
+    })
 
     if(!token)
     {
@@ -81,10 +102,11 @@ const StudentEnrol = () => {
                             {options}
                         </Form.Select>
                     </Form.Group>
-                    <Button variant="primary" type="submit">Confirm</Button>
+                    <Button onClick={onFormSubmit} variant="primary" type="submit">Confirm</Button>
                 </Form>
             </div>
             <EnrolCalendar id={id} ref={classesRef}/>
+            {console.log(selectedOption)}
         </div>
     )
 }

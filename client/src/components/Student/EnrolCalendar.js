@@ -3,9 +3,8 @@ import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Eventcalendar, momentTimezone  } from "@mobiscroll/react";
 import axios from 'axios';
 import moment from 'moment-timezone';
-import {detectClash} from './detectClash';
 
-const EnrolCalendar = forwardRef(({id}, ref) => {
+const EnrolCalendar = forwardRef(({id, getAllClasses}, ref) => {
   
   const [myEvents, setEvents] = useState([]);
   const [numClasses, setNumClasses] = useState(0);
@@ -83,6 +82,9 @@ const EnrolCalendar = forwardRef(({id}, ref) => {
       }
 
       setEvents(newEvents);
+    },
+    getAllClasses() {
+      return myEvents;
     }
   }));
 
@@ -132,7 +134,6 @@ const EnrolCalendar = forwardRef(({id}, ref) => {
 
   return (
     <div className="calendar-container">
-      {console.log(myEvents)}
       <Eventcalendar
         className="calendar-width"
         theme="ios"

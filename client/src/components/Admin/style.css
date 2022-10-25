@@ -42,4 +42,14 @@ hr {
 
 .message-display {
     width: 70%;
+    padding: 2%;
+}
+
+.clash-list {
+    height: 100%;
+}
+
+.clash-item {
+    border-bottom: 1px solid black;
+    max-height: 10%;
 }
