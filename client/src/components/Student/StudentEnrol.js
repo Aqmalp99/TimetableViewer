@@ -41,7 +41,7 @@ const StudentEnrol = () => {
     const [otherClasses, setOtherClasses] = useState([]);
     const [selectedOption, setSelectedOption] = useState({});
     const classesRef = useRef(null);
-
+    const [noClasses, setNoClasses]= useState(true);
     
 
     useEffect(()=>{
@@ -126,7 +126,7 @@ const StudentEnrol = () => {
     else if (role !== 'student')
         return <Navigate to='/'/>;
     
-    
+   
     return (
         <div>
             <NavbarStudent />
@@ -142,8 +142,9 @@ const StudentEnrol = () => {
                     <Button onClick={onFormSubmit} variant="primary" type="submit">Confirm</Button>
                 </Form>
             </div>
-            <EnrolCalendar id={id} ref={classesRef}/>
-            {console.log(selectedOption)}
+             <h2 style={ { textAlign: "center" } }>Select a class from the drop down list to see what your calendar will look like!</h2>
+            <EnrolCalendar id={id} ref={classesRef} />
+           
         </div>
     )
 }

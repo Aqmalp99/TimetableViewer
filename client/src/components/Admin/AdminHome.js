@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavbarAdmin from '../Navbar/NavbarAdmin';
 import "./style.css";
 import Form from 'react-bootstrap/Form';
@@ -31,8 +31,11 @@ const AdminHome = () => {
 
     const onFormSubmit = (e) => {
         console.log(e);
-        if(e.type === 'submit')
+
+        if(e.type === 'submit'){
+            window.history.replaceState(null, '');
             e.preventDefault();
+        }
         
         
         const fetchUser = async () => {
@@ -64,12 +67,13 @@ const AdminHome = () => {
             return <></>
         }
     }
-    if(location.state)
-    {
-
+    useEffect( () => {
+        if(location.state)
+        {
+        console.log("YES");
         const fetchUser = async () => {
             await axios
-            .get(`/timetable/${location.state.student_id}`)
+            .get(`/timetable/${searchID}`)
             .then((response) => {
                 const data=response.data;
                 setRole(data[0].role);
@@ -80,6 +84,8 @@ const AdminHome = () => {
             }
         fetchUser();
     }
+    },[]);
+    
   const token = getToken();
   if(!token)
   {

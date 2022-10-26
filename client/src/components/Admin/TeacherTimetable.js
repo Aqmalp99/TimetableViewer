@@ -9,17 +9,7 @@ import axios from "axios";
 import Form from 'react-bootstrap/Form';
 import io from "socket.io-client";
 
-// const socket = io("/", {
-//   query: {
-//       role: "admin",
-//   }
-// });
-// function getToken() {
-//   const tokenString = sessionStorage.getItem('token');
-//   const userToken = JSON.parse(tokenString);
-//   console.log(userToken);
-//   return userToken;
-// }
+
 
 const TeacherTimetable = ({role,userID}) => {
   
@@ -126,7 +116,11 @@ const TeacherTimetable = ({role,userID}) => {
     setFormData(
       {date: (e.target.id === "date") ? e.target.value : formData.date, 
       start: (e.target.id === "start") ? e.target.value : formData.start,
-      end: (e.target.id === "end") ? e.target.value : formData.end
+      end: (e.target.id === "end") ? e.target.value : formData.end,
+      class_name: selectedClass.className,
+        class_type: selectedClass.classType,
+        class_code: selectedClass.title,
+        staff_id: userID
       })
   }
 

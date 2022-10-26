@@ -3,6 +3,9 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 
 const NavbarStudent = () => {
+  const logout = () => {
+    sessionStorage.clear();
+  }
   return (
     <div>
         <Navbar bg="light" expand="lg" sticky="top"> 
@@ -16,7 +19,7 @@ const NavbarStudent = () => {
                       <Nav.Link href="/student/enrol">Enrol in Class</Nav.Link>
                       <Nav.Link href="/student/inbox">Inbox</Nav.Link>
                       <Nav.Link href="/student/settings">Settings</Nav.Link>
-                      <Nav.Link href="/">Logout</Nav.Link>
+                      <Nav.Link href="/" onClick={logout}>Logout</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

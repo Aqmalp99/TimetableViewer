@@ -54,6 +54,7 @@ const LoadTimetable = forwardRef(({ifEventSelected, displayClashes, ChangeSelect
       setEvents(newData);
     },
     newClass(newClassData){
+      console.log(newClassData);
       let newEvents = [...myEvents];
       if (newClassData != null){
         newEvents.push({

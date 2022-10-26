@@ -59,7 +59,7 @@ const AdminInbox = () => {
         navigate('/admin' , {state: { student_id: e.target.value}})
     }
     const renderedClashes = clashes.map((element,index) => {
-        return (<ListGroup.Item key = {index}>{element.uni_id} <Button value={element.uni_id} onClick={onClick}> Resolve Clash</Button></ListGroup.Item>)
+        return (<ListGroup.Item key = {index}>{element.uni_id} <Button value={element.uni_id} onClick={onClick}> Review Timetable</Button></ListGroup.Item>)
     })
 
     const token = getToken();
