@@ -27,8 +27,6 @@ const TeacherTimetable = ({role,userID}) => {
   const [editMode, setEditMode]= useState(false);
   const [showChangeClass, setShowChangeClass]= useState(false);
   const [formData, setFormData] = useState({});
-  const [showVenueOptions, setShowVenueOptions]= useState(false);
-  const [selectedVenue, setSelectedVenue] = useState();
 
   const classRef = useRef(null);
  
@@ -111,7 +109,8 @@ const TeacherTimetable = ({role,userID}) => {
         end: selectedClass.end.toLocaleTimeString('en-US',{ hour12: false }),
         class_name: selectedClass.className,
         class_type: selectedClass.classType,
-        class_code: selectedClass.title});
+        class_code: selectedClass.title,
+        staff_id: userID});
     if(e.target.value === "currentClass")
       setShowChangeClass(!showChangeClass);
     else if (e.target.value === "extraClass")
@@ -164,7 +163,7 @@ const TeacherTimetable = ({role,userID}) => {
       }
     
     getVenues();
-    setShowVenueOptions(!setShowVenueOptions);
+  
     
     // classRef.current.updateClass({id: selectedClass.id, date: formData.date, start: formData.start, end: formData.end});
     
@@ -174,26 +173,36 @@ const TeacherTimetable = ({role,userID}) => {
     setShowChangeClass(!showChangeClass);
   }
   const closeExtraClassModal = () => {
+    setAvailableVenues([]);
     setShowExtraClasses(!showExtraClasses);
   }
 
   const chooseVenue = (e) => {
-    setSelectedVenue(e.target.value);
+    setFormData({...formData, venue_id: e.target.value });
   }
   
-  const submitNewClass = () => {
-    const body = {};
-    const newClass = async () => {
-        await axios
-          .post(`/admin/create-class`, body)
-          .then((response)=> {
-            console.log(response);
-          })
-          .catch((err) => console.log(err))
-        }
-        
-      newClass();
+  const submitNewClass = async () => {
+    let body = {...formData};
+    console.log(body);
+       const { data }= await axios.post(`/admin/create-class`, body)
+       body={...body, class_id:data[0].class_id};
+       
+      setAvailableVenues([]);
       setShowExtraClasses(!showExtraClasses);
+      classRef.current.newClass(body);
+      
+  }
+
+  const confirmNewVenue = async () => {
+    let body = {class_id: selectedClass.id, venue_id: formData.venue_id}
+    await axios
+    .post("/admin/update-venue",body)
+      .then((response) => {
+          
+      })
+        
+      .catch((err) => console.log(err))
+      setShowVenues(!showVenues);
   }
 //   const token = getToken();
 //   if(!token)
@@ -256,13 +265,13 @@ const TeacherTimetable = ({role,userID}) => {
        </Modal.Header>
        <ModalBody>
         <label htmlFor="venues">Choose an Available Venue:</label>
-          <select>
+          <select onClick={chooseVenue}>
             {availableVenues.map((element,index) =>{ 
-                return <option key={index}>{element.venue}</option>
+                return <option key={index} value={element.venueID}>{element.venue}</option>
               }
             )}
           </select>
-          <Button variant="primary" onClick={showAlternateVenues}>Accept</Button>
+          <Button variant="primary" onClick={confirmNewVenue}>Accept</Button>
        </ModalBody>
       </Modal>
 
@@ -311,17 +320,21 @@ const TeacherTimetable = ({role,userID}) => {
             </Form.Group>
             
             
-          
-          
+          <div className="d-grid gap-2">
+            <Button size="lg" variant="outline-primary" type="submit">Show Available Venues</Button>
+          </div>
+          <div className="d-grid gap-2">
           <label htmlFor="venues">Choose an Available Venue:</label>
-            <select onChange={chooseVenue}>
+            <select onClick={chooseVenue}>
                 {availableVenues.map((element,index) =>{ 
                     return <option key={index} value={element.venueID}>{element.venue}</option>
                 }
                 )}
-            </select>{showVenueOptions ? <Button variant="outline-primary" type="submit">Show Available Venues</Button> : <></>}
-            <Button variant="primary" onClick={submitNewClass}>Accept</Button>
-             
+            </select>
+            </div><br/>
+            <div className="d-grid gap-2">
+              <Button size= 'lg' variant="primary" onClick={submitNewClass}>Accept</Button>
+            </div>
             </Form>
        </ModalBody>
       </Modal>

@@ -125,21 +125,39 @@ router.post('/admin/update-time', async (req, res) => {
     })
 });
 router.post('/admin/create-class', async (req, res) => {
-    const query = `INSERT INTO class (class_code, class_name, class_type, start_date, start_time, end_time, capacity, venue_id, class_size)
-                    VALUES ($1,$2,$3,$4, $5, $6, $7, $8, 0)`;
+    let query = `INSERT INTO class (class_code, class_name, class_type, start_date, start_time, end_time, capacity, venue_id, class_size)
+                    VALUES ($1,$2,$3,$4, $5, $6, 50, $7, 0) RETURNING class_id;`;
     console.log(req.body);
+    let data='';
     await req.pool.connect((err, client, release) => {
         if (err) {
             return console.error('Error acquiring client', err.stack)
         }
-        client.query(query, [req.body.class_code, req.body.class_name, req.body.class_type, req.body.date, req.body.start_time, req.body.end_time, req.body.capacity, req.body.venue_id], (err, result) => {
+        client.query(query, [req.body.class_code, req.body.class_name, req.body.class_type, req.body.date, req.body.start, req.body.end, req.body.venue_id], (err, result) => {
             release();
             if (err) {
                 return console.error('Error executing query', err.stack)
             }
             // console.log(result.rows)
-            res.sendStatus(200);
+            data=result.rows;
             // console.log(data);
+        })
+    })
+
+    query = `INSERT INTO staff_enrolments (staff_id, class_id)
+                VALUES ($1,$2)`;
+    await req.pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query(query, [req.body.staff_id, data[0].class_id], (err, result) => {
+            release();
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            // console.log(result.rows)
+            res.send(data);
+            console.log(data);
         })
     })
 });
@@ -250,8 +268,61 @@ router.get('/admin/alternate-classes', async (req, res) => {
     })
 });
 
+router.post('/admin/update-venue', async (req, res) => {
+    const query = `UPDATE class SET venue_id = $1
+                    WHERE class_id = $2;`;
+    await req.pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query(query, [req.body.venue_id, req.body.class_id], (err, result) => {
+            release();
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            // console.log(result.rows)
+            res.sendStatus(200);
+            // console.log(data);
+        })
+    })
+});
+
+router.post('/admin/change-class', async (req, res) => {
+    let query = `INSERT INTO enrolled_classes (student_id, class_id)
+                    VALUES ($1,$2);`;
+    await req.pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query(query, [req.body.user_id, req.body.newClass_id], (err, result) => {
+            release();
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            // console.log(result.rows)
+            // console.log(data);
+        })
+    })
+    query = `DELETE FROM enrolled_classes WHERE 
+            student_id = $1 AND class_id = $2;`;
+    await req.pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query(query, [req.body.user_id, req.body.class_id], (err, result) => {
+            release();
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            // console.log(result.rows)
+            res.sendStatus(200);
+            // console.log(data);
+        })
+    })
+});
+
 router.get('/notifications', async (req, res) => {
-    const query = `SELECT notification_id, type FROM notification WHERE user_id = $1`
+    const query = SELECT notification_id, type FROM notification WHERE user_id = $1
 
     await req.pool.connect((err, client, release) => {
         if (err) {
@@ -271,7 +342,7 @@ router.get('/notifications', async (req, res) => {
 });
 
 router.post('/notification/delete', async (req, res) => {
-    const deleteQuery = `DELETE FROM notification WHERE notification_id = $1;`;
+    const deleteQuery = DELETE FROM notification WHERE notification_id = $1;;
 
     await req.pool.connect((err, client, release) => {
         if (err) {
