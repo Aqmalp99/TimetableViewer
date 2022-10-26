@@ -60,7 +60,7 @@ const LoadTimetable = forwardRef(({ifEventSelected, displayClashes, ChangeSelect
             venue: element.room_code + " / " + element.building,
             recurring: {
               repeat: 'weekly',
-              interval: 1
+              interval: element.recurring_factor
             }
           };
         })

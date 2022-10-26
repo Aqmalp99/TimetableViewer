@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/student/:id', async (req, res) => {
-    const query = `SELECT users.clash_resolved, class.class_id, class.class_code, class.class_name, class.class_type, class.start_date, class.start_time, class.end_time, venue.room_code, venue.building, venue.capacity from enrolled_classes
+    const query = `SELECT users.clash_resolved, class.class_id, class.class_code, class.class_name, class.class_type, class.start_date, class.start_time, class.end_time, class.recurring_factor, venue.room_code, venue.building, venue.capacity from enrolled_classes
                    INNER JOIN class
                    ON class.class_id = enrolled_classes.class_id
                    INNER JOIN venue
