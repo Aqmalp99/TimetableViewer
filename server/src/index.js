@@ -99,6 +99,7 @@ io.on("connection", async (socket) => {
         socket.to('0').emit("receive_message", data);
       })
 
+
     socket.on("send_message_admin", async (data) => {
         console.log(`data`);
         console.log(data);
@@ -106,7 +107,7 @@ io.on("connection", async (socket) => {
                               VALUES ($1,'approval')
                               RETURNING notification_id;`;
         const updateQuery = `UPDATE users SET clash_resolved = 'approved' WHERE user_id = $1`;
-        
+
         const { rows } = await dbPool.query(insertQuery, [data.id]);
         await dbPool.query(updateQuery, [data.id]);
 
