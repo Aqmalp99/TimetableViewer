@@ -18,7 +18,7 @@ import Signup from "./components/authentication/Signup";
 import ChangeClassDetails from "./components/email/ChangeClassDetails";
 import StudentEnrol from "./components/Student/StudentEnrol";
 import StudentInbox from "./components/Student/StudentInbox";
-
+import Editprofile from "./components/authentication/Editprofile";
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -39,6 +39,7 @@ function App() {
       <Route path="/shae" element={<ShaeTest />}/>
       <Route path="/aqmal" element={<AqmalTest />}/>
       <Route path="/Timetable" element={<TimetableView />} />
+      <Route exact path="student/settings" element={<Editprofile />} />
       {/* <Route  path="/student-test" element={<StudentHome />} /> */}
       {/* <Route  path="/edit-test" element={<EditProfile />} /> */}
       <Route exact path="/admin" element={<AdminHome />} />

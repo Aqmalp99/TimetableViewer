@@ -41,17 +41,36 @@ const Signup = () =>{
         e.preventDefault();
         try {
             const body = {username, fullname, email, password,role,notification};
+            if (body.username.length === 0)
+            {
+                createAlert("Please enter all details", "ERROR");
+            }
+            else if (body.fullname.length === 0)
+            {
+                createAlert("Please enter all details", "ERROR");
+            }
+            else if (body.email.length === 0)
+            {
+                createAlert("Please enter all details", "ERROR");
+            }
+            else if (body.password.length === 0)
+            {
+                createAlert("Please enter all details", "ERROR");
+            }
+            else
+            {
             const newUserRequest = await fetch("http://localhost:4000/signup", {
                 method: "POST",
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify(body)
             });
-            createAlert("Sign Up successful", "Success")
-            navigate("/")
+            createAlert("Please try different email", "ERROR");
+            navigate("/");
             console.log(newUserRequest);
+            }
 
         }catch(err) {
-            createAlert("Please enter all details", "ERROR")
+            createAlert("Please try again", "ERROR");
             console.error(err.message);
         }
     }
@@ -119,7 +138,7 @@ const Signup = () =>{
                                 <Form.Label>Confirm Password</Form.Label>
                                 <Form.Control type="password" placeholder="Confirm Password" />
                             </Form.Group> */}
-                            <Form.Group className="mb-3" controlId="roleID">
+                            {/* <Form.Group className="mb-3" controlId="roleID">
                                 <Form.Label>Role</Form.Label>
                                 <Form.Control type="text"
                                     name="role"
@@ -136,11 +155,8 @@ const Signup = () =>{
                                     onChange={onNotificationChange} 
                                     placeholder="true/false" 
                                 />
-                            </Form.Group>
+                            </Form.Group> */}
                         </Row>
-                        <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                            <Form.Check type="checkbox" label="Agree Term and conditions" />
-                        </Form.Group>
                         <div className="v-parnet-signup-button">
                             <Button className="v-signup-button" type="submit" >
                                 Submit
