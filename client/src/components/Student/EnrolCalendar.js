@@ -107,7 +107,7 @@ const customWithNavButtons = () => {
   useEffect(() => {
     const getClasses = async () => {
       await axios
-      .get(`/student`, { params: { id: id } })
+      .get(`/student/classes`, { params: { id: id } })
       .then((response) => {
         // if (detectClash(response.data).length > 0){
         //   displayClashes(detectClash(response.data));

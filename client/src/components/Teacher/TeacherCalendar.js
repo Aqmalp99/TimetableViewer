@@ -110,7 +110,7 @@ const customWithNavButtons = () => {
     console.log(`teacher id is ${id}`);
     const getClasses = async () => {
       await axios
-      .get(`/teacher`, { params: { id: id } })
+      .get(`/teacher/classes`, { params: { id: id } })
       .then((response) => {
         if (detectClash(response.data).length > 0){
           displayClashes(detectClash(response.data));
