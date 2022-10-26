@@ -21,11 +21,14 @@ const TeacherTimetable = ({role,userID}) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [clashes, setClashes] = useState([]);
   const [showVenues, setShowVenues] = useState(false);
+  const [showExtraClasses, setShowExtraClasses] = useState(false);
   const [selectedClass, setSelectedClass]= useState([]);
   const [availableVenues, setAvailableVenues]= useState([]);
   const [editMode, setEditMode]= useState(false);
   const [showChangeClass, setShowChangeClass]= useState(false);
   const [formData, setFormData] = useState({});
+  const [showVenueOptions, setShowVenueOptions]= useState(false);
+  const [selectedVenue, setSelectedVenue] = useState();
 
   const classRef = useRef(null);
  
@@ -53,6 +56,10 @@ const TeacherTimetable = ({role,userID}) => {
       });
 
       setClashes(clashMessages);
+    }
+    else {
+      setClashes([]);
+      return (<></>);
     }
    
   }
@@ -97,12 +104,18 @@ const TeacherTimetable = ({role,userID}) => {
     setEditMode(!editMode);
   }
 
-  const currentClassTime = () => {
+  const currentClassTime = (e) => {
     setFormData(
         {date: selectedClass.date, 
         start: selectedClass.start.toLocaleTimeString('en-US',{ hour12: false }),
-        end: selectedClass.end.toLocaleTimeString('en-US',{ hour12: false })});
-    setShowChangeClass(!showChangeClass);
+        end: selectedClass.end.toLocaleTimeString('en-US',{ hour12: false }),
+        class_name: selectedClass.className,
+        class_type: selectedClass.classType,
+        class_code: selectedClass.title});
+    if(e.target.value === "currentClass")
+      setShowChangeClass(!showChangeClass);
+    else if (e.target.value === "extraClass")
+      setShowExtraClasses(!showExtraClasses);
   }
 
   const onDateTimeChanged = (e) => {
@@ -128,8 +141,59 @@ const TeacherTimetable = ({role,userID}) => {
     classRef.current.updateClass({id: selectedClass.id, date: formData.date, start: formData.start, end: formData.end});
     setShowChangeClass(!showChangeClass);
   }
+
+  const extraClass = async(e) => {
+    e.preventDefault();
+    const date= selectedClass.date;
+    const startTime= selectedClass.start.toLocaleTimeString('en-US',{ hour12: false });
+    const endTime= selectedClass.end.toLocaleTimeString('en-US',{ hour12: false });
+    const getVenues = async () => {
+      await axios
+        .get(`/teacher/venues`, { params: {date:date , start_time: startTime, end_time: endTime}})
+        .then((response)=> {
+          let data = response.data.map(element => {
+            return {
+              venueID: element.venue_id,
+              venue: element.room_code + " / " + element.building,
+              capacity: element.capacity
+            };
+          })
+          setAvailableVenues(data);
+        })
+        .catch((err) => console.log(err))
+      }
+    
+    getVenues();
+    setShowVenueOptions(!setShowVenueOptions);
+    
+    // classRef.current.updateClass({id: selectedClass.id, date: formData.date, start: formData.start, end: formData.end});
+    
+  }
+
   const closeModal = () => {
     setShowChangeClass(!showChangeClass);
+  }
+  const closeExtraClassModal = () => {
+    setShowExtraClasses(!showExtraClasses);
+  }
+
+  const chooseVenue = (e) => {
+    setSelectedVenue(e.target.value);
+  }
+  
+  const submitNewClass = () => {
+    const body = {};
+    const newClass = async () => {
+        await axios
+          .post(`/admin/create-class`, body)
+          .then((response)=> {
+            console.log(response);
+          })
+          .catch((err) => console.log(err))
+        }
+        
+      newClass();
+      setShowExtraClasses(!showExtraClasses);
   }
 //   const token = getToken();
 //   if(!token)
@@ -157,11 +221,14 @@ const TeacherTimetable = ({role,userID}) => {
       <LoadTimetable ref= {classRef} id={userID} role={role} onClassClick= {onClassClick}displayClashes={displayClashes} ifEventSelected={ifEventSelected} ChangeSelectedClass={ChangeSelectedClass}/>
       <div className="button-group-flex">
       { editMode ? 
-        (<><Button className="me-3 mt-3" disabled={buttonDisabled} onClick={currentClassTime}>
+        (<><Button className="me-3 mt-3" disabled={buttonDisabled} value= "currentClass" onClick={currentClassTime}>
           Change Class Times
         </Button>
         <Button className="me-3 mt-3" disabled={buttonDisabled} onClick={showAlternateVenues}>
           Get Alternate Venues
+        </Button>
+        <Button className="me-3 mt-3" disabled={buttonDisabled} value="extraClass" onClick={currentClassTime}>
+          Add Extra Class
         </Button></>) : <></>
       }
       </div>
@@ -221,6 +288,41 @@ const TeacherTimetable = ({role,userID}) => {
             <Button variant="primary" type="submit">Accept</Button>
           </Form>
           
+       </ModalBody>
+      </Modal>
+
+      <Modal show={showExtraClasses} onHide={closeExtraClassModal}>
+      <Modal.Header closeButton>
+          <Modal.Title>New Class Times</Modal.Title>
+       </Modal.Header>
+       <ModalBody>
+          <Form onSubmit={extraClass}>
+            <Form.Group className="mb-3">
+              <Form.Label> Date of First Class</Form.Label>
+              <Form.Control type="date" id="date" value={formData.date} onChange={onDateTimeChanged}/>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label> Start Time </Form.Label>
+              <Form.Control type="time" id="start"value={formData.start} onChange={onDateTimeChanged}/>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label> End Time </Form.Label>
+              <Form.Control type="time" id="end" value={formData.end} onChange={onDateTimeChanged}/>
+            </Form.Group>
+            
+            
+          
+          
+          <label htmlFor="venues">Choose an Available Venue:</label>
+            <select onChange={chooseVenue}>
+                {availableVenues.map((element,index) =>{ 
+                    return <option key={index} value={element.venueID}>{element.venue}</option>
+                }
+                )}
+            </select>{showVenueOptions ? <Button variant="outline-primary" type="submit">Show Available Venues</Button> : <></>}
+            <Button variant="primary" onClick={submitNewClass}>Accept</Button>
+             
+            </Form>
        </ModalBody>
       </Modal>
       <div className="clashes-container">

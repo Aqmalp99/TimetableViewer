@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useRef } from "react";
 import LoadTimetable from "./LoadTimetable";
 import Button from "react-bootstrap/Button";
 import '../ShaeTest/styles.css';
@@ -7,6 +7,7 @@ import { ModalBody } from "react-bootstrap";
 import  { Navigate } from 'react-router-dom';
 import { Buffer } from "buffer";
 import axios from "axios";
+import moment from "moment-timezone";
 
 // function getToken() {
 //   const tokenString = sessionStorage.getItem('token');
@@ -20,12 +21,18 @@ const StudentTimetable = ({role,userID}) => {
   const [showClassDetails, setShowClassDetails] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [clashes, setClashes] = useState([]);
-  const [showVenues, setShowVenues] = useState(false);
+  const [showClasses, setShowClasses] = useState(false);
+  const [showDeEnrol, setShowDeEnrol] = useState(false);
   const [selectedClass, setSelectedClass]= useState([]);
-  const [availableVenues, setAvailableVenues]= useState([]);
+  const [availableClasses, setAvailableClasses]= useState([]);
+  const [editMode, setEditMode]= useState(false);
+  const [showChangeClass, setShowChangeClass]= useState(false);
+  const [formData, setFormData] = useState({});
+
+  const classRef = useRef(null);
 
   const displayClashes = (clashes) => {
-
+    console.log(clashes.length);
     if (clashes.length > 0){
       const clashMessages = clashes.map((element, index) => {
         return (
@@ -45,8 +52,14 @@ const StudentTimetable = ({role,userID}) => {
         </div>
         );
       });
+      
 
       setClashes(clashMessages);
+    }
+    else {
+      console.log(clashes);
+      setClashes([]);
+      return (<></>);
     }
    
   }
@@ -55,29 +68,7 @@ const StudentTimetable = ({role,userID}) => {
     setButtonDisabled(selected ? false : true);
   }
 
-  const showAlternateVenues = () => {
-    const date= selectedClass.date;
-    const startTime= selectedClass.start.toLocaleTimeString('en-US',{ hour12: false });
-    const endTime= selectedClass.end.toLocaleTimeString('en-US',{ hour12: false });
-
-    const getVenues = async () => {
-      await axios
-        .get(`/teacher/venues`, { params: {date:date , start_time: startTime, end_time: endTime}})
-        .then((response)=> {
-          let data = response.data.map(element => {
-            return {
-              venueID: element.venue_id,
-              venue: element.room_code + " / " + element.building,
-              capacity: element.capacity
-            };
-          })
-          setAvailableVenues(data);
-        })
-        .catch((err) => console.log(err))
-      }
-    setShowVenues(!showVenues);
-    getVenues();
-  };
+  
 
   const ChangeSelectedClass = useCallback((event) => {
     setSelectedClass(event);
@@ -87,6 +78,60 @@ const StudentTimetable = ({role,userID}) => {
     setShowClassDetails(!showClassDetails);
   };
   
+  const toggleEditOptions = () => {
+    setEditMode(!editMode);
+  }
+
+  const toggleAlternateClasses = async(e) => {
+    
+    await axios
+    .get("/admin/alternate-classes", { params: { class_code: selectedClass.title, class_type: selectedClass.classType, class_id: selectedClass.id } } )
+    .then((response) => {
+      let data = response.data.map(element => {
+        return {
+          id: element.class_id,
+          title: element.class_code,
+          className: element.class_name,
+          classType: element.class_type,
+          classSize: element.class_size,
+          color: "#56ca70",
+          date: moment(element.start_date).format('YYYY-MM-DD'),
+          start: new Date(moment(element.start_date).format('YYYY-MM-DD') + "T" + element.start_time),
+          end: new Date(moment(element.start_date).format('YYYY-MM-DD') +"T" + element.end_time),
+          venue: element.room_code + " / " + element.building,
+          recurring: {
+            repeat: 'weekly',
+            interval: 1
+          }
+        };
+      })
+      setAvailableClasses(data);
+    })
+      
+    .catch((err) => console.log(err))
+
+    setShowClasses(!showClasses);
+  }
+  const showAlternateClasses = () => {
+    setShowClasses(!showClasses);
+  }
+
+  const toggleDeEnrol = () => {
+    setShowDeEnrol(!showDeEnrol);
+  }
+
+  const deEnrolClass= async(e) => {
+    const body = {user_id: userID, class_id: selectedClass.id}
+    await axios
+    .post("/admin/de-enrol",body)
+    .then((response) => {
+        
+    })
+      
+    .catch((err) => console.log(err))
+    classRef.current.deEnrol({id: selectedClass.id});
+    setShowDeEnrol(!showDeEnrol);
+  }
 //   const token = getToken();
 //   if(!token)
 //   {
@@ -103,15 +148,21 @@ const StudentTimetable = ({role,userID}) => {
 
   return (
     <div className="App">
-      
-      <LoadTimetable id={userID} role={role} onClassClick= {onClassClick}displayClashes={displayClashes} ifEventSelected={ifEventSelected} ChangeSelectedClass={ChangeSelectedClass}/>
+      <Button variant={editMode ? "outline-danger" : "outline-primary"} onClick={toggleEditOptions}>
+          {editMode ? 
+            <>Close Edit</> : <>Edit</>
+          }
+        </Button>
+      <LoadTimetable ref={classRef} id={userID} role={role} onClassClick= {onClassClick}displayClashes={displayClashes} ifEventSelected={ifEventSelected} ChangeSelectedClass={ChangeSelectedClass}/>
       <div className="button-group-flex">
-        <Button className="me-3 mt-3" disabled={buttonDisabled}>
-          Get Recommended Times
+      { editMode ? 
+        (<><Button className="me-3 mt-3" disabled={buttonDisabled} onClick={toggleDeEnrol}>
+          De-Enrol
         </Button>
-        <Button className="me-3 mt-3" disabled={buttonDisabled} onClick={showAlternateVenues}>
-          Get Alternate Venues
-        </Button>
+        <Button className="me-3 mt-3" disabled={buttonDisabled} onClick={toggleAlternateClasses}>
+          Get Alternate Classes
+        </Button></>) : <></>
+      }
       </div>
       <Modal show={showClassDetails} onHide={onClassClick}>
       <Modal.Header closeButton>
@@ -130,19 +181,30 @@ const StudentTimetable = ({role,userID}) => {
           <p>Type of Class: {selectedClass.classType}</p>
        </ModalBody>
       </Modal>
-      <Modal show={showVenues} onHide={showAlternateVenues}>
+      <Modal show={showClasses} onHide={showAlternateClasses}>
       <Modal.Header closeButton>
-          <Modal.Title>Alternate Venues</Modal.Title>
+          <Modal.Title>Alternate Classes</Modal.Title>
        </Modal.Header>
        <ModalBody>
-        <label htmlFor="venues">Choose an Available Venue:</label>
+        <label htmlFor="venues">Choose an Available Class:</label>
           <select>
-            {availableVenues.map((element,index) =>{ 
-                return <option key={index}>{element.venue}</option>
+            {availableClasses.map((element,index) =>{ 
+                return <option key={index}>{element.classType}</option>
               }
             )}
           </select>
-          <Button variant="primary" onClick={showAlternateVenues}>Accept</Button>
+          <Button variant="primary" onClick={showAlternateClasses}>Accept</Button>
+       </ModalBody>
+      </Modal>
+      <Modal show={showDeEnrol} onHide={toggleDeEnrol}>
+      <Modal.Header closeButton>
+          <Modal.Title>Are you sure?</Modal.Title>
+       </Modal.Header>
+       <ModalBody>
+       <div className="d-grid gap-2">
+          <Button size='lg' variant="danger" onClick={toggleDeEnrol}>No</Button>
+          <Button size='lg' variant="success" onClick={deEnrolClass}>Yes</Button>
+          </div>
        </ModalBody>
       </Modal>
       <div className="clashes-container">

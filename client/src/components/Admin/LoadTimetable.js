@@ -81,6 +81,13 @@ const LoadTimetable = forwardRef(({ifEventSelected, displayClashes, ChangeSelect
         displayClashes(detectClash(data));
       
        setEvents(data);
+    },
+    deEnrol({id}){
+      const newData = myEvents.filter((element) => {
+        return element.id !==id;
+      });
+      displayClashes(detectClash(newData));
+      setEvents(newData);
     }
   }));
   //events object has color, end, id, start, title
@@ -98,7 +105,7 @@ const LoadTimetable = forwardRef(({ifEventSelected, displayClashes, ChangeSelect
             className: element.class_name,
             classType: element.class_type,
             classSize: element.class_size,
-            color: "#56ca70",
+            color: element.class_size >= element.capacity ? "#FF0000" : "#56ca70",
             date: moment(element.start_date).format('YYYY-MM-DD'),
             start: new Date(moment(element.start_date).format('YYYY-MM-DD') + "T" + element.start_time),
             end: new Date(moment(element.start_date).format('YYYY-MM-DD') +"T" + element.end_time),
