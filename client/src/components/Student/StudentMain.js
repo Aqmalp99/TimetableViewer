@@ -3,16 +3,9 @@ import StudentCalendar from "./StudentCalendar";
 import NavbarStudent from "../Navbar/NavbarStudent";
 import ClassDetails from "./ClassDetails";
 import Button from "react-bootstrap/Button";
-import '../ShaeTest/styles.css';
+import './styles.css';
 import  { Navigate } from 'react-router-dom';
 import { Buffer } from "buffer";
-import io from "socket.io-client";
-
-const socket = io("/", {
-  // query: {
-  //     id: id,
-  // }
-});
 
 function getToken() {
   const tokenString = sessionStorage.getItem('token');
@@ -27,21 +20,11 @@ const StudentMain = () => {
   const [clashes, setClashes] = useState([]);
   const [selectedClass, setSelectedClass]= useState([]);
 
-  const onClashResolve = () => {
-    //maybe?? display a form that asks for names of alternate classes in textbox.
-    //send this info as well?
-
-    //send uni ID, clash start date, clash classes
-    //socket.emit to room 1
-    //display alert saying message sent to administrators
-  }
-
-
   const displayClashes = (clashes) => {
     if (clashes.length > 0){
       const clashMessages = clashes.map((element, index) => {
         return (
-        <div key={index} className="clash-message">
+        <div key={index} style={{ backgroundColor: (element.a.clash_resolved === "approved") ? "rgb(0,204,0)" : "rgb(255,0,0)" }} className="clash-message">
             <h3>Clash</h3>
             <p>
               {
@@ -77,19 +60,6 @@ const StudentMain = () => {
     return <Navigate to='/'/>;
 
   }
-
-  const sendMessage = () => {
-    // let messageData = {
-    //     sender: id,
-    //     message: message,
-    //     convoID: conversations[activeConversation].match_id,
-    // }
-
-    // setMessages((messages) => ([...messages, messageData]));
-
-    // socket.emit("send_message", {messageData});
-    // setMessage("");
-}
 
   const base64Url = token.split('.')[1];
   const buff = Buffer.from(base64Url, 'base64');

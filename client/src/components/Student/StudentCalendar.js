@@ -37,6 +37,7 @@ const StudentCalendar = ({displayClashes, ChangeSelectedClass, id, role, onClass
       await axios
       .get(`/student/${id}`)
       .then((response) => {
+        console.log(response.data);
         if (detectClash(response.data).length > 0){
           displayClashes(detectClash(response.data));
         }
