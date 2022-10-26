@@ -23,24 +23,23 @@ const Signup = () =>{
         })
     }
 
+    const [firstName, setFirstName] = useState("");
+    const [surname, setSurname] = useState("");
     const [username, setUsername] = useState("");
-    const [fullname, setFullname] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [role, setRole] = useState("");
-    const [notification, setNotification] = useState("");
 
+    
+    const onFirstNameChange = e => setFirstName(e.target.value);
+    const onSurnameChange = e => setSurname(e.target.value);
     const onUsernameChange = e => setUsername(e.target.value);
-    const onFullnameChange = e => setFullname(e.target.value);
     const onEmailChange = e => setEmail(e.target.value);
     const onPasswordChange = e => setPassword(e.target.value);
-    const onRoleChange = e => setRole(e.target.value);
-    const onNotificationChange = e => setNotification(e.target.value);
 
     const handleSubmit = async(e) => {
         e.preventDefault();
         try {
-            const body = {username, fullname, email, password,role,notification};
+            const body = {username, firstName, surname, email, password};
             const newUserRequest = await fetch("http://localhost:4000/signup", {
                 method: "POST",
                 headers: { "Content-Type": "application/json"},
@@ -71,27 +70,40 @@ const Signup = () =>{
                         <Form onSubmit={handleSubmit}>
                         <Row>
                             <Col>
-                                <Form.Group className="mb-3" controlId="username">
+                                <Form.Group className="mb-3" controlId="first-name">
                                     <Form.Label sm="4">First Name</Form.Label>
                                         <Form.Control type="text"
-                                            name="username"
+                                            name="first-name"
                                             // value={test}
                                             // onChange={e => setTest(e.target.value)} 
-                                            value={username}
-                                            onChange={onUsernameChange}
+                                            value={firstName}
+                                            onChange={onFirstNameChange}
                                             placeholder="First Name" 
                                         />
                                 </Form.Group>
                             </Col>
                             <Col>
-                                <Form.Group className="mb-3" controlId="fullnameID">
+                                <Form.Group className="mb-3" controlId="surname">
                                     <Form.Label sm="4">Last Name</Form.Label>
                                     <Form.Control type="text"
-                                        name="fullname" 
-                                        value={fullname}
-                                        onChange={onFullnameChange}
+                                        name="surname" 
+                                        value={surname}
+                                        onChange={onSurnameChange}
                                         placeholder="Last Name" 
                                     
+                                    />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group className="mb-3" controlId="studentID">
+                                    <Form.Label>Student ID</Form.Label>
+                                    <Form.Control type="text"
+                                        name="studentID"
+                                        value={username}
+                                        onChange={onUsernameChange} 
+                                        placeholder="Student ID" 
                                     />
                                 </Form.Group>
                             </Col>
@@ -119,24 +131,6 @@ const Signup = () =>{
                                 <Form.Label>Confirm Password</Form.Label>
                                 <Form.Control type="password" placeholder="Confirm Password" />
                             </Form.Group> */}
-                            <Form.Group className="mb-3" controlId="roleID">
-                                <Form.Label>Role</Form.Label>
-                                <Form.Control type="text"
-                                    name="role"
-                                    value={role}
-                                    onChange={onRoleChange} 
-                                    placeholder="Enter Role" 
-                                />
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="notificationID">
-                                <Form.Label>Notification</Form.Label>
-                                <Form.Control type="text"
-                                    name="notification"
-                                    value={notification}
-                                    onChange={onNotificationChange} 
-                                    placeholder="true/false" 
-                                />
-                            </Form.Group>
                         </Row>
                         <Form.Group className="mb-3" controlId="formBasicCheckbox">
                             <Form.Check type="checkbox" label="Agree Term and conditions" />
