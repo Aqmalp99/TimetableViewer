@@ -2,7 +2,7 @@ import * as React from 'react';
 import Login from '../../src/components/login/Login';
 import {mount} from '@cypress/react';
 
-it('The user shoul redirect to the right page after loggin in.', () => {
+it('The user should redirect to the right page after loggin in.', () => {
     mount(<Login />) 
     cy.contains('Login').should('be.visible');
     cy.contains('Username').should('be.visible');

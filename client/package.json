@@ -38,7 +38,7 @@
         "build": "react-scripts build",
         "test": "react-scripts test --detectOpenHandles",
         "eject": "react-scripts eject",
-        "tests": "cypress open"
+        "tests": "cypress open-ct"
     },
     "eslintConfig": {
         "extends": [
