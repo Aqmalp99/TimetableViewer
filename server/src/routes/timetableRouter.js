@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/student/:id', async (req, res) => {
+router.get('/student', async (req, res) => {
     const query = `SELECT users.clash_resolved, class.class_id, class.class_code, class.class_name, class.class_type, class.start_date, class.start_time, class.end_time, class.recurring_factor, venue.room_code, venue.building, venue.capacity from enrolled_classes
                    INNER JOIN class
                    ON class.class_id = enrolled_classes.class_id
@@ -14,7 +14,7 @@ router.get('/student/:id', async (req, res) => {
         if (err) {
             return console.error('Error acquiring client', err.stack)
         }
-        client.query(query, [req.params.id], (err, result) => {
+        client.query(query, [req.query.id], (err, result) => {
             release();
             if (err) {
                 return console.error('Error executing query', err.stack)
@@ -54,7 +54,7 @@ router.get('/teacher/venues', async (req, res) => {
         })
     })
 });
-router.get('/teacher/:id', async (req, res) => {
+router.get('/teacher', async (req, res) => {
     const query = `SELECT class.class_code, class.class_size, class.class_id, class.class_name, class.class_type, class.start_date, class.start_time, class.end_time, venue.room_code, venue.building, venue.capacity from staff_enrolments
                    INNER JOIN class
                    ON class.class_id = staff_enrolments.class_id
@@ -65,7 +65,7 @@ router.get('/teacher/:id', async (req, res) => {
         if (err) {
             return console.error('Error acquiring client', err.stack)
         }
-        client.query(query, [req.params.id], (err, result) => {
+        client.query(query, [req.query.id], (err, result) => {
             release();
             if (err) {
                 return console.error('Error executing query', err.stack)

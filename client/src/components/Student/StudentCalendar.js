@@ -35,7 +35,7 @@ const StudentCalendar = ({displayClashes, ChangeSelectedClass, id, role, onClass
   useEffect(() => {
     const getClasses = async () => {
       await axios
-      .get(`/student/${id}`)
+      .get(`/student`, { params: { id: id } })
       .then((response) => {
         console.log(response.data);
         if (detectClash(response.data).length > 0){

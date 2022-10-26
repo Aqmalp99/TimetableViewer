@@ -174,7 +174,7 @@ const customWithNavButtons = () => {
     const getClasses = async () => {
       // const studentID= "/student/"+ toString(id);
       await axios
-      .get(`/${role}/${id}`)
+      .get(`/${role}`, { params: { id: id } })
       .then((response) => {
         
         let data = response.data.map(element => {
