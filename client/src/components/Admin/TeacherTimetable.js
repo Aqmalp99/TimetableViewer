@@ -7,7 +7,13 @@ import { ModalBody } from "react-bootstrap";
 import  { Navigate } from 'react-router-dom';
 import axios from "axios";
 import Form from 'react-bootstrap/Form';
+import io from "socket.io-client";
 
+// const socket = io("/", {
+//   query: {
+//       role: "admin",
+//   }
+// });
 // function getToken() {
 //   const tokenString = sessionStorage.getItem('token');
 //   const userToken = JSON.parse(tokenString);
@@ -27,40 +33,38 @@ const TeacherTimetable = ({role,userID}) => {
   const [editMode, setEditMode]= useState(false);
   const [showChangeClass, setShowChangeClass]= useState(false);
   const [formData, setFormData] = useState({});
+  const [showApproveConfirm, setShowApproveConfirm] = useState(false);
+
+  
 
   const classRef = useRef(null);
  
 
   const displayClashes = (clashes) => {
-
     if (clashes.length > 0){
       const clashMessages = clashes.map((element, index) => {
         return (
-        <div key={index} className="clash-message">
+        <div key={index} style={{ backgroundColor: (element.a.clash_resolved === "approved") ? "rgb(0,204,0)" : "rgb(255,0,0)" }} className="clash-message">
             <h3>Clash</h3>
             <p>
               {
-              (element.a.date > element.b.date) 
-                ? element.a.date.slice(0, -14)
-                : element.b.date.slice(0, -14)
+              (element.a.start_date > element.b.start_date) 
+                ? element.a.start_date.slice(0, -14)
+                : element.b.start_date.slice(0, -14)
               }
             </p>
-            <p>Class 1: <span>{element.a.title}</span></p>
-            <ul><li>{element.a.start.toLocaleTimeString()} - {element.a.end.toLocaleTimeString()}</li></ul>
-            <p>Class 2: <span>{element.b.title}</span></p>
-            <ul><li>{element.b.start.toLocaleTimeString()} - {element.b.end.toLocaleTimeString()}</li></ul>
+            <p>Class 1: <span>{element.a.class_code}</span></p>
+            <ul><li>{element.a.start_time} - {element.a.end_time}</li></ul>
+            <p>Class 2: <span>{element.b.class_code}</span></p>
+            <ul><li>{element.b.start_time} - {element.b.end_time}</li></ul>
         </div>
         );
       });
 
       setClashes(clashMessages);
     }
-    else {
-      setClashes([]);
-      return (<></>);
-    }
-   
   }
+
 
   const ifEventSelected = selected => {
     setButtonDisabled(selected ? false : true);
@@ -204,6 +208,15 @@ const TeacherTimetable = ({role,userID}) => {
       .catch((err) => console.log(err))
       setShowVenues(!showVenues);
   }
+
+  const toggleApproveConfirm = () => {
+    setShowApproveConfirm(!showApproveConfirm);
+  }
+
+  const onApproveTimetable = async () => {
+    // socket.emit("send_message_admin", {id: userID});
+    toggleApproveConfirm();
+  }
 //   const token = getToken();
 //   if(!token)
 //   {
@@ -221,11 +234,12 @@ const TeacherTimetable = ({role,userID}) => {
   return (
     <div className="App">
       
-        <Button variant={editMode ? "outline-danger" : "outline-primary"} onClick={toggleEditOptions}>
+      <Button variant={editMode ? "outline-danger" : "outline-primary"} onClick={toggleEditOptions}>
           {editMode ? 
             <>Close Edit</> : <>Edit</>
           }
         </Button>
+      {(clashes.length > 0) ? <Button variant="outline-success" onClick={toggleApproveConfirm}>Approve Timetable</Button> : <></>}
       
       <LoadTimetable ref= {classRef} id={userID} role={role} onClassClick= {onClassClick}displayClashes={displayClashes} ifEventSelected={ifEventSelected} ChangeSelectedClass={ChangeSelectedClass}/>
       <div className="button-group-flex">
@@ -336,6 +350,17 @@ const TeacherTimetable = ({role,userID}) => {
               <Button size= 'lg' variant="primary" onClick={submitNewClass}>Accept</Button>
             </div>
             </Form>
+       </ModalBody>
+      </Modal>
+      <Modal show={showApproveConfirm} onHide={toggleApproveConfirm}>
+      <Modal.Header closeButton>
+          <Modal.Title>Are you sure?</Modal.Title>
+       </Modal.Header>
+       <ModalBody>
+       <div className="d-grid gap-2">
+          <Button size='lg' variant="danger" onClick={toggleApproveConfirm}>No</Button>
+          <Button size='lg' variant="success" onClick={onApproveTimetable}>Yes</Button>
+          </div>
        </ModalBody>
       </Modal>
       <div className="clashes-container">

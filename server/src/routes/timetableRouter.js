@@ -322,7 +322,7 @@ router.post('/admin/change-class', async (req, res) => {
 });
 
 router.get('/notifications', async (req, res) => {
-    const query = SELECT notification_id, type FROM notification WHERE user_id = $1
+    const query = `SELECT notification_id, type FROM notification WHERE user_id = $1;`;
 
     await req.pool.connect((err, client, release) => {
         if (err) {
@@ -342,7 +342,7 @@ router.get('/notifications', async (req, res) => {
 });
 
 router.post('/notification/delete', async (req, res) => {
-    const deleteQuery = DELETE FROM notification WHERE notification_id = $1;;
+    const deleteQuery = `DELETE FROM notification WHERE notification_id = $1;`;
 
     await req.pool.connect((err, client, release) => {
         if (err) {

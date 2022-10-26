@@ -44,7 +44,6 @@ const TeacherMain = () => {
             <ul><li>{element.a.start_time} - {element.a.end_time}</li></ul>
             <p>Class 2: <span>{element.b.class_code}</span></p>
             <ul><li>{element.b.start_time} - {element.b.end_time}</li></ul>
-            <Button>Resolve Clash</Button>
         </div>
         );
       });
@@ -91,8 +90,6 @@ const TeacherMain = () => {
 
   return (
     <div className="App">
-      <div> I AM TEACHER</div>
-        {console.log(id)}
       <NavbarTeacher/>
       <TeacherCalendar id={id} role={role} onClassClick= {onClassClick}displayClashes={displayClashes} ChangeSelectedClass={ChangeSelectedClass}/>
       <ClassDetails showClassDetails={showClassDetails} onClassClick={onClassClick} selectedClass={selectedClass} />
