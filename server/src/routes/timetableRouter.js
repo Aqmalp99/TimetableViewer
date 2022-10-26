@@ -2,11 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/student/:id', async (req, res) => {
-    const query = `SELECT class.class_id, class.class_code, class.class_name, class.class_type, class.start_date, class.start_time, class.end_time, venue.room_code, venue.building, venue.capacity from enrolled_classes
+    const query = `SELECT users.clash_resolved, class.class_id, class.class_code, class.class_name, class.class_type, class.start_date, class.start_time, class.end_time, venue.room_code, venue.building, venue.capacity from enrolled_classes
                    INNER JOIN class
                    ON class.class_id = enrolled_classes.class_id
                    INNER JOIN venue
                    ON class.venue_id = venue.venue_id
+                   INNER join users
+                   ON enrolled_classes.student_id = users.user_id
                    WHERE enrolled_classes.student_id = $1;`;
     await req.pool.connect((err, client, release) => {
         if (err) {
@@ -247,4 +249,44 @@ router.get('/admin/alternate-classes', async (req, res) => {
         })
     })
 });
+
+router.get('/notifications', async (req, res) => {
+    const query = `SELECT notification_id, type FROM notification WHERE user_id = $1`
+
+    await req.pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query(query, [req.query.id], (err, result) => {
+            release();
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            // console.log(result.rows)
+            res.send(result.rows);
+            // console.log(data);
+        })
+    })
+
+});
+
+router.post('/notification/delete', async (req, res) => {
+    const deleteQuery = `DELETE FROM notification WHERE notification_id = $1;`;
+
+    await req.pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query(deleteQuery, [req.body.id], (err, result) => {
+            release();
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            // console.log(result.rows)
+            res.sendStatus(200);
+            // console.log(data);
+        })
+    })
+});
+
 module.exports = router;

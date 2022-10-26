@@ -17,6 +17,7 @@ import Signup from "./components/authentication/Signup";
 // import EditProfile from "./components/profiles/EditProfile";
 import ChangeClassDetails from "./components/email/ChangeClassDetails";
 import StudentEnrol from "./components/Student/StudentEnrol";
+import StudentInbox from "./components/Student/StudentInbox";
 
 
 function setToken(userToken) {
@@ -47,6 +48,7 @@ function App() {
       <Route exact path="/teacher" element={<TeacherMain />} />
       <Route exact path="/student/enrol" element={<StudentEnrol />} />
       <Route path="/admin/create-class" element={<CreateClass />} />
+      <Route exact path="/student/inbox" element={<StudentInbox />} />
     </Routes>
     
   );

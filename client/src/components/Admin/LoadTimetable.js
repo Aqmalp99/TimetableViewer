@@ -3,61 +3,7 @@ import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Eventcalendar, momentTimezone  } from "@mobiscroll/react";
 import axios from 'axios';
 import moment from 'moment-timezone';
-
-const detectClash = (data) => {
-  let clashes = [];
-  console.log(data);
-  for (let i = 0; i < data.length; i++){
-    for (let j = i+1; j < data.length; j++){
-      //check times of each
-      
-      let start_i=data[i].start.toLocaleTimeString('en-US',{ hour12: false });
-      let start_j=data[j].start.toLocaleTimeString('en-US',{ hour12: false });
-      let end_i=data[i].end.toLocaleTimeString('en-US',{ hour12: false });
-      let end_j=data[j].end.toLocaleTimeString('en-US',{ hour12: false });
-      if (start_i === start_j || (start_i < start_j && end_i > start_j) || (start_i > start_j && end_j > start_i)){
-        //check day of each
-        let date1 = new Date(data[i].date);
-        
-        let date2 = new Date(data[j].date);
-        
-        if (date1.getDay() === date2.getDay()){
-          //check equality if dates are recurring
-          if (date1 < date2){
-            while (date1 <= date2){
-              if (date1.toString() === date2.toString()){
-                clashes.push({
-                  a: data[i],
-                  b: data[j],
-                });
-              }
-              date1.setDate(date1.getDate() + 7);
-            }
-          }
-          else if (date2 < date1) {
-            while (date2 <= date1){
-              if (date1.toString() === date2.toString()){
-                clashes.push({
-                  a: data[i],
-                  b: data[j],
-                });
-              }
-              date2.setDate(date2.getDate() + 7);
-            }
-          }
-          else {
-            clashes.push({
-              a: data[i],
-              b: data[j],
-            });
-          }
-        }
-      }
-    }
-  }
-  return clashes;
-}
-
+import { detectClash } from "../Student/detectClash";
 
 const LoadTimetable = forwardRef(({ifEventSelected, displayClashes, ChangeSelectedClass, id, role, onClassClick}, ref) => {
   
@@ -97,7 +43,9 @@ const LoadTimetable = forwardRef(({ifEventSelected, displayClashes, ChangeSelect
       await axios
       .get(`/${role}/${id}`)
       .then((response) => {
-        
+        if (detectClash(response.data).length > 0){
+          displayClashes(detectClash(response.data));
+        }
         let data = response.data.map(element => {
           return {
             id: element.class_id,
@@ -116,9 +64,7 @@ const LoadTimetable = forwardRef(({ifEventSelected, displayClashes, ChangeSelect
             }
           };
         })
-        if (detectClash(data).length > 0){
-            displayClashes(detectClash(data));
-          }
+        
         console.log(response.data[0].start_time);
         setEvents(data);
         if (response.data.length === 0)
