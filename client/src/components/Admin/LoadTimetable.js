@@ -81,6 +81,52 @@ const LoadTimetable = forwardRef(({ifEventSelected, displayClashes, ChangeSelect
         displayClashes(detectClash(data));
       
        setEvents(data);
+    },
+    deEnrol({id}){
+      const newData = myEvents.filter((element) => {
+        return element.id !==id;
+      });
+      displayClashes(detectClash(newData));
+      setEvents(newData);
+    },
+    newClass(newClassData){
+      let newEvents = [...myEvents];
+      if (newClassData != null){
+        newEvents.push({
+          id: newClassData.class_id,
+          title: newClassData.class_code,
+          className: newClassData.class_name,
+          classType: newClassData.class_type,
+          classSize: newClassData.class_size,
+          color: "#56ca70",
+          date: moment(newClassData.date).format('YYYY-MM-DD'),
+          start: new Date(moment(newClassData.date).format('YYYY-MM-DD') + "T" + newClassData.start),
+          end: new Date(moment(newClassData.date).format('YYYY-MM-DD') +"T" + newClassData.end),
+          recurring: {
+            repeat: 'weekly',
+            interval: 1
+          }
+        })
+      }
+      setEvents(newEvents);
+    },
+    alternateClass(newData){
+      console.log(newData);
+      let data = myEvents.map(element => {
+        if(element.id === newData.class_id){
+            return {...element, 
+                id: parseInt(newData.newClass_id),
+                date: moment(newData.date).format('YYYY-MM-DD'),
+                start: newData.start,
+                end:newData.end};
+            }
+            return element;
+          
+   });
+   
+    
+  
+   setEvents(data);
     }
   }));
   //events object has color, end, id, start, title
@@ -98,7 +144,7 @@ const LoadTimetable = forwardRef(({ifEventSelected, displayClashes, ChangeSelect
             className: element.class_name,
             classType: element.class_type,
             classSize: element.class_size,
-            color: "#56ca70",
+            color: element.class_size >= element.capacity ? "#FF0000" : "#56ca70",
             date: moment(element.start_date).format('YYYY-MM-DD'),
             start: new Date(moment(element.start_date).format('YYYY-MM-DD') + "T" + element.start_time),
             end: new Date(moment(element.start_date).format('YYYY-MM-DD') +"T" + element.end_time),

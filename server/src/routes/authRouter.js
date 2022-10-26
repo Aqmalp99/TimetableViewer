@@ -13,7 +13,7 @@ authRouter.post('/', async(req,res) => {
     try{
         const {username, password} = req.body;
         const loginCheck = await pool.query(
-            `SELECT user_id,username,password,role FROM users u 
+            `SELECT user_id,username,password,role,uni_id FROM users u 
             WHERE u.username = $1`,[username]
         );
          
@@ -32,7 +32,7 @@ authRouter.post('/', async(req,res) => {
         {
             console.log("Good for login");
             // console.log(loginCheck.rows[0])
-            let user = {id: loginCheck.rows[0].user_id,username: loginCheck.rows[0].username , role:loginCheck.rows[0].role}
+            let user = {id: loginCheck.rows[0].user_id,username: loginCheck.rows[0].username , role:loginCheck.rows[0].role, student_id:loginCheck.rows[0].uni_id}
             console.log(user);
             let tokens = jwtTokens(user);
             res.cookie('refresh_token', tokens.refreshToken, {httpOnly: true});

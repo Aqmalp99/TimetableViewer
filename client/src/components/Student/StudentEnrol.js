@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react'
-import { Navigate } from 'react-router-dom';
+import { Navigate,useNavigate } from 'react-router-dom';
 import { Buffer } from "buffer";
 import NavbarStudent from '../Navbar/NavbarStudent'
 import { Button, Form } from 'react-bootstrap'
@@ -7,7 +7,8 @@ import "./styles.css";
 import EnrolCalendar from './EnrolCalendar';
 import axios from 'axios';
 import { detectNewClash } from './detectNewClash';
-import io from 'socket.io-client'
+import io from 'socket.io-client';
+
 
 function getToken() {
     const tokenString = sessionStorage.getItem('token');
@@ -15,16 +16,28 @@ function getToken() {
     console.log(userToken);
     return userToken;
 }
-
+function getRole() {
+    const token = getToken();
+    if (token != null){
+        const base64Url = token.split('.')[1];
+        const buff = Buffer.from(base64Url, 'base64');
+        const payloadinit = buff.toString('ascii');
+        const payload = JSON.parse(payloadinit);
+        const role=payload.role;
+        return role;
+    }
+    return "noRole";
+}
 const socket = io("/", {
-    // query: {
-    //     id: id,
-    // }
+    
+    query: {
+        role: getRole(),
+    }
   });
 
 
 const StudentEnrol = () => {
-
+    const navigate= useNavigate();
     const [otherClasses, setOtherClasses] = useState([]);
     const [selectedOption, setSelectedOption] = useState({});
     const classesRef = useRef(null);
@@ -72,8 +85,23 @@ const StudentEnrol = () => {
         classes.pop(); //remove currently selected option
         const clashes = detectNewClash(selectedOption, classes);
         if (clashes.length > 0){
-            //socket emit
+            socket.emit("send_message", {id: payload.id,student_id: payload.student_id});
         }
+        console.log(selectedOption);
+        const insertEnrolment = async () => {
+            const body = { user_id: payload.id, class_id: selectedOption.class_id };
+            await axios
+            .post(`/student/enrol`, body)
+            .then((res) => {
+                navigate("/student");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        }
+
+        insertEnrolment();
+
     }
     
     const options = otherClasses.map((element, index) => {

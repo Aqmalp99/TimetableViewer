@@ -12,10 +12,12 @@ const app = express();
 const dotenv = require('dotenv').config();
 const server = require('http').createServer(app);
 // const server = http.createServer(app);
-const io = require('socket.io')(server, { transports: ["websocket"] , cors: {
+const io = require('socket.io')(server, { transports: ["websocket", "polling"] , cors: {
   origin: "http://localhost:3000",
   methods: ["GET", "POST"],
-}});
+}, 
+allowEIO3: true
+});
 const cors = require('cors');
 const path = require('path');
 const dbPool = require('./db/database');
@@ -76,13 +78,18 @@ else {
 
 io.on("connection", async (socket) => {
     console.log(`User connected: ${socket.id}`);
-    // const userID = socket.handshake.query.id;
-    await socket.join('1');
+    const role = socket.handshake.query.role;
+    console.log(role);
+    if (role === 'admin')
+        await socket.join('1');
   
     console.log(socket.rooms);
   
     socket.on("send_message", async (data) => {
       console.log(data);
+      const insertQuery = `INSERT INTO clash_request (user_id, date_time)
+                            VALUES ($1,NOW());`;
+    await dbPool.query(insertQuery, [data.id]);
       socket.to('1').emit("receive_message", data);
     })
   });
