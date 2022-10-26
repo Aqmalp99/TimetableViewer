@@ -40,7 +40,7 @@ const Signup = () =>{
         e.preventDefault();
         try {
             const body = {username, firstName, surname, email, password};
-            const newUserRequest = await fetch("http://localhost:4000/signup", {
+            const newUserRequest = await fetch("/signup", {
                 method: "POST",
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify(body)
