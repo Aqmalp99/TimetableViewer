@@ -132,6 +132,30 @@ const StudentTimetable = ({role,userID}) => {
     classRef.current.deEnrol({id: selectedClass.id});
     setShowDeEnrol(!showDeEnrol);
   }
+
+  const confirmAlternateClass = async() => {
+
+    let body = {user_id: userID, class_id: selectedClass.id, newClass_id: formData.newClass_id}
+    await axios
+    .post("/admin/change-class",body)
+    .then((response) => {
+        
+    })
+    let data= availableClasses.map(element => {
+      if(element.id ===  parseInt(formData.newClass_id))
+      {
+        body={...body, date: element.date, start: element.start, end: element.end};
+      }
+    })
+    classRef.current.alternateClass(body);
+    setShowClasses(!showClasses);
+
+  }
+
+  const chooseClass = (e) => {
+    console.log(e.target.value);
+    setFormData({...formData, newClass_id: e.target.value });
+  }
 //   const token = getToken();
 //   if(!token)
 //   {
@@ -187,13 +211,13 @@ const StudentTimetable = ({role,userID}) => {
        </Modal.Header>
        <ModalBody>
         <label htmlFor="venues">Choose an Available Class:</label>
-          <select>
+          <select onClick={chooseClass}>
             {availableClasses.map((element,index) =>{ 
-                return <option key={index}>{element.classType}</option>
+                return <option key={index} value={element.id}>{element.classType} {element.date} {element.start.toLocaleTimeString()} {element.end.toLocaleTimeString()}</option>
               }
             )}
           </select>
-          <Button variant="primary" onClick={showAlternateClasses}>Accept</Button>
+          <Button variant="primary" onClick={confirmAlternateClass}>Accept</Button>
        </ModalBody>
       </Modal>
       <Modal show={showDeEnrol} onHide={toggleDeEnrol}>
