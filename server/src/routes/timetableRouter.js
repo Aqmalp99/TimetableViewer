@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/student/:id', async (req, res) => {
-    const query = `SELECT class.class_id, class.class_code, class.class_name, class.class_type, class.start_date, class.start_time, class.end_time, venue.room_code, venue.building from enrolled_classes
+    const query = `SELECT class.class_id, class.class_code, class.class_name, class.class_type, class.start_date, class.start_time, class.end_time, venue.room_code, venue.building, venue.capacity from enrolled_classes
                    INNER JOIN class
                    ON class.class_id = enrolled_classes.class_id
                    INNER JOIN venue
@@ -201,6 +201,48 @@ router.post('/student/enrol', async (req, res) => {
             }
             // console.log(result.rows)
             res.sendStatus(200);
+            // console.log(data);
+        })
+    })
+});
+
+router.post('/admin/de-enrol', async (req, res) => {
+    const query = `DELETE FROM enrolled_classes WHERE 
+                    student_id = $1 AND class_id = $2;`;
+    await req.pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query(query, [req.body.user_id, req.body.class_id], (err, result) => {
+            release();
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            // console.log(result.rows)
+            res.sendStatus(200);
+            // console.log(data);
+        })
+    })
+});
+
+router.get('/admin/alternate-classes', async (req, res) => {
+    const query = `SELECT class.class_id, class.class_code, class.class_name, class.class_type, class.start_date, class.start_time, class.end_time, venue.room_code, venue.building from class
+                    INNER JOIN venue
+                    ON venue.venue_id = class.venue_id
+                    WHERE class.class_code = $1
+                    AND class.class_type = $2
+                    AND class.class_id != $3;`;
+    await req.pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query(query, [req.query.class_code, req.query.class_type, req.query.class_id], (err, result) => {
+            release();
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            res.send(result.rows);
+          
             // console.log(data);
         })
     })
