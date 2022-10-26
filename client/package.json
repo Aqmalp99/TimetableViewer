@@ -19,9 +19,11 @@
         "buffer": "^6.0.3",
         "express-flash": "^0.0.2",
         "js-cookies": "^1.0.4",
+        "jwt-decode": "^3.1.2",
         "moment-timezone": "^0.5.37",
         "react": "^18.2.0",
         "react-bootstrap": "^2.5.0",
+        "react-cookie": "^4.1.1",
         "react-dom": "^18.2.0",
         "react-modal": "^3.15.1",
         "react-router-dom": "^6.3.0",
@@ -36,7 +38,7 @@
         "build": "react-scripts build",
         "test": "react-scripts test --detectOpenHandles",
         "eject": "react-scripts eject",
-        "tests": "cypress open"
+        "tests": "cypress open-ct"
     },
     "eslintConfig": {
         "extends": [

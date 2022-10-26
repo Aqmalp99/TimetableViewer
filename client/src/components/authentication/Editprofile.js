@@ -1,4 +1,5 @@
 import { useState, Fragment } from "react";
+import jwt_decode from "jwt-decode";
 import  { useNavigate,Route, Link } from 'react-router-dom';
 // Components Imports
 import NavbarTemp from "../Navbar/NavbarHome";
@@ -11,9 +12,21 @@ import Col from "react-bootstrap/Col";
 import "./signup.css"
 import Alert_boot from '../Alert_boot';
 
+function getToken() {
+  const tokenString = sessionStorage.getItem('token');
+  const userToken = JSON.parse(tokenString);
+  console.log(userToken);
+  return userToken;
+}
+
 const Editprofile = () =>{
-
-
+    const navigate= useNavigate();
+    const token = getToken();
+      if(!token)
+      {
+        console.log(getToken());
+      }
+    const decoded = jwt_decode(token);
     const[alert, setAlert] = useState(null);
 
     const createAlert = (message, type)=> {
@@ -37,16 +50,31 @@ const Editprofile = () =>{
     const onRoleChange = e => setRole(e.target.value);
     const onNotificationChange = e => setNotification(e.target.value);
 
+
     const handleSubmit = async(e) => {
         e.preventDefault();
         try {
             const body = {username, fullname, email, password,role,notification};
+
+            if (body.email !== decoded.username)
+            {
+                createAlert("Please enter your email", "ERROR");
+                console.log(decoded);
+            }
+            else if (body.password.length === 0)
+            {
+                createAlert("Please enter new password", "ERROR");
+            }
+            else
+            {
             const editUserRequest = await fetch("http://localhost:4000/editUser", {
                 method: "POST",
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify(body)
             });
             console.log(editUserRequest);
+            createAlert("Settings has been changed", "Success")
+        }
 
         }catch(err) {
             createAlert("Cannot Edit try Again", "ERROR")
@@ -68,35 +96,8 @@ const Editprofile = () =>{
                         <div className="v-signup-form-input">
                         <Form onSubmit={handleSubmit}>
                         <Row>
-                            <Col>
-                                <Form.Group className="mb-3" controlId="username">
-                                    <Form.Label sm="4">First Name</Form.Label>
-                                        <Form.Control type="text"
-                                            name="username"
-                                            // value={test}
-                                            // onChange={e => setTest(e.target.value)} 
-                                            value={username}
-                                            onChange={onUsernameChange}
-                                            placeholder="First Name" 
-                                        />
-                                </Form.Group>
-                            </Col>
-                            <Col>
-                                <Form.Group className="mb-3" controlId="fullnameID">
-                                    <Form.Label sm="4">Last Name</Form.Label>
-                                    <Form.Control type="text"
-                                        name="fullname" 
-                                        value={fullname}
-                                        onChange={onFullnameChange}
-                                        placeholder="Last Name" 
-                                    
-                                    />
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Row>
                             <Form.Group className="mb-3" controlId="emailID">
-                                <Form.Label>Email</Form.Label>
+                                <Form.Label>Enter Your Email</Form.Label>
                                 <Form.Control type="email"
                                     name="email"
                                     value={email}
@@ -117,28 +118,7 @@ const Editprofile = () =>{
                                 <Form.Label>Confirm Password</Form.Label>
                                 <Form.Control type="password" placeholder="Confirm Password" />
                             </Form.Group> */}
-                            <Form.Group className="mb-3" controlId="roleID">
-                                <Form.Label>Role</Form.Label>
-                                <Form.Control type="text"
-                                    name="role"
-                                    value={role}
-                                    onChange={onRoleChange} 
-                                    placeholder="Enter Role" 
-                                />
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="notificationID">
-                                <Form.Label>Notification</Form.Label>
-                                <Form.Control type="text"
-                                    name="notification"
-                                    value={notification}
-                                    onChange={onNotificationChange} 
-                                    placeholder="true/false" 
-                                />
-                            </Form.Group>
                         </Row>
-                        <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                            <Form.Check type="checkbox" label="Agree Term and conditions" />
-                        </Form.Group>
                         <div className="v-parnet-signup-button">
                             <Button className="v-signup-button" type="submit" >
                                 Submit
@@ -154,4 +134,4 @@ const Editprofile = () =>{
         </>
     );
 }
-export default Signup;
+export default Editprofile;

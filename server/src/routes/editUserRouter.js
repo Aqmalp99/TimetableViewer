@@ -8,10 +8,10 @@ const pool = require("../db/dbCongif");
 editUserRouter.post('/editUser', async(req, res) => {
     try {
        
-        const {username,password,notification} = req.body;
+        const {username, fullname, email, password,role,notification} = req.body;
         let hashedPassword = await bcrypt.hash(password,10);
         const existingUser = await pool.query(
-            "SELECT * FROM users WHERE username = $1",[username]
+            "SELECT * FROM users WHERE username = $1",[email]
         );
         // check if the user is already registered
         if (existingUser.rowCount === 0){
@@ -23,10 +23,9 @@ editUserRouter.post('/editUser', async(req, res) => {
             //register new user
             const addUser = await pool.query(
                 `UPDATE users SET
-                    password = $1, 
-                    notification= $2
-                    where username = $3`,
-                    [hashedPassword,notification,username] 
+                    password = $1 
+                    WHERE username = $2`,
+                    [hashedPassword,email] 
             );
             res.status(200).json({status: "Edit Unsuccessfull"});
             
