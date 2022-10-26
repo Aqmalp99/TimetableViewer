@@ -1,4 +1,5 @@
 import { useState, Fragment } from "react";
+import jwt_decode from "jwt-decode";
 import  { useNavigate,Route, Link } from 'react-router-dom';
 // Components Imports
 import NavbarTemp from "../Navbar/NavbarHome";
@@ -19,8 +20,13 @@ function getToken() {
 }
 
 const Editprofile = () =>{
-
-
+    const navigate= useNavigate();
+    const token = getToken();
+      if(!token)
+      {
+        console.log(getToken());
+      }
+    const decoded = jwt_decode(token);
     const[alert, setAlert] = useState(null);
 
     const createAlert = (message, type)=> {
@@ -50,9 +56,10 @@ const Editprofile = () =>{
         try {
             const body = {username, fullname, email, password,role,notification};
 
-            if (body.email.length === 0)
+            if (body.email !== decoded.username)
             {
                 createAlert("Please enter your email", "ERROR");
+                console.log(decoded);
             }
             else if (body.password.length === 0)
             {
