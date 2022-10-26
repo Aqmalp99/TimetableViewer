@@ -322,8 +322,8 @@ router.post('/admin/change-class', async (req, res) => {
 });
 
 router.get('/notifications', async (req, res) => {
-    const query = `SELECT notification_id, type FROM notification WHERE user_id = $1`;
 
+    const query = `SELECT notification_id, type FROM notification WHERE user_id = $1;`;
     await req.pool.connect((err, client, release) => {
         if (err) {
             return console.error('Error acquiring client', err.stack)

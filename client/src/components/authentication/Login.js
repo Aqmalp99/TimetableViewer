@@ -17,9 +17,6 @@ import diagram1 from  "../assets/images/undraw.svg"
 import Alert_boot from '../Alert_boot';
 import { Buffer } from 'buffer';
 
-
-
-
 const Login = ({setToken})  => {
     const navigate= useNavigate();
     const [showTmc, setShowTmc]  = useState(false);

@@ -76,7 +76,7 @@ const StudentTimetable = ({role,userID}) => {
 
   const onClassClick = ()=> {
     setShowClassDetails(!showClassDetails);
-  };
+  }
   
   const toggleEditOptions = () => {
     setEditMode(!editMode);
@@ -141,8 +141,8 @@ const StudentTimetable = ({role,userID}) => {
   const onApproveTimetable = async () => {
     socket.emit("send_message_admin", {id: userID});
     toggleApproveConfirm();
-
   }
+
 
   const confirmAlternateClass = async() => {
 

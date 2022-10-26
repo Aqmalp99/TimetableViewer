@@ -42,14 +42,7 @@ const StudentEnrol = () => {
     const [selectedOption, setSelectedOption] = useState({});
     const classesRef = useRef(null);
 
-    const token = getToken();
-
-    const base64Url = token.split('.')[1];
-    const buff = Buffer.from(base64Url, 'base64');
-    const payloadinit = buff.toString('ascii');
-    const payload = JSON.parse(payloadinit);
-    const id=payload.id;
-    const role = payload.role;
+    
 
     useEffect(()=>{
         const fetchClasses = async () => {
@@ -112,12 +105,28 @@ const StudentEnrol = () => {
         }
     })
 
+    const token = getToken();
     if(!token)
     {
         console.log(getToken());
         return <Navigate to='/'/>;
     }
+    
 
+    const base64Url = token.split('.')[1];
+    const buff = Buffer.from(base64Url, 'base64');
+    const payloadinit = buff.toString('ascii');
+    const payload = JSON.parse(payloadinit);
+    const id=payload.id;
+    const role = payload.role;
+    if( role === 'admin')
+        return <Navigate to='/admin'/>;
+    else if ( role === 'teacher')
+        return <Navigate to='/teacher'/>;
+    else if (role !== 'student')
+        return <Navigate to='/'/>;
+    
+    
     return (
         <div>
             <NavbarStudent />
