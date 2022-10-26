@@ -6,9 +6,18 @@ import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import { ModalBody } from "react-bootstrap";
 import "./style.css";
+import { Buffer } from 'buffer';
+import {useLocation, useNavigate, Navigate} from 'react-router-dom';
+
+function getToken() {
+  const tokenString = sessionStorage.getItem('token');
+  const userToken = JSON.parse(tokenString);
+  console.log(userToken);
+  return userToken;
+}
 
 const CreateClass = () => {
-
+    const navigate= useNavigate();
     const [showVenues,setShowVenues]= useState(false);
     const [availableVenues, setAvailableVenues]= useState([]);
     const [formDetails,setFormDetails]=useState({});
@@ -58,6 +67,25 @@ const CreateClass = () => {
           setShowVenues(!showVenues);
           newClass();
       }
+      const token = getToken();
+      if(!token)
+      {
+        console.log(getToken());
+        return <Navigate to='/'/>;
+
+      }
+      const base64Url = token.split('.')[1];
+      const buff = Buffer.from(base64Url, 'base64');
+      const payloadinit = buff.toString('ascii');
+      const payload = JSON.parse(payloadinit);
+      const roleLogin = payload.role;
+      if( roleLogin === 'student')
+        navigate("/student");
+                  
+      else if ( roleLogin === 'teacher')
+        navigate("/teacher")
+      else if (roleLogin !== 'admin')
+        navigate("/")
 
   return (
     <div>

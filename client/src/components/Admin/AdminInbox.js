@@ -2,18 +2,25 @@ import React, {useEffect, useState} from 'react';
 import NavbarAdmin from '../Navbar/NavbarAdmin';
 import "./style.css";
 import io from "socket.io-client";
-import ClashList from './ClashList';
 import axios from 'axios';
 import ListGroup from 'react-bootstrap/ListGroup';
 import moment from 'moment-timezone';
 import { Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
+import { Buffer } from 'buffer';
 
 const socket = io("/", {
   query: {
       role: "admin",
   }
 });
+
+function getToken() {
+    const tokenString = sessionStorage.getItem('token');
+    const userToken = JSON.parse(tokenString);
+    console.log(userToken);
+    return userToken;
+  }  
 
 const AdminInbox = () => {
     const navigate = useNavigate();
@@ -55,7 +62,25 @@ const AdminInbox = () => {
         return (<ListGroup.Item key = {index}>{element.uni_id} <Button value={element.uni_id} onClick={onClick}> Resolve Clash</Button></ListGroup.Item>)
     })
 
+    const token = getToken();
+    if(!token)
+    {
+        console.log(getToken());
+        return <Navigate to='/'/>;
 
+    }
+    const base64Url = token.split('.')[1];
+    const buff = Buffer.from(base64Url, 'base64');
+    const payloadinit = buff.toString('ascii');
+    const payload = JSON.parse(payloadinit);
+    const roleLogin = payload.role;
+    if( roleLogin === 'student')
+        navigate("/student");
+                
+    else if ( roleLogin === 'teacher')
+        navigate("/teacher")
+    else if (roleLogin !== 'admin')
+        navigate("/")
     return (<>
         <NavbarAdmin />
         <h1>Admin Inbox!</h1>

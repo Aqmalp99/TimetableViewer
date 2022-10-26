@@ -3,6 +3,7 @@ import NavbarStudent from '../Navbar/NavbarStudent';
 import io from "socket.io-client";
 import { Buffer } from 'buffer';
 import { Button, ListGroup } from 'react-bootstrap';
+import  { Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function getToken() {
@@ -79,6 +80,26 @@ const StudentInbox = () => {
             return <ListGroup.Item key={index}>Your timetable with clashes has been approved by an administrator! <Button value={element.notification_id} onClick={onDismiss}> Dismiss</Button></ListGroup.Item>
         }
     });
+  const token = getToken();
+  if(!token)
+  {
+    console.log(getToken());
+    return <Navigate to='/'/>;
+
+  }
+
+  const base64Url = token.split('.')[1];
+  const buff = Buffer.from(base64Url, 'base64');
+  const payloadinit = buff.toString('ascii');
+  const payload = JSON.parse(payloadinit);
+  const id=payload.id;
+  const role = payload.role;
+  if( role === 'admin')
+    return <Navigate to='/admin'/>;
+  else if ( role === 'teacher')
+    return <Navigate to='/teacher'/>;
+  else if (role !== 'student')
+    return <Navigate to='/'/>;
 
     return (
     <div>

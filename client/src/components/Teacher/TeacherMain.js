@@ -6,13 +6,6 @@ import Button from "react-bootstrap/Button";
 import '../ShaeTest/styles.css';
 import  { Navigate } from 'react-router-dom';
 import { Buffer } from "buffer";
-import io from "socket.io-client";
-
-const socket = io("/", {
-  // query: {
-  //     id: id,
-  // }
-});
 
 function getToken() {
   const tokenString = sessionStorage.getItem('token');
@@ -60,6 +53,8 @@ const TeacherMain = () => {
     setShowClassDetails(!showClassDetails);
   };
   
+ 
+
   const token = getToken();
   if(!token)
   {
@@ -68,25 +63,18 @@ const TeacherMain = () => {
 
   }
 
-  const sendMessage = () => {
-    // let messageData = {
-    //     sender: id,
-    //     message: message,
-    //     convoID: conversations[activeConversation].match_id,
-    // }
-
-    // setMessages((messages) => ([...messages, messageData]));
-
-    // socket.emit("send_message", {messageData});
-    // setMessage("");
-}
-
   const base64Url = token.split('.')[1];
   const buff = Buffer.from(base64Url, 'base64');
   const payloadinit = buff.toString('ascii');
   const payload = JSON.parse(payloadinit);
   const id=payload.id;
   const role = payload.role;
+  if( role === 'admin')
+    return <Navigate to='/admin'/>;
+  else if ( role === 'student')
+    return <Navigate to='/student'/>;
+  else if (role !== 'teacher')
+    return <Navigate to='/'/>;
 
   return (
     <div className="App">
