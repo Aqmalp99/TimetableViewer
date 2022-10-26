@@ -90,8 +90,9 @@ const TeacherTimetable = ({role,userID}) => {
         })
         .catch((err) => console.log(err))
       }
-    setShowVenues(!showVenues);
+    
     getVenues();
+    setShowVenues(!showVenues);
   };
 
   const ChangeSelectedClass = useCallback((event) => {
@@ -217,6 +218,11 @@ const TeacherTimetable = ({role,userID}) => {
     // socket.emit("send_message_admin", {id: userID});
     toggleApproveConfirm();
   }
+
+  const closeAlternateVenue = () => {
+    setShowVenues(!showVenues);
+    setAvailableVenues([]);
+  }
 //   const token = getToken();
 //   if(!token)
 //   {
@@ -273,7 +279,7 @@ const TeacherTimetable = ({role,userID}) => {
        </ModalBody>
       </Modal>
 
-      <Modal show={showVenues} onHide={showAlternateVenues}>
+      <Modal show={showVenues} onHide={closeAlternateVenue}>
       <Modal.Header closeButton>
           <Modal.Title>Alternate Venues</Modal.Title>
        </Modal.Header>
