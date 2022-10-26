@@ -11,15 +11,17 @@ signUpRouter.post('/signup', async(req, res) => {
         const {username, fullname, email, password,role,notification} = req.body;
         const notification1 = true;
         const role1 = "student";
+
         let hashedPassword = await bcrypt.hash(password,10);
         const existingUser = await pool.query(
-            "SELECT * FROM users WHERE username = $1",[username]
+            "SELECT * FROM users WHERE uni_id = $1",[username]
         );
         // check if the user is already registered
         if (existingUser.rowCount === 0){
             //register new user
             const addUser = await pool.query(
                 `INSERT INTO users( 
+                    uni_id,
                     username, 
                     password, 
                     role, 
@@ -29,6 +31,7 @@ signUpRouter.post('/signup', async(req, res) => {
                     )
                     VALUES($1,$2,$3,$4,$5,$6);`,
                     [email,hashedPassword,role1,notification1,username,fullname] 
+
             );
             res.status(200).json({status: "signup successfull"});
         } else{

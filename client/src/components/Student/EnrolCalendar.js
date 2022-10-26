@@ -1,8 +1,13 @@
 import React, { useState, useMemo, useEffect, forwardRef, useImperativeHandle } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import { Eventcalendar, momentTimezone  } from "@mobiscroll/react";
+import { Eventcalendar, setOptions,momentTimezone, CalendarNav, SegmentedGroup, SegmentedItem, CalendarPrev, CalendarToday, CalendarNext } from '@mobiscroll/react';
 import axios from 'axios';
 import moment from 'moment-timezone';
+
+setOptions({
+  theme: 'ios',
+  themeVariant: 'light'
+});
 
 const EnrolCalendar = forwardRef(({id, getAllClasses}, ref) => {
   
@@ -10,12 +15,99 @@ const EnrolCalendar = forwardRef(({id, getAllClasses}, ref) => {
   const [numClasses, setNumClasses] = useState(0);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
+  const [calView, setCalView] = React.useState(
+    {
+        
+        schedule: {
+          labels: true,
+          type: "week",
+          startTime: "08:00",
+          endTime: "18:00",
+          allDay: false,
+          startDay: 1,
+          endDay: 5
+        }
+    }
+);
+const changeView = (event) => {
+  let calView;
   
+  switch (event.target.value) {
+      case 'year':
+          calView = {
+              calendar: { type: 'year' }
+          }
+          break;
+      case 'month':
+          calView = {
+              calendar: { labels: true }
+          }
+          break;
+      case 'week':
+          calView = {
+            schedule: {
+              labels: true,
+              type: "week",
+              startTime: "08:00",
+              endTime: "18:00",
+              allDay: false,
+              startDay: 1,
+              endDay: 5
+            }
+          }
+          break;
+      case 'day':
+          calView = {
+              schedule: { type: 'day',
+              startTime: "08:00",
+              endTime: "18:00",
+              allDay: false, }
+          }
+          break;
+      case 'agenda':
+          calView = {
+              calendar: { type: 'week' },
+              agenda: { type: 'week' }
+          }
+          break;
+  }
+
+  
+  setCalView(calView);
+}
+
+const customWithNavButtons = () => {
+  return <React.Fragment>
+      <CalendarNav className="cal-header-nav" />
+      <div className="cal-header-picker">
+          <SegmentedGroup value={view} onChange={changeView}>
+              <SegmentedItem value="year">
+                  Year
+              </SegmentedItem>
+              <SegmentedItem value="month">
+                  Month
+              </SegmentedItem>
+              <SegmentedItem value="week">
+                  Week
+              </SegmentedItem>
+              <SegmentedItem value="day">
+                  Day
+              </SegmentedItem>
+              <SegmentedItem value="agenda">
+                  Agenda
+              </SegmentedItem>
+          </SegmentedGroup>
+      </div>
+      <CalendarPrev className="cal-header-prev" />
+      <CalendarToday className="cal-header-today" />
+      <CalendarNext className="cal-header-next" />
+  </React.Fragment>;
+}
   //events object has color, end, id, start, title
   useEffect(() => {
     const getClasses = async () => {
       await axios
-      .get(`/student/${id}`)
+      .get(`/student/classes`, { params: { id: id } })
       .then((response) => {
         // if (detectClash(response.data).length > 0){
         //   displayClashes(detectClash(response.data));
@@ -34,7 +126,7 @@ const EnrolCalendar = forwardRef(({id, getAllClasses}, ref) => {
             venue: element.room_code + " / " + element.building,
             recurring: {
               repeat: 'weekly',
-              interval: 1
+              interval: element.recurring_factor
             }
           };
         })
@@ -42,6 +134,7 @@ const EnrolCalendar = forwardRef(({id, getAllClasses}, ref) => {
         setNumClasses(data.length);
         if (response.data.length === 0)
           setError("No classes");
+        
         setLoading(false);
       })
       .catch((err) => {
@@ -61,7 +154,7 @@ const EnrolCalendar = forwardRef(({id, getAllClasses}, ref) => {
       if (newEvents.length != numClasses){
         newEvents.pop();
       }
-
+      console.log(tempClass);
       if (tempClass != null){
         newEvents.push({
           id: tempClass.class_id,
@@ -80,7 +173,7 @@ const EnrolCalendar = forwardRef(({id, getAllClasses}, ref) => {
           }
         })
       }
-
+      console.log(newEvents[newEvents.length-1]);
       setEvents(newEvents);
     },
     getAllClasses() {
@@ -123,11 +216,11 @@ const EnrolCalendar = forwardRef(({id, getAllClasses}, ref) => {
 
   if (error){
     if (error === 500){
-      return <div>There has been an error fetching your class details. Please refresh your page and try again</div>
+      return <div style={ { textAlign: "center" } }>There has been an error fetching your class details. Please refresh your page and try again</div>
     }
     
     if (error === "No classes"){
-      return <div>We have no record of your enrolment in any classes. Please contact a course administrator.</div>
+      return <div style={ { textAlign: "center" } }>We have no record of your enrolment in any classes. Please contact a course administrator.</div>
     }
   }
   momentTimezone.moment = moment;
@@ -135,6 +228,7 @@ const EnrolCalendar = forwardRef(({id, getAllClasses}, ref) => {
   return (
     <div className="calendar-container">
       <Eventcalendar
+      renderHeader={customWithNavButtons}
         className="calendar-width"
         theme="ios"
         themeVariant="light"
@@ -144,7 +238,7 @@ const EnrolCalendar = forwardRef(({id, getAllClasses}, ref) => {
         dragToResize={false}
         eventDelete={false}
         data={myEvents}
-        view={view}
+        view={calView}
         invalidateEvent="strict"
         // onEventClick={onEventClick}
         // onEventDoubleClick={onEventDoubleClick}

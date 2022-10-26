@@ -41,15 +41,8 @@ const StudentEnrol = () => {
     const [otherClasses, setOtherClasses] = useState([]);
     const [selectedOption, setSelectedOption] = useState({});
     const classesRef = useRef(null);
-
-    const token = getToken();
-
-    const base64Url = token.split('.')[1];
-    const buff = Buffer.from(base64Url, 'base64');
-    const payloadinit = buff.toString('ascii');
-    const payload = JSON.parse(payloadinit);
-    const id=payload.id;
-    const role = payload.role;
+    const [noClasses, setNoClasses]= useState(true);
+    
 
     useEffect(()=>{
         const fetchClasses = async () => {
@@ -112,12 +105,28 @@ const StudentEnrol = () => {
         }
     })
 
+    const token = getToken();
     if(!token)
     {
         console.log(getToken());
         return <Navigate to='/'/>;
     }
+    
 
+    const base64Url = token.split('.')[1];
+    const buff = Buffer.from(base64Url, 'base64');
+    const payloadinit = buff.toString('ascii');
+    const payload = JSON.parse(payloadinit);
+    const id=payload.id;
+    const role = payload.role;
+    if( role === 'admin')
+        return <Navigate to='/admin'/>;
+    else if ( role === 'teacher')
+        return <Navigate to='/teacher'/>;
+    else if (role !== 'student')
+        return <Navigate to='/'/>;
+    
+   
     return (
         <div>
             <NavbarStudent />
@@ -133,8 +142,9 @@ const StudentEnrol = () => {
                     <Button onClick={onFormSubmit} variant="primary" type="submit">Confirm</Button>
                 </Form>
             </div>
-            <EnrolCalendar id={id} ref={classesRef}/>
-            {console.log(selectedOption)}
+             <h2 style={ { textAlign: "center" } }>Select a class from the drop down list to see what your calendar will look like!</h2>
+            <EnrolCalendar id={id} ref={classesRef} />
+           
         </div>
     )
 }

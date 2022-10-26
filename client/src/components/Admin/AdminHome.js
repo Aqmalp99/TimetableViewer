@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavbarAdmin from '../Navbar/NavbarAdmin';
 import "./style.css";
 import Form from 'react-bootstrap/Form';
@@ -6,9 +6,18 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import StudentTimetable from "./StudentTimetable";
 import TeacherTimetable from "./TeacherTimetable";
-import {useLocation} from 'react-router-dom';
+import {useLocation, useNavigate, Navigate} from 'react-router-dom';
+import { Buffer } from 'buffer';
+
+function getToken() {
+  const tokenString = sessionStorage.getItem('token');
+  const userToken = JSON.parse(tokenString);
+  console.log(userToken);
+  return userToken;
+}
 
 const AdminHome = () => {
+    const navigate= useNavigate();
     const location = useLocation();
     const initialState = location.state ? location.state.student_id : '';
     const [searchID, setSearchID]= useState(initialState);
@@ -22,8 +31,11 @@ const AdminHome = () => {
 
     const onFormSubmit = (e) => {
         console.log(e);
-        if(e.type === 'submit')
+
+        if(e.type === 'submit'){
+            window.history.replaceState(null, '');
             e.preventDefault();
+        }
         
         
         const fetchUser = async () => {
@@ -55,12 +67,13 @@ const AdminHome = () => {
             return <></>
         }
     }
-    if(location.state)
-    {
-
+    useEffect( () => {
+        if(location.state)
+        {
+        console.log("YES");
         const fetchUser = async () => {
             await axios
-            .get(`/timetable/${location.state.student_id}`)
+            .get(`/timetable/${searchID}`)
             .then((response) => {
                 const data=response.data;
                 setRole(data[0].role);
@@ -71,6 +84,28 @@ const AdminHome = () => {
             }
         fetchUser();
     }
+    },[]);
+    
+  const token = getToken();
+  if(!token)
+  {
+    console.log(getToken());
+    return <Navigate to='/'/>;
+
+  }
+  const base64Url = token.split('.')[1];
+  const buff = Buffer.from(base64Url, 'base64');
+  const payloadinit = buff.toString('ascii');
+  const payload = JSON.parse(payloadinit);
+  const roleLogin = payload.role;
+  if( roleLogin === 'student')
+    navigate("/student");
+  else if ( roleLogin === 'teacher')
+    navigate("/teacher")
+  else if (roleLogin !== 'admin')
+    navigate("/")
+
+
   return (
     <div onLoad={(e) => onFormSubmit(e)}>
         <NavbarAdmin/>

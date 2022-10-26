@@ -47,9 +47,9 @@ function App() {
       <Route path="/admin/inbox" element={<AdminInbox />} />
       <Route exact path="/student" element={<StudentMain />} />
       <Route exact path="/teacher" element={<TeacherMain />} />
-      <Route exact path="/student/enrol" element={<StudentEnrol />} />
+      <Route path="/student/enrol" element={<StudentEnrol />} />
       <Route path="/admin/create-class" element={<CreateClass />} />
-      <Route exact path="/student/inbox" element={<StudentInbox />} />
+      <Route path="/student/inbox" element={<StudentInbox />} />
     </Routes>
     
   );

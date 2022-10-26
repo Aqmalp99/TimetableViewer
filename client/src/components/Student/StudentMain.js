@@ -4,7 +4,7 @@ import NavbarStudent from "../Navbar/NavbarStudent";
 import ClassDetails from "./ClassDetails";
 import Button from "react-bootstrap/Button";
 import './styles.css';
-import  { Navigate } from 'react-router-dom';
+import  { Navigate, useNavigate } from 'react-router-dom';
 import { Buffer } from "buffer";
 
 function getToken() {
@@ -15,7 +15,7 @@ function getToken() {
 }
 
 const StudentMain = () => {
-  
+  const navigate= useNavigate();
   const [showClassDetails, setShowClassDetails] = useState(false);
   const [clashes, setClashes] = useState([]);
   const [selectedClass, setSelectedClass]= useState([]);
@@ -67,10 +67,17 @@ const StudentMain = () => {
   const payload = JSON.parse(payloadinit);
   const id=payload.id;
   const role = payload.role;
-
+  if( role === 'admin')
+    return <Navigate to='/admin'/>;
+  else if ( role === 'teacher')
+    return <Navigate to='/teacher'/>;
+  else if (role !== 'student')
+    return <Navigate to='/'/>;
+    
   return (
     <div className="App">
       <NavbarStudent/>
+      <h2>Your timetable:</h2>
       <StudentCalendar id={id} role={role} onClassClick= {onClassClick}displayClashes={displayClashes} ChangeSelectedClass={ChangeSelectedClass}/>
       <ClassDetails showClassDetails={showClassDetails} onClassClick={onClassClick} selectedClass={selectedClass} />
       <div className="clashes-container">

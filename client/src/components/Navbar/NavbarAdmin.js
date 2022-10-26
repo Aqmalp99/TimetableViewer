@@ -9,6 +9,9 @@ import  { Navigate } from 'react-router-dom';
 // import { displaySignup } from '../authentication/Home';
 
 const NavbarAdmin = () => {
+  const logout = () => {
+    sessionStorage.clear();
+  }
   return (
     <div>
         <Navbar bg="light" expand="lg" sticky="top"> 
@@ -21,7 +24,7 @@ const NavbarAdmin = () => {
                       <Nav.Link href="/admin">Home</Nav.Link>
                       <Nav.Link href="/admin/create-class">Create Class</Nav.Link>
                       <Nav.Link href="/admin/inbox">Inbox</Nav.Link>
-                      <Nav.Link href="/">Logout</Nav.Link>
+                      <Nav.Link href="/" onClick={logout}>Logout</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

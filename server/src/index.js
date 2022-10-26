@@ -90,12 +90,15 @@ io.on("connection", async (socket) => {
     console.log(socket.rooms);
   
     socket.on("send_message", async (data) => {
-      console.log(data);
-      const insertQuery = `INSERT INTO clash_request (user_id, date_time)
-                            VALUES ($1,NOW());`;
-    await dbPool.query(insertQuery, [data.id]);
-      socket.to('0').emit("receive_message", data);
-    })
+        console.log(data);
+        const insertQuery = `INSERT INTO clash_request (user_id, date_time)
+                              VALUES ($1,NOW());`;
+          const updateQuery = `UPDATE users SET clash_resolved = 'not_approved'`;
+          await dbPool.query(insertQuery, [data.id]);
+          await dbPool.query(updateQuery);
+        socket.to('0').emit("receive_message", data);
+      })
+
 
     socket.on("send_message_admin", async (data) => {
         console.log(`data`);
@@ -104,7 +107,7 @@ io.on("connection", async (socket) => {
                               VALUES ($1,'approval')
                               RETURNING notification_id;`;
         const updateQuery = `UPDATE users SET clash_resolved = 'approved' WHERE user_id = $1`;
-        
+
         const { rows } = await dbPool.query(insertQuery, [data.id]);
         await dbPool.query(updateQuery, [data.id]);
 

@@ -35,7 +35,7 @@ const StudentCalendar = ({displayClashes, ChangeSelectedClass, id, role, onClass
   useEffect(() => {
     const getClasses = async () => {
       await axios
-      .get(`/student/${id}`)
+      .get(`/student/classes`, { params: { id: id } })
       .then((response) => {
         console.log(response.data);
         if (detectClash(response.data).length > 0){
@@ -55,7 +55,7 @@ const StudentCalendar = ({displayClashes, ChangeSelectedClass, id, role, onClass
             venue: element.room_code + " / " + element.building,
             recurring: {
               repeat: 'weekly',
-              interval: 1
+              interval: element.recurring_factor
             }
           };
         })

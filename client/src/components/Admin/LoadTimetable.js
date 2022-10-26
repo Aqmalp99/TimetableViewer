@@ -1,15 +1,33 @@
 import React, { useState, useMemo, useEffect, useCallback, forwardRef, useImperativeHandle } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import { Eventcalendar, momentTimezone  } from "@mobiscroll/react";
+import { Eventcalendar, setOptions,momentTimezone, CalendarNav, SegmentedGroup, SegmentedItem, CalendarPrev, CalendarToday, CalendarNext } from '@mobiscroll/react';
 import axios from 'axios';
 import moment from 'moment-timezone';
 import { detectClash } from "../Student/detectClash";
+setOptions({
+  theme: 'ios',
+  themeVariant: 'light'
+});
 
 const LoadTimetable = forwardRef(({ifEventSelected, displayClashes, ChangeSelectedClass, id, role, onClassClick}, ref) => {
   
   const [myEvents, setEvents] = useState([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
+  const [calView, setCalView] = React.useState(
+    {
+        
+        schedule: {
+          labels: true,
+          type: "week",
+          startTime: "08:00",
+          endTime: "18:00",
+          allDay: false,
+          startDay: 1,
+          endDay: 5
+        }
+    }
+);
   
   useImperativeHandle(ref, () => ({
     updateClass({id,date,start,end}) {
@@ -24,7 +42,7 @@ const LoadTimetable = forwardRef(({ifEventSelected, displayClashes, ChangeSelect
             return element;
        });
        
-        displayClashes(detectClash(data));
+        // displayClashes(detectClash(data));
       
        setEvents(data);
     },
@@ -32,10 +50,11 @@ const LoadTimetable = forwardRef(({ifEventSelected, displayClashes, ChangeSelect
       const newData = myEvents.filter((element) => {
         return element.id !==id;
       });
-      displayClashes(detectClash(newData));
+      // displayClashes(detectClash(newData));
       setEvents(newData);
     },
     newClass(newClassData){
+      console.log(newClassData);
       let newEvents = [...myEvents];
       if (newClassData != null){
         newEvents.push({
@@ -75,16 +94,89 @@ const LoadTimetable = forwardRef(({ifEventSelected, displayClashes, ChangeSelect
    setEvents(data);
     }
   }));
+
+  const changeView = (event) => {
+    let calView;
+    
+    switch (event.target.value) {
+        case 'year':
+            calView = {
+                calendar: { type: 'year' }
+            }
+            break;
+        case 'month':
+            calView = {
+                calendar: { labels: true }
+            }
+            break;
+        case 'week':
+            calView = {
+              schedule: {
+                labels: true,
+                type: "week",
+                startTime: "08:00",
+                endTime: "18:00",
+                allDay: false,
+                startDay: 1,
+                endDay: 5
+              }
+            }
+            break;
+        case 'day':
+            calView = {
+                schedule: { type: 'day',
+                startTime: "08:00",
+                endTime: "18:00",
+                allDay: false, }
+            }
+            break;
+        case 'agenda':
+            calView = {
+                calendar: { type: 'week' },
+                agenda: { type: 'week' }
+            }
+            break;
+    }
+
+    
+    setCalView(calView);
+}
+
+const customWithNavButtons = () => {
+    return <React.Fragment>
+        <CalendarNav className="cal-header-nav" />
+        <div className="cal-header-picker">
+            <SegmentedGroup value={view} onChange={changeView}>
+                <SegmentedItem value="year">
+                    Year
+                </SegmentedItem>
+                <SegmentedItem value="month">
+                    Month
+                </SegmentedItem>
+                <SegmentedItem value="week">
+                    Week
+                </SegmentedItem>
+                <SegmentedItem value="day">
+                    Day
+                </SegmentedItem>
+                <SegmentedItem value="agenda">
+                    Agenda
+                </SegmentedItem>
+            </SegmentedGroup>
+        </div>
+        <CalendarPrev className="cal-header-prev" />
+        <CalendarToday className="cal-header-today" />
+        <CalendarNext className="cal-header-next" />
+    </React.Fragment>;
+}
   //events object has color, end, id, start, title
   useEffect(() => {
     const getClasses = async () => {
       // const studentID= "/student/"+ toString(id);
       await axios
-      .get(`/${role}/${id}`)
+      .get(`/${role}/classes`, { params: { id: id } })
       .then((response) => {
-        if (detectClash(response.data).length > 0){
-          displayClashes(detectClash(response.data));
-        }
+        
         let data = response.data.map(element => {
           return {
             id: element.class_id,
@@ -99,11 +191,13 @@ const LoadTimetable = forwardRef(({ifEventSelected, displayClashes, ChangeSelect
             venue: element.room_code + " / " + element.building,
             recurring: {
               repeat: 'weekly',
-              interval: 1
+              interval: element.recurring_factor
             }
           };
         })
-        
+        if (detectClash(response.data).length > 0){
+          displayClashes(detectClash(response.data));
+        }
         console.log(response.data[0].start_time);
         setEvents(data);
         if (response.data.length === 0)
@@ -181,6 +275,7 @@ const LoadTimetable = forwardRef(({ifEventSelected, displayClashes, ChangeSelect
   return (
     <div className="calendar-container">
       <Eventcalendar
+        renderHeader={customWithNavButtons}
         className="calendar-width"
         theme="ios"
         themeVariant="light"
@@ -190,7 +285,7 @@ const LoadTimetable = forwardRef(({ifEventSelected, displayClashes, ChangeSelect
         dragToResize={false}
         eventDelete={false}
         data={myEvents}
-        view={view}
+        view={calView}
         invalidateEvent="strict"
         onCellClick={onCellClick}
         onEventClick={onEventClick}
