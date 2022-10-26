@@ -77,6 +77,7 @@ const StudentMain = () => {
   return (
     <div className="App">
       <NavbarStudent/>
+      <h2>Your timetable:</h2>
       <StudentCalendar id={id} role={role} onClassClick= {onClassClick}displayClashes={displayClashes} ChangeSelectedClass={ChangeSelectedClass}/>
       <ClassDetails showClassDetails={showClassDetails} onClassClick={onClassClick} selectedClass={selectedClass} />
       <div className="clashes-container">
