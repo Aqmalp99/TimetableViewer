@@ -144,9 +144,6 @@ const StudentTimetable = ({role,userID}) => {
 
   }
 
-  if (clashes.length > 0){
-    console.log(clashes);
-
   const confirmAlternateClass = async() => {
 
     let body = {user_id: userID, class_id: selectedClass.id, newClass_id: formData.newClass_id}
